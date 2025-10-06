@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imago Dei & AI Conference Companion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-weight: 300;
+            line-height: 1.5;
+            color: #222;
+            background: #fafafa;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 200;
+            color: #111;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .conference-meta {
+            background: #f5f5f5;
+            padding: 20px;
+            border-left: 3px solid #333;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .conference-meta strong {
+            color: #222;
+        }
+
+        .next-event-section {
+            margin: 40px 0 60px 0;
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .next-event-header {
+            background: #f5f5f5;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .schedule-scroll {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 20px;
+            gap: 15px;
+            scrollbar-width: thin;
+        }
+
+        .schedule-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .schedule-scroll::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+
+        .schedule-scroll::-webkit-scrollbar-thumb {
+            background: #999;
+            border-radius: 4px;
+        }
+
+        .event-card {
+            min-width: 280px;
+            background: #fafafa;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-left: 3px solid #ccc;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .event-card.next {
+            border-left-color: #333;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .event-card.past {
+            opacity: 0.6;
+        }
+
+        .event-day {
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .event-time {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .event-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #222;
+            margin-bottom: 8px;
+        }
+
+        .event-type {
+            font-size: 0.75rem;
+            background: #eee;
+            color: #555;
+            padding: 3px 8px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .event-link {
+            color: #666;
+            font-size: 0.85rem;
+            text-decoration: none;
+            border-bottom: 1px solid #ddd;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .event-link:hover {
+            border-bottom-color: #333;
+        }
+
+        .themes {
+            margin: 60px 0;
+        }
+
+        .themes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 30px;
+        }
+
+        .themes-header:hover {
+            opacity: 0.7;
+        }
+
+        .themes h2 {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: #333;
+            margin: 0;
+        }
+
+        .toggle-icon {
+            font-size: 1.2rem;
+            color: #666;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .themes-content {
+            max-height: 1000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+        }
+
+        .themes-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+        }
+
+        .theme {
+            margin-bottom: 30px;
+            padding: 0;
+        }
+
+        .theme-number {
+            font-size: 0.85rem;
+            color: #999;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .theme h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #222;
+            margin: 5px 0 10px 0;
+        }
+
+        .theme p {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1px;
+            background: #ddd;
+            border: 1px solid #ddd;
+            margin: 60px 0;
+        }
+
+        .nav-card {
+            background: white;
+            padding: 30px;
+            text-decoration: none;
+            color: #333;
+            transition: background-color 0.2s ease;
+            border: none;
+        }
+
+        .nav-card:hover {
+            background: #f8f8f8;
+        }
+
+        .nav-card h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #222;
+            margin-bottom: 8px;
+        }
+
+        .nav-card p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .quick-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            margin-top: 40px;
+            background: #eee;
+            border: 1px solid #ddd;
+        }
+
+        .quick-link {
+            background: white;
+            color: #444;
+            padding: 12px 18px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 400;
+            transition: background-color 0.2s ease;
+            border: none;
+        }
+
+        .quick-link:hover {
+            background: #f0f0f0;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #777;
+            font-size: 0.85rem;
+        }
+
+        /* ===== MOBILE NAVIGATION SYSTEM ===== */
+        /* UPDATE ALL PAGES: Add this entire navigation section when iterating */
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .nav-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px;
+            color: #333;
+            display: none; /* Show only on mobile */
+            transition: transform 0.2s ease;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-toggle.active {
+            transform: rotate(90deg);
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            z-index: 1000;
+            transition: right 0.3s ease;
+            box-shadow: -2px 0 20px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-header {
+            padding: 30px 20px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .nav-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            float: right;
+            color: #666;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        .nav-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #222;
+            margin-top: 10px;
+        }
+
+        .nav-section {
+            padding: 20px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .nav-section:last-child {
+            border-bottom: none;
+        }
+
+        .nav-section-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0 20px 15px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: background-color 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover, .nav-link.current {
+            background: #f8f8f8;
+            border-left-color: #333;
+        }
+
+        .nav-link.current {
+            color: #000;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-card {
+                padding: 25px;
+            }
+
+            .quick-nav {
+                flex-direction: column;
+            }
+
+            .nav-toggle {
+                display: flex; /* Show hamburger menu on mobile */
+            }
+        }
+
+        @media (min-width: 769px) {
+            .nav-toggle {
+                display: none; /* Hide hamburger on desktop */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- UPDATE ALL PAGES: Replace <header> section with this structure -->
+        <header>
+            <div class="main-header">
+                <div class="header-content">
+                    <h1>Imago Dei & AI</h1>
+                    <p class="subtitle">Conference Companion</p>
+                    <div class="conference-meta">
+                        <strong>October 9-11, 2025</strong> • Harvard University<br>
+                        Christianity and Artificial Intelligence in the Algorithmic Society
+                    </div>
+                </div>
+                <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu">
+                    ☰
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation Overlay -->
+        <div class="nav-overlay" id="navOverlay"></div>
+
+        <!-- Mobile Navigation Panel -->
+        <nav class="mobile-nav" id="mobileNav">
+            <div class="nav-header">
+                <button class="nav-close" id="navClose" aria-label="Close navigation menu">×</button>
+                <div class="nav-title">Conference Navigation</div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Core Content</div>
+                <a href="index.html" class="nav-link current">🏠 Home</a>
+                <a href="schedule.html" class="nav-link">📅 Schedule</a>
+                <a href="speakers.html" class="nav-link">👥 Speakers</a>
+                <a href="reading-lists.html" class="nav-link">📚 Essential Readings</a>
+                <a href="questions.html" class="nav-link">❓ Question Bank</a>
+                <a href="notes.html" class="nav-link">📝 Session Notes</a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Interactive Tools</div>
+                <a href="bingo.html" class="nav-link">🎲 Conference Bingo</a>
+                <a href="name-face-quiz.html" class="nav-link">🤔 Name-Face Quiz</a>
+                <a href="expertise-quiz.html" class="nav-link">🧠 Expertise Quiz</a>
+                <a href="research-briefs.html" class="nav-link">📄 Research Briefs</a>
+                <a href="metaphor-tracker.html" class="nav-link">💭 Metaphor Tracker</a>
+                <a href="speaker-matrix.html" class="nav-link">📊 Speaker Matrix</a>
+                <a href="insight-collector.html" class="nav-link">💡 Insight Collector</a>
+            </div>
+        </nav>
+
+        <section class="next-event-section">
+            <div class="schedule-scroll" id="scheduleScroll">
+                <!-- Events will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <section class="themes">
+            <div class="themes-header" onclick="toggleThemes()">
+                <h2>Core Themes</h2>
+                <span class="toggle-icon" id="toggleIcon">▼</span>
+            </div>
+
+            <div class="themes-content" id="themesContent">
+                <div class="theme">
+                    <div class="theme-number">Theme One</div>
+                    <h3>What does it mean to be human?</h3>
+                    <p>How AI capabilities both illuminate and challenge traditional Christian anthropology, examining our distinctively human capacities for reasoning, creativity, relationship, and spiritual meaning.</p>
+                </div>
+
+                <div class="theme">
+                    <div class="theme-number">Theme Two</div>
+                    <h3>What does it mean to learn?</h3>
+                    <p>Exploring the profound differences between human and machine learning through Christian traditions of pedagogy, wisdom, and spiritual formation.</p>
+                </div>
+
+                <div class="theme">
+                    <div class="theme-number">Theme Three</div>
+                    <h3>What does good community and loving relationships look like?</h3>
+                    <p>Addressing how AI technologies reshape human relationship and whether algorithmic mediation promotes or hinders authentic Christian community.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="nav-grid">
+            <a href="schedule.html" class="nav-card">
+                <h3>Schedule</h3>
+                <p>Complete program with times, locations, and session details for all three days</p>
+            </a>
+
+            <a href="speakers.html" class="nav-card">
+                <h3>Speaker Profiles</h3>
+                <p>Detailed backgrounds, research interests, and key publications for every presenter</p>
+            </a>
+
+            <a href="research-briefs.html" class="nav-card">
+                <h3>Research Briefs</h3>
+                <p>Session-by-session analysis of expected topics, key concepts, and theological implications</p>
+            </a>
+
+            <a href="questions.html" class="nav-card">
+                <h3>Question Bank</h3>
+                <p>Curated questions for panels and individual speakers, tailored to conference themes</p>
+            </a>
+
+            <a href="reading-lists.html" class="nav-card">
+                <h3>Essential Readings</h3>
+                <p>Key papers and works from each speaker most relevant to conference themes</p>
+            </a>
+
+            <a href="bingo.html" class="nav-card">
+                <h3>Session Bingo</h3>
+                <p>Interactive tracking cards for key concepts and themes in each session</p>
+            </a>
+
+            <a href="metaphor-tracker.html" class="nav-card">
+                <h3>Metaphor Tracker</h3>
+                <p>Analysis of technological metaphors, cultural patterns, and theological implications in AI discourse</p>
+            </a>
+
+            <a href="notes.html" class="nav-card">
+                <h3>Session Notes</h3>
+                <p>Structured note-taking space for observations, insights, and connections</p>
+            </a>
+
+            <a href="name-face-quiz.html" class="nav-card">
+                <h3>Name-Face Quiz</h3>
+                <p>Interactive quiz to match speaker names with their photos</p>
+            </a>
+
+            <a href="expertise-quiz.html" class="nav-card">
+                <h3>Expertise Quiz</h3>
+                <p>Test your knowledge of speaker backgrounds and areas of expertise</p>
+            </a>
+
+            <a href="speaker-matrix.html" class="nav-card">
+                <h3>Speaker Matrix</h3>
+                <p>Map speakers across key dimensions with interactive 2x2 matrices</p>
+            </a>
+
+            <a href="insight-collector.html" class="nav-card">
+                <h3>Insight Collector</h3>
+                <p>Capture and organize your aha moments, questions, and insights</p>
+            </a>
+        </div>
+
+        <div class="quick-nav">
+            <a href="schedule.html#day1" class="quick-link">Day 1: Foundations</a>
+            <a href="schedule.html#day2" class="quick-link">Day 2: Core Sessions</a>
+            <a href="schedule.html#day3" class="quick-link">Day 3: Applications</a>
+            <a href="speakers.html#keynote" class="quick-link">Keynote Speakers</a>
+            <a href="metaphor-tracker.html" class="quick-link">Metaphor Analysis</a>
+        </div>
+
+        <footer>
+            <p>For thoughtful engagement with AI, theology, and the future of human flourishing</p>
+        </footer>
+    </div>
+
+    <!-- UPDATE ALL PAGES: Add this JavaScript for mobile navigation functionality -->
+    <script>
+        // Conference schedule data
+        const scheduleEvents = [
+            { day: "Thursday, Oct 9", time: "12:30pm - 1:45pm", title: "Flourishing Considerations for AI", type: "Luncheon Lecture", speaker: "Prof. Tyler VanderWeele", link: "schedule.html" },
+            { day: "Thursday, Oct 9", time: "2:00pm - 4:00pm", title: "Harvard Campus & Museum Tours", type: "Optional", link: "schedule.html" },
+            { day: "Thursday, Oct 9", time: "6:00pm - 7:15pm", title: "Welcome Reception and Dinner", type: "Reception", link: "schedule.html#welcome-reception" },
+            { day: "Thursday, Oct 9", time: "7:15pm - 9:00pm", title: "The Frontiers of AI", type: "Fireside Chat", link: "schedule.html#frontiers-ai" },
+            { day: "Friday, Oct 10", time: "8:45am - 8:50am", title: "Welcome", type: "", link: "schedule.html" },
+            { day: "Friday, Oct 10", time: "8:50am - 9:50am", title: "Are We Merely Machines?", type: "Keynote", speaker: "Prof. Rosalind Picard", link: "schedule.html#picard-keynote" },
+            { day: "Friday, Oct 10", time: "10:05am - 12:05pm", title: "Session I: Technos, Telos, and Theology", type: "Panel", link: "schedule.html#session-i" },
+            { day: "Friday, Oct 10", time: "12:30pm - 1:30pm", title: "Hope in the Age of Generative AI", type: "Luncheon Keynote", speaker: "Dr. John Kim", link: "schedule.html#kim-keynote" },
+            { day: "Friday, Oct 10", time: "1:50pm - 3:30pm", title: "Session II: Education in the Machine Age", type: "Panel", link: "schedule.html#session-ii" },
+            { day: "Friday, Oct 10", time: "3:45pm - 5:25pm", title: "Session III: AI, Relationships and Relating", type: "Panel", link: "schedule.html#session-iii" },
+            { day: "Friday, Oct 10", time: "5:25pm - 5:45pm", title: "Open Discussion", type: "", link: "schedule.html" },
+            { day: "Friday, Oct 10", time: "6:15pm - 8:15pm", title: "VIP Dinner", type: "Invitation Only", link: "schedule.html" },
+            { day: "Saturday, Oct 11", time: "9:00am - 11:15am", title: "Session IV: Artificial Intelligence at Church", type: "Panel", link: "schedule.html#session-iv" },
+            { day: "Saturday, Oct 11", time: "11:15am - 1:00pm", title: "Lunch & Networking", type: "", link: "schedule.html" }
+        ];
+
+        // Toggle themes visibility
+        function toggleThemes() {
+            const content = document.getElementById('themesContent');
+            const icon = document.getElementById('toggleIcon');
+            content.classList.toggle('collapsed');
+            icon.classList.toggle('collapsed');
+        }
+
+        // Find next event based on current date/time
+        function findNextEvent() {
+            const now = new Date();
+            // For demo purposes, return first event
+            // In production, you would parse times and compare
+            return 0; // Index of next event
+        }
+
+        // Populate schedule scroll
+        function populateSchedule() {
+            const container = document.getElementById('scheduleScroll');
+            const nextEventIndex = findNextEvent();
+
+            scheduleEvents.forEach((event, index) => {
+                const card = document.createElement('div');
+                card.className = 'event-card';
+
+                if (index === nextEventIndex) {
+                    card.classList.add('next');
+                    card.id = 'nextEvent';
+                } else if (index < nextEventIndex) {
+                    card.classList.add('past');
+                }
+
+                card.innerHTML = `
+                    <div class="event-day">${event.day}</div>
+                    <div class="event-time">${event.time}</div>
+                    <div class="event-title">${event.title}</div>
+                    ${event.speaker ? `<div style="font-size: 0.85rem; color: #666; margin-top: 5px;">${event.speaker}</div>` : ''}
+                    ${event.type ? `<div class="event-type">${event.type}</div>` : ''}
+                    <a href="${event.link}" class="event-link">View Details →</a>
+                `;
+
+                container.appendChild(card);
+            });
+
+            // Auto-scroll to next event
+            setTimeout(() => {
+                const nextEventCard = document.getElementById('nextEvent');
+                if (nextEventCard) {
+                    nextEventCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }, 100);
+        }
+
+        // Mobile Navigation System
+        // This script handles the hamburger menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            populateSchedule();
+
+            const navToggle = document.getElementById('navToggle');
+            const navClose = document.getElementById('navClose');
+            const mobileNav = document.getElementById('mobileNav');
+            const navOverlay = document.getElementById('navOverlay');
+
+            // Open navigation
+            function openNav() {
+                mobileNav.classList.add('active');
+                navOverlay.classList.add('active');
+                navToggle.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when nav is open
+            }
+
+            // Close navigation
+            function closeNav() {
+                mobileNav.classList.remove('active');
+                navOverlay.classList.remove('active');
+                navToggle.classList.remove('active');
+                document.body.style.overflow = ''; // Restore scrolling
+            }
+
+            // Event listeners
+            navToggle.addEventListener('click', openNav);
+            navClose.addEventListener('click', closeNav);
+            navOverlay.addEventListener('click', closeNav);
+
+            // Close nav on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+                    closeNav();
+                }
+            });
+
+            // Handle navigation link clicks
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    // Optional: Close nav when link is clicked
+                    // Uncomment next line if you want nav to close on link click:
+                    // closeNav();
+                });
+            });
+
+            // Set current page indicator
+            // This automatically highlights the current page in the navigation
+            const currentPath = window.location.pathname;
+            const currentPage = currentPath.split('/').pop() || 'index.html';
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('current');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
