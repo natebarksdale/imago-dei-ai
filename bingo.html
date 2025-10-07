@@ -523,6 +523,7 @@
  </div>
 
  <div class="bingo-card active" data-card="picard" id="picard-bingo">
+ <div id="picard-keynote"></div>
  <h2 class="bingo-title">Picard Keynote: "Are We Merely Machines"</h2>
  <p class="bingo-description">Concepts likely to appear in Prof. Rosalind Picard's keynote address</p>
 
@@ -581,6 +582,7 @@
  </div>
 
  <div class="bingo-card" data-card="frontiers" id="frontiers-bingo">
+ <div id="frontiers-ai"></div>
  <h2 class="bingo-title">Frontiers of AI Fireside Chat</h2>
  <p class="bingo-description">Terms from the panel discussion with Johnson, Kim, Weyl, and Zhang</p>
 
@@ -641,6 +643,7 @@
  </div>
 
  <div class="bingo-card" data-card="governance" id="governance-bingo">
+ <div id="session-i"></div>
  <h2 class="bingo-title">Technos, Telos, and Theology</h2>
  <p class="bingo-description">Law, governance, and citizenship concepts from Cross, Ha, Simpson, and Thio</p>
 
@@ -701,6 +704,7 @@
  </div>
 
  <div class="bingo-card" data-card="education" id="education-bingo">
+ <div id="session-ii"></div>
  <h2 class="bingo-title">Education in the Machine Age</h2>
  <p class="bingo-description">Learning and formation concepts from Dorobantu, Johnson, and Lumbreras</p>
 
@@ -761,6 +765,7 @@
  </div>
 
  <div class="bingo-card" data-card="relationships" id="relationships-bingo">
+ <div id="session-iii"></div>
  <h2 class="bingo-title">AI, Relationships and Relating</h2>
  <p class="bingo-description">Human connection concepts from Tan, Teubner, and Wales</p>
 
@@ -822,6 +827,7 @@
  </div>
 
  <div class="bingo-card" data-card="church" id="church-bingo">
+ <div id="session-iv"></div>
  <h2 class="bingo-title">Artificial Intelligence at Church</h2>
  <p class="bingo-description">Ministry and worship concepts from Dürr, Kelly, and Wright</p>
 
@@ -921,7 +927,33 @@
  Object.keys(gameStates).forEach(cardName => {
  updateStats(cardName);
  });
+
+ // Check for hash in URL and switch to that card
+ checkHashAndSwitchCard();
  }
+
+ function checkHashAndSwitchCard() {
+ const hash = window.location.hash.substring(1); // Remove the # symbol
+ if (!hash) return;
+
+ // Map session IDs to card names
+ const hashToCard = {
+ 'picard-keynote': 'picard',
+ 'frontiers-ai': 'frontiers',
+ 'session-i': 'governance',
+ 'session-ii': 'education',
+ 'session-iii': 'relationships',
+ 'session-iv': 'church'
+ };
+
+ const cardName = hashToCard[hash];
+ if (cardName && gameStates[cardName]) {
+ switchCard(cardName);
+ }
+ }
+
+ // Listen for hash changes
+ window.addEventListener('hashchange', checkHashAndSwitchCard);
 
  function switchCard(cardName) {
  // Switch tabs
