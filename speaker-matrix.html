@@ -371,6 +371,64 @@
  color: white;
  }
 
+ .divergence-score {
+ position: absolute;
+ bottom: 15px;
+ left: 15px;
+ background: rgba(255, 255, 255, 0.95);
+ border: 2px solid #333;
+ padding: 12px 16px;
+ text-align: center;
+ z-index: 100;
+ box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+ min-width: 120px;
+ }
+
+ .divergence-score h3 {
+ font-size: 0.7rem;
+ font-weight: 500;
+ color: #666;
+ margin: 0 0 6px 0;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ }
+
+ .score-value {
+ font-size: 2rem;
+ font-weight: 200;
+ color: #ff6b6b;
+ margin: 0;
+ line-height: 1;
+ }
+
+ .score-label {
+ font-size: 0.65rem;
+ color: #999;
+ margin-top: 4px;
+ }
+
+ @media (max-width: 768px) {
+ .divergence-score {
+ bottom: 10px;
+ left: 10px;
+ padding: 10px 12px;
+ min-width: 100px;
+ }
+
+ .divergence-score h3 {
+ font-size: 0.65rem;
+ margin-bottom: 4px;
+ }
+
+ .score-value {
+ font-size: 1.6rem;
+ }
+
+ .score-label {
+ font-size: 0.6rem;
+ }
+ }
+
  .instructions {
  background: #f9f9f9;
  border: 1px solid #e0e0e0;
@@ -635,7 +693,7 @@
  <a href="reading-lists.html" class="nav-link">Essential Readings</a>
  <a href="questions.html" class="nav-link">Question Bank</a>
  <a href="notes.html" class="nav-link">Session Notes</a>
- <a href="conference-research-brief.html" class="nav-link">Conference Research Brief</a>
+ <a href="devotional.html" class="nav-link">Devotional Guide</a>
  </div>
 
  <div class="nav-section">
@@ -647,12 +705,11 @@
  <a href="metaphor-tracker.html" class="nav-link">Metaphor Tracker</a>
  <a href="speaker-matrix.html" class="nav-link">Speaker Matrix</a>
  <a href="insight-collector.html" class="nav-link">Insight Collector</a>
- <a href="connection-builder.html" class="nav-link">Connection Builder</a>
  </div>
  </nav>
 
  <div class="instructions">
- <strong>How to use:</strong>Click a matrix below to view speaker positions. Filter by panel to focus on specific sessions. Drag any speaker's photo to reposition them based on your understanding. Your custom placements are saved locally.
+ <strong>How to use:</strong> Click a matrix below to view speaker positions. Filter by panel to focus on specific sessions. Drag any speaker's photo to reposition them based on your understanding. Your custom placements are saved locally.
  </div>
 
  <div class="panel-filter">
@@ -957,6 +1014,45 @@
  renderMatrix();
  });
 
+ function calculateDivergenceScore() {
+ let totalDistance = 0;
+ let movedCount = 0;
+ const matrix = matrices[currentMatrix];
+
+ // Calculate for current matrix only
+ if (customPositions[currentMatrix]) {
+ Object.keys(customPositions[currentMatrix]).forEach(speakerId => {
+ const customPos = customPositions[currentMatrix][speakerId];
+ const originalPos = matrix.speakers[speakerId];
+
+ if (originalPos) {
+ // Calculate Euclidean distance as percentage of matrix diagonal
+ const dx = customPos.x - originalPos.x;
+ const dy = customPos.y - originalPos.y;
+ const distance = Math.sqrt(dx * dx + dy * dy);
+ totalDistance += distance;
+ movedCount++;
+ }
+ });
+ }
+
+ // Calculate average distance and convert to percentage
+ const averageDistance = movedCount > 0 ? totalDistance / movedCount : 0;
+ const scorePercent = Math.round(averageDistance);
+
+ // Update display
+ const scoreValue = document.getElementById('scoreValue');
+ const scoreLabel = document.getElementById('scoreLabel');
+
+ if (movedCount === 0) {
+ scoreValue.textContent = '0%';
+ scoreLabel.textContent = 'No changes';
+ } else {
+ scoreValue.textContent = scorePercent + '%';
+ scoreLabel.textContent = `${movedCount} moved`;
+ }
+ }
+
  function renderMatrix() {
  const matrix = matrices[currentMatrix];
  const display = document.getElementById('matrixDisplay');
@@ -975,10 +1071,10 @@
 
  ${Object.entries(matrix.speakers).map(([id, pos]) => {
  const speaker = speakerData[id];
- const customPos = customPositions[currentMatrix].[id];
+ const customPos = customPositions[currentMatrix]?.[id];
  const finalPos = customPos || pos;
  const isActive = panelRosters[currentPanel].includes(id);
- const inactiveClass = isActive '' : 'inactive';
+ const inactiveClass = isActive ? '' : 'inactive';
 
  return `
  <div class="speaker-dot ${inactiveClass}"
@@ -992,6 +1088,12 @@
  </div>
  `;
  }).join('')}
+
+ <div class="divergence-score" id="divergenceScore">
+ <h3>Divergence</h3>
+ <div class="score-value" id="scoreValue">0%</div>
+ <div class="score-label" id="scoreLabel">No changes</div>
+ </div>
  </div>
  `;
 
@@ -1027,10 +1129,13 @@
  if (showAllMovements || selectedSpeaker) {
  renderMovementIndicators();
  }
+
+ // Update divergence score
+ calculateDivergenceScore();
  }
 
  function selectSpeaker(speakerId) {
- selectedSpeaker = selectedSpeaker === speakerId null : speakerId;
+ selectedSpeaker = selectedSpeaker === speakerId ? null : speakerId;
  renderMatrix();
  }
 
@@ -1043,11 +1148,11 @@
  container.querySelectorAll('.movement-arrow, .original-position, .distance-label').forEach(el => el.remove());
 
  const speakersToShow = showAllMovements
- Object.keys(matrix.speakers)
- : selectedSpeaker [selectedSpeaker] : [];
+ ? Object.keys(matrix.speakers)
+ : selectedSpeaker ? [selectedSpeaker] : [];
 
  speakersToShow.forEach(speakerId => {
- const customPos = customPositions[currentMatrix].[speakerId];
+ const customPos = customPositions[currentMatrix]?.[speakerId];
  if (!customPos) return; // No movement
 
  const originalPos = matrix.speakers[speakerId];
@@ -1132,8 +1237,8 @@
  draggedElement.classList.add('dragging');
 
  const rect = draggedElement.getBoundingClientRect();
- const clientX = e.type.includes('touch') e.touches[0].clientX : e.clientX;
- const clientY = e.type.includes('touch') e.touches[0].clientY : e.clientY;
+ const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+ const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
 
  dragOffset.x = clientX - rect.left - rect.width / 2;
  dragOffset.y = clientY - rect.top - rect.height / 2;
@@ -1146,8 +1251,8 @@
  const container = document.getElementById('matrixContainer');
  const containerRect = container.getBoundingClientRect();
 
- const clientX = e.type.includes('touch') e.touches[0].clientX : e.clientX;
- const clientY = e.type.includes('touch') e.touches[0].clientY : e.clientY;
+ const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+ const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
 
  let x = clientX - containerRect.left - dragOffset.x;
  let y = clientY - containerRect.top - dragOffset.y;
@@ -1187,6 +1292,8 @@
 
  renderMatrix();
  }
+	</script>
+
 	<footer>
  <p>This unofficial conference companion was generated by <a href="https://claude.ai/code" target="_blank" style="color: #555; text-decoration: underline;">Claude Code</a> with project management from Nate Barksdale.</p>
  <p style="margin-top: 8px;">

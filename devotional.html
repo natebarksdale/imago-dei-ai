@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Devotional Guide | Imago Dei & AI Conference</title>
+ <style>
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Helvetica Neue', Arial, sans-serif;
+ font-weight: 300;
+ line-height: 1.6;
+ color: #222;
+ background: #fafafa;
+ }
+
+ .container {
+ max-width: 800px;
+ margin: 0 auto;
+ padding: 40px 20px;
+ }
+
+ header {
+ margin-bottom: 50px;
+ padding-bottom: 30px;
+ border-bottom: 1px solid #ddd;
+ }
+
+ .main-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: flex-start;
+ margin-bottom: 20px;
+ }
+
+ .header-content {
+ flex: 1;
+ }
+
+ h1 {
+ font-size: 2rem;
+ font-weight: 200;
+ color: #111;
+ margin-bottom: 8px;
+ letter-spacing: -1px;
+ }
+
+ .subtitle {
+ font-size: 1rem;
+ color: #666;
+ font-weight: 300;
+ margin-bottom: 20px;
+ }
+
+ .intro {
+ background: #f5f5f5;
+ padding: 20px;
+ border-left: 3px solid #333;
+ font-size: 0.95rem;
+ color: #555;
+ font-style: italic;
+ }
+
+ .nav-toggle {
+ background: none;
+ border: none;
+ font-size: 1.5rem;
+ cursor: pointer;
+ padding: 8px;
+ color: #333;
+ transition: transform 0.2s ease;
+ min-width: 44px;
+ min-height: 44px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ position: fixed;
+ top: 20px;
+ right: 20px;
+ z-index: 1001;
+ background: white;
+ border-radius: 4px;
+ box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+ }
+
+ .devotional {
+ background: white;
+ border: 1px solid #e0e0e0;
+ padding: 30px;
+ margin-bottom: 30px;
+ }
+
+ .devotional-header {
+ margin-bottom: 25px;
+ padding-bottom: 20px;
+ border-bottom: 2px solid #333;
+ }
+
+ .session-link {
+ font-size: 0.75rem;
+ color: #999;
+ text-decoration: none;
+ text-transform: uppercase;
+ letter-spacing: 1px;
+ }
+
+ .session-link:hover {
+ color: #333;
+ }
+
+ .devotional h2 {
+ font-size: 1.5rem;
+ font-weight: 300;
+ color: #111;
+ margin: 8px 0;
+ }
+
+ .session-time {
+ font-size: 0.85rem;
+ color: #666;
+ }
+
+ .section {
+ margin: 25px 0;
+ }
+
+ .section-title {
+ font-size: 0.75rem;
+ font-weight: 500;
+ color: #999;
+ text-transform: uppercase;
+ letter-spacing: 1px;
+ margin-bottom: 12px;
+ }
+
+ .collect {
+ font-size: 1rem;
+ line-height: 1.8;
+ color: #333;
+ font-style: italic;
+ padding-left: 20px;
+ border-left: 3px solid #ddd;
+ }
+
+ .scripture {
+ background: #f9f9f9;
+ padding: 15px 20px;
+ border-left: 3px solid #333;
+ }
+
+ .scripture-ref {
+ font-size: 0.9rem;
+ font-weight: 500;
+ color: #333;
+ margin-bottom: 8px;
+ }
+
+ .scripture-ref a {
+ color: #333;
+ text-decoration: underline;
+ }
+
+ .scripture-text {
+ font-size: 0.95rem;
+ color: #555;
+ line-height: 1.7;
+ }
+
+ .reflection {
+ font-size: 0.95rem;
+ color: #444;
+ line-height: 1.7;
+ }
+
+ /* Mobile Navigation */
+ .mobile-nav {
+ position: fixed;
+ top: 0;
+ right: -100%;
+ width: 280px;
+ height: 100vh;
+ background: white;
+ z-index: 1000;
+ transition: right 0.3s ease;
+ box-shadow: -2px 0 20px rgba(0,0,0,0.1);
+ overflow-y: auto;
+ }
+
+ .mobile-nav.active {
+ right: 0;
+ }
+
+ .nav-overlay {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: rgba(0,0,0,0.5);
+ z-index: 999;
+ opacity: 0;
+ visibility: hidden;
+ transition: all 0.3s ease;
+ }
+
+ .nav-overlay.active {
+ opacity: 1;
+ visibility: visible;
+ }
+
+ .nav-header {
+ padding: 30px 20px 20px;
+ border-bottom: 1px solid #eee;
+ }
+
+ .nav-close {
+ background: none;
+ border: none;
+ font-size: 1.5rem;
+ cursor: pointer;
+ float: right;
+ color: #666;
+ min-width: 44px;
+ min-height: 44px;
+ }
+
+ .nav-title {
+ font-size: 1.1rem;
+ font-weight: 500;
+ color: #222;
+ margin-top: 10px;
+ }
+
+ .nav-section {
+ padding: 20px 0;
+ border-bottom: 1px solid #f0f0f0;
+ }
+
+ .nav-section-title {
+ font-size: 0.85rem;
+ font-weight: 500;
+ color: #999;
+ text-transform: uppercase;
+ letter-spacing: 1px;
+ margin: 0 20px 15px;
+ }
+
+ .nav-link {
+ display: block;
+ padding: 12px 20px;
+ color: #333;
+ text-decoration: none;
+ font-size: 0.95rem;
+ transition: background-color 0.2s ease;
+ border-left: 3px solid transparent;
+ }
+
+ .nav-link:hover, .nav-link.current {
+ background: #f8f8f8;
+ border-left-color: #333;
+ }
+
+ footer {
+ margin-top: 60px;
+ padding: 30px 20px;
+ text-align: center;
+ font-size: 0.85rem;
+ color: #777;
+ border-top: 1px solid #e0e0e0;
+ }
+
+ footer a {
+ color: #555;
+ text-decoration: underline;
+ }
+
+ @media (max-width: 768px) {
+ .container {
+ padding: 30px 15px;
+ }
+
+ h1 {
+ font-size: 1.6rem;
+ }
+
+ .devotional {
+ padding: 20px;
+ }
+
+ .devotional h2 {
+ font-size: 1.3rem;
+ }
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <header>
+ <div class="main-header">
+ <div class="header-content">
+ <h1>Devotional Guide</h1>
+ <p class="subtitle">Prayers, Scripture & Reflections</p>
+ <div class="intro">"Be still, and know that I am God." — Psalm 46:10</div>
+ </div>
+ <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu">
+ ☰
+ </button>
+ </div>
+ </header>
+
+ <div class="nav-overlay" id="navOverlay"></div>
+
+ <nav class="mobile-nav" id="mobileNav">
+ <div class="nav-header">
+ <button class="nav-close" id="navClose" aria-label="Close navigation menu">×</button>
+ <div class="nav-title">Conference Navigation</div>
+ </div>
+
+
+ <div class="nav-section">
+ <div class="nav-section-title">Quick Access</div>
+ <a href="#" id="showQRNav" class="nav-link" style="border-left-color: #333;">View QR Code</a>
+ </div>
+
+ <div class="nav-section">
+ <div class="nav-section-title">Core Content</div>
+ <a href="index.html" class="nav-link">Home</a>
+ <a href="schedule.html" class="nav-link">Schedule</a>
+ <a href="speakers.html" class="nav-link">Speaker Profiles</a>
+ <a href="reading-lists.html" class="nav-link">Essential Readings</a>
+ <a href="questions.html" class="nav-link">Question Bank</a>
+ <a href="notes.html" class="nav-link">Session Notes</a>
+ <a href="devotional.html" class="nav-link current">Devotional Guide</a>
+ </div>
+
+ <div class="nav-section">
+ <div class="nav-section-title">Interactive Tools</div>
+ <a href="bingo.html" class="nav-link">Session Bingo</a>
+ <a href="name-face-quiz.html" class="nav-link">Name-Face Quiz</a>
+ <a href="expertise-quiz.html" class="nav-link">Expertise Quiz</a>
+ <a href="research-briefs.html" class="nav-link">Research Briefs</a>
+ <a href="metaphor-tracker.html" class="nav-link">Metaphor Tracker</a>
+ <a href="speaker-matrix.html" class="nav-link">Speaker Matrix</a>
+ <a href="insight-collector.html" class="nav-link">Insight Collector</a>
+ </div>
+ </nav>
+
+ <!-- The Frontiers of AI -->
+ <div class="devotional" id="frontiers-ai">
+ <div class="devotional-header">
+ <a href="schedule.html#frontiers-ai" class="session-link">Thursday, Oct 9 • 7:15pm</a>
+ <h2>The Frontiers of AI</h2>
+ <div class="session-time">Fireside Chat</div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Collect</div>
+ <p class="collect">Almighty God, who hast created all things by thy Word and formed us in thine image with minds to seek understanding: Grant us wisdom as we explore the frontiers of artificial intelligence. Help us to discern thy purposes in our making and building, that all our innovations may serve the common good and reflect thy glory. Through Jesus Christ our Lord, who with thee and the Holy Spirit liveth and reigneth, one God, for ever and ever. Amen.</p>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Scripture</div>
+ <div class="scripture">
+ <div class="scripture-ref"><a href="https://www.biblegateway.com/passage/?search=Proverbs+3%3A5-7&version=ESV" target="_blank">Proverbs 3:5-7</a></div>
+ <div class="scripture-text">"Trust in the LORD with all your heart, and do not lean on your own understanding. In all your ways acknowledge him, and he will make straight your paths. Be not wise in your own eyes; fear the LORD, and turn away from evil."</div>
+ </div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Reflection</div>
+ <p class="reflection">As we stand at the frontier of unprecedented technological capability, we are called to humility. The reformers reminded us that our greatest works remain under God's sovereignty. Calvin wrote that all knowledge of creation points us back to knowledge of the Creator. Before entering this conversation, ask yourself: What am I seeking in this technology? Am I pursuing wisdom or merely information? How might God be calling me to discern the right use of these powerful new tools?</p>
+ </div>
+ </div>
+
+ <!-- Session I: Technos, Telos, and Theology -->
+ <div class="devotional" id="session-i">
+ <div class="devotional-header">
+ <a href="schedule.html#session-i" class="session-link">Friday, Oct 10 • 10:00am</a>
+ <h2>Session I: Technos, Telos, and Theology</h2>
+ <div class="session-time">Panel Discussion</div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Collect</div>
+ <p class="collect">O God of truth and wisdom, who didst guide the Israelites through the wilderness and give them thy law: Illumine our minds as we consider the relationship between technology, purpose, and faith. Help us to see that all true making flows from thee, and that our tools must serve thy purposes for human flourishing. Keep us from worshiping the works of our hands, and direct our building toward the building of thy Kingdom. Through Jesus Christ our Lord. Amen.</p>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Scripture</div>
+ <div class="scripture">
+ <div class="scripture-ref"><a href="https://www.biblegateway.com/passage/?search=Exodus+31%3A1-5&version=ESV" target="_blank">Exodus 31:1-5</a></div>
+ <div class="scripture-text">"The LORD said to Moses, 'See, I have called by name Bezalel... and I have filled him with the Spirit of God, with ability and intelligence, with knowledge and all craftsmanship, to devise artistic designs, to work in gold, silver, and bronze, in cutting stones for setting, and in carving wood, to work in every craft.'"</div>
+ </div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Reflection</div>
+ <p class="reflection">The scriptures reveal that skill, craft, and making are gifts from God's Spirit. Yet as the medievals warned, technology without telos—without proper ordering toward its end—becomes mere mechanism. Julian of Norwich saw all things held in God's love "as a little thing, the size of a hazelnut." Consider: How do our technologies reflect or obscure this truth? What is the proper end of artificial intelligence, and who determines it?</p>
+ </div>
+ </div>
+
+ <!-- Keynote: Are We Merely Machines -->
+ <div class="devotional" id="keynote-machines">
+ <div class="devotional-header">
+ <a href="schedule.html#keynote-picard" class="session-link">Friday, Oct 10 • 9:00am</a>
+ <h2>Are We Merely Machines?</h2>
+ <div class="session-time">Keynote Address</div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Collect</div>
+ <p class="collect">Creator God, who breathed into us the breath of life and made us living souls in thine image: Guard us from reducing the mystery of human personhood to mere mechanism. Grant us grace to see in every person thy divine image, fearfully and wonderfully made. As we explore what machines can and cannot do, keep before us the truth that we are more than the sum of our parts, knit together by thy love. Through Jesus Christ, who took on flesh and dwelt among us. Amen.</p>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Scripture</div>
+ <div class="scripture">
+ <div class="scripture-ref"><a href="https://www.biblegateway.com/passage/?search=Genesis+2%3A7&version=ESV" target="_blank">Genesis 2:7</a></div>
+ <div class="scripture-text">"Then the LORD God formed the man of dust from the ground and breathed into his nostrils the breath of life, and the man became a living creature."</div>
+ </div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Reflection</div>
+ <p class="reflection">The Psalmist declares we are "fearfully and wonderfully made." The early church fathers insisted on the soul's irreducibility to material processes. As you prepare to hear this address, ponder the mystery of your own consciousness. What makes you *you*? Is there something about human experience—love, wonder, worship—that transcends computation? Hold this question gently before God.</p>
+ </div>
+ </div>
+
+ <!-- Session II: Education in the Machine Age -->
+ <div class="devotional" id="session-ii">
+ <div class="devotional-header">
+ <a href="schedule.html#session-ii" class="session-link">Friday, Oct 10 • 1:50pm</a>
+ <h2>Session II: Education in the Machine Age</h2>
+ <div class="session-time">Panel Discussion</div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Collect</div>
+ <p class="collect">Gracious God, the source of all wisdom and understanding: Guide us as we consider how to form the next generation in an age of intelligent machines. Grant teachers wisdom, students discernment, and all of us humility to recognize that true learning is more than information transfer—it is formation of the whole person in truth and love. May our educational endeavors cultivate wisdom, not merely cleverness. Through Jesus Christ, the incarnate Wisdom of God. Amen.</p>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Scripture</div>
+ <div class="scripture">
+ <div class="scripture-ref"><a href="https://www.biblegateway.com/passage/?search=Proverbs+4%3A5-7&version=ESV" target="_blank">Proverbs 4:5-7</a></div>
+ <div class="scripture-text">"Get wisdom; get insight; do not forget, and do not turn away from the words of my mouth. Do not forsake her, and she will keep you; love her, and she will guard you. The beginning of wisdom is this: Get wisdom, and whatever you get, get insight."</div>
+ </div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Reflection</div>
+ <p class="reflection">Augustine distinguished between *scientia* (knowledge of temporal things) and *sapientia* (wisdom oriented toward eternal truth). As AI systems master information retrieval and pattern recognition, we must ask: What kind of formation do humans need? The monastic tradition emphasized *lectio divina*—slow, contemplative reading that forms the soul. In a world of instant answers, how do we cultivate patient wisdom? Consider your own learning: What has truly formed you?</p>
+ </div>
+ </div>
+
+ <!-- Session III: AI, Relationships and Relating -->
+ <div class="devotional" id="session-iii">
+ <div class="devotional-header">
+ <a href="schedule.html#session-iii" class="session-link">Friday, Oct 10 • 3:45pm</a>
+ <h2>Session III: AI, Relationships and Relating</h2>
+ <div class="session-time">Panel Discussion</div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Collect</div>
+ <p class="collect">God of love, who hast created us for communion with thee and with one another: Preserve us from false intimacy and technological counterfeits of relationship. Teach us to cherish the gift of embodied presence, the vulnerability of true friendship, and the risk of genuine love. As AI offers simulacra of companionship, anchor us in the truth that we are made for real relationship—costly, joyful, and face-to-face. Through Jesus Christ, who called us friends. Amen.</p>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Scripture</div>
+ <div class="scripture">
+ <div class="scripture-ref"><a href="https://www.biblegateway.com/passage/?search=1+Corinthians+13%3A11-12&version=ESV" target="_blank">1 Corinthians 13:11-12</a></div>
+ <div class="scripture-text">"When I was a child, I spoke like a child, I thought like a child, I reasoned like a child. When I became a man, I gave up childish ways. For now we see in a mirror dimly, but then face to face. Now I know in part; then I shall know fully, even as I have been fully known."</div>
+ </div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Reflection</div>
+ <p class="reflection">Paul speaks of knowing and being known—the deepest form of relationship. The mystics understood that union with God and communion with others require presence, attention, and sometimes suffering. Kierkegaard warned against reducing persons to abstractions. As AI companions promise perfect understanding without the mess of real relationship, ask: What is lost when we choose simulated presence over embodied encounter? Can love exist without risk, without the possibility of rejection?</p>
+ </div>
+ </div>
+
+ <!-- Keynote: Hope in the Age of Generative AI -->
+ <div class="devotional" id="keynote-hope">
+ <div class="devotional-header">
+ <a href="schedule.html#keynote-kim" class="session-link">Friday, Oct 10 • 12:00pm</a>
+ <h2>Hope in the Age of Generative AI</h2>
+ <div class="session-time">Keynote Address</div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Collect</div>
+ <p class="collect">God of hope, who dost make all things new: In an age of rapid change and uncertainty, anchor us in the hope that does not disappoint. Help us to distinguish true hope from mere optimism, and to ground our future in thy promises rather than our predictions. Grant us courage to embrace the new while holding fast to the old, old story of thy redemptive love. Through Jesus Christ, our hope of glory. Amen.</p>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Scripture</div>
+ <div class="scripture">
+ <div class="scripture-ref"><a href="https://www.biblegateway.com/passage/?search=Romans+8%3A24-25&version=ESV" target="_blank">Romans 8:24-25</a></div>
+ <div class="scripture-text">"For in this hope we were saved. Now hope that is seen is not hope. For who hopes for what he sees? But if we hope for what we do not see, we wait for it with patience."</div>
+ </div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Reflection</div>
+ <p class="reflection">Christian hope is eschatological—rooted not in technological progress but in God's promised future. Yet as Moltmann taught, this hope transforms how we live now. Neither technophobic fear nor utopian optimism captures the Christian stance. Instead, we work in hope, knowing that our labor is not in vain, and that God can bring good even from our faltering attempts at faithfulness. As you consider AI's generative power, ask: Where is my ultimate hope placed?</p>
+ </div>
+ </div>
+
+ <!-- Session IV: Artificial Intelligence at Church -->
+ <div class="devotional" id="session-iv">
+ <div class="devotional-header">
+ <a href="schedule.html#session-iv" class="session-link">Saturday, Oct 11 • 9:00am</a>
+ <h2>Session IV: Artificial Intelligence at Church</h2>
+ <div class="session-time">Panel Discussion</div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Collect</div>
+ <p class="collect">Lord Jesus Christ, who didst call thy Church to be the body of Christ in the world: Guide us as we discern how to use or refuse new technologies in our worship and witness. Grant pastors wisdom, congregations discernment, and all the faithful courage to preserve what is essential while embracing what serves thy mission. May our churches be communities of embodied presence, Spirit-filled worship, and genuine fellowship, never mere consumers of religious products. Amen.</p>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Scripture</div>
+ <div class="scripture">
+ <div class="scripture-ref"><a href="https://www.biblegateway.com/passage/?search=1+Corinthians+12%3A12-14&version=ESV" target="_blank">1 Corinthians 12:12-14</a></div>
+ <div class="scripture-text">"For just as the body is one and has many members, and all the members of the body, though many, are one body, so it is with Christ. For in one Spirit we were all baptized into one body—Jews or Greeks, slaves or free—and all were made to drink of one Spirit. For the body does not consist of one member but of many."</div>
+ </div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Reflection</div>
+ <p class="reflection">The Church is fundamentally a body, not a network—an embodied, sacramental community gathered around Word and Table. Bonhoeffer warned against "cheap grace" and emphasized life together in concrete community. As churches consider AI for preaching, pastoral care, or teaching, the question is not merely "Can we?" but "Should we?" What practices are essential to preserve? What is the irreplaceable role of human presence in Christian formation? Pray for your own church as it navigates these questions.</p>
+ </div>
+ </div>
+
+ <!-- Welcome Reception -->
+ <div class="devotional" id="welcome-reception">
+ <div class="devotional-header">
+ <a href="schedule.html#welcome-reception" class="session-link">Thursday, Oct 9 • 6:00pm</a>
+ <h2>Welcome Reception and Dinner</h2>
+ <div class="session-time">Gathering</div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Collect</div>
+ <p class="collect">Gracious God, who dost welcome all to thy table and call us into community: We thank thee for this gathering of minds and hearts. Grant us grace to listen well, to speak truthfully, and to build genuine fellowship across our differences. Help us to see thy image in every person we meet, and to approach these days with humility, curiosity, and love. Through Jesus Christ, who ate with sinners and saints alike. Amen.</p>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Scripture</div>
+ <div class="scripture">
+ <div class="scripture-ref"><a href="https://www.biblegateway.com/passage/?search=Hebrews+13%3A1-2&version=ESV" target="_blank">Hebrews 13:1-2</a></div>
+ <div class="scripture-text">"Let brotherly love continue. Do not neglect to show hospitality to strangers, for thereby some have entertained angels unawares."</div>
+ </div>
+ </div>
+
+ <div class="section">
+ <div class="section-title">Reflection</div>
+ <p class="reflection">The Christian life begins and ends with hospitality—God's hospitality to us, and ours to one another. Benedict's Rule instructed monks to receive every guest as Christ himself. As you enter this conference, remember that each conversation is an opportunity for mutual enrichment and understanding. Come with openness rather than answers, with questions rather than conclusions. Who might God be calling you to meet?</p>
+ </div>
+ </div>
+
+ </div>
+
+ <footer>
+ <p>This unofficial conference companion was generated by <a href="https://claude.ai/code" target="_blank" style="color: #555; text-decoration: underline;">Claude Code</a> with project management from Nate Barksdale.</p>
+ <p style="margin-top: 8px;">
+ <a href="https://natebarksdale.xyz" target="_blank" style="color: #555; text-decoration: underline;">Visit natebarksdale.xyz</a>
+ •
+ <a href="#" id="showQR" style="color: #555; text-decoration: underline; cursor: pointer;">View QR Code</a>
+ </p>
+ </footer>
+
+ <!-- QR Code Modal -->
+ <div id="qrModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center;">
+ <div style="background: white; padding: 40px; border-radius: 8px; text-align: center; max-width: 400px; position: relative;">
+ <button id="closeQR" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2rem; cursor: pointer; color: #666;">&times;</button>
+ <h3 style="margin-bottom: 20px; font-weight: 400; color: #222;">Conference Companion</h3>
+ <img src="qr-code.png" alt="QR Code" style="width: 250px; height: 250px; margin: 0 auto; display: block; border: 2px solid #ddd; padding: 10px;">
+ <p style="margin-top: 20px; color: #666; font-size: 0.9rem;">Scan to access this guide on your phone</p>
+ <p style="margin-top: 8px; color: #999; font-size: 0.8rem;">natebarksdale.xyz/imago-dei-ai</p>
+ </div>
+ </div>
+
+ <script>
+ // Navigation
+ const navToggle = document.getElementById('navToggle');
+ const navClose = document.getElementById('navClose');
+ const mobileNav = document.getElementById('mobileNav');
+ const navOverlay = document.getElementById('navOverlay');
+
+ navToggle.addEventListener('click', () => {
+ mobileNav.classList.add('active');
+ navOverlay.classList.add('active');
+ document.body.style.overflow = 'hidden';
+ });
+
+ function closeNav() {
+ mobileNav.classList.remove('active');
+ navOverlay.classList.remove('active');
+ document.body.style.overflow = '';
+ }
+
+ navClose.addEventListener('click', closeNav);
+ navOverlay.addEventListener('click', closeNav);
+
+ // QR Modal functionality
+ (function() {
+ function initQRModal() {
+ const showQR = document.getElementById('showQR');
+ const showQRNav = document.getElementById('showQRNav');
+ const closeQR = document.getElementById('closeQR');
+ const qrModal = document.getElementById('qrModal');
+
+ if (showQR) {
+ showQR.addEventListener('click', function(e) {
+ e.preventDefault();
+ qrModal.style.display = 'flex';
+ });
+ }
+
+ if (closeQR) {
+ closeQR.addEventListener('click', function() {
+ qrModal.style.display = 'none';
+ });
+ }
+
+ if (qrModal) {
+ qrModal.addEventListener('click', function(e) {
+ if (e.target === qrModal) {
+ qrModal.style.display = 'none';
+ }
+ });
+ }
+
+ if (showQRNav) {
+ showQRNav.addEventListener('click', function(e) {
+ e.preventDefault();
+ qrModal.style.display = 'flex';
+ // Close the mobile nav
+ const mobileNav = document.getElementById('mobileNav');
+ const navOverlay = document.getElementById('navOverlay');
+ const navToggle = document.getElementById('navToggle');
+ if (mobileNav) mobileNav.classList.remove('active');
+ if (navOverlay) navOverlay.classList.remove('active');
+ if (navToggle) navToggle.classList.remove('active');
+ document.body.style.overflow = '';
+ });
+ }
+
+ // Close on escape
+ document.addEventListener('keydown', function(e) {
+ if (e.key === 'Escape' && qrModal && qrModal.style.display === 'flex') {
+ qrModal.style.display = 'none';
+ }
+ });
+ }
+
+ if (document.readyState === 'loading') {
+ document.addEventListener('DOMContentLoaded', initQRModal);
+ } else {
+ initQRModal();
+ }
+ })();
+ </script>
+
+</body>
+</html>
