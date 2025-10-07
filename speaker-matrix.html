@@ -1,1115 +1,1273 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speaker Matrix | Imago Dei & AI Conference</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-weight: 300;
-            line-height: 1.5;
-            color: #222;
-            background: #fafafa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        header {
-            margin-bottom: 50px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-        }
-
-        .header-content {
-            flex: 1;
-        }
-
-        h1 {
-            font-size: 2rem;
-            font-weight: 200;
-            color: #111;
-            margin-bottom: 8px;
-            letter-spacing: -1px;
-        }
-
-        .subtitle {
-            font-size: 1rem;
-            color: #666;
-            font-weight: 300;
-            margin-bottom: 20px;
-        }
-
-        .intro {
-            background: #f5f5f5;
-            padding: 20px;
-            border-left: 3px solid #333;
-            font-size: 0.95rem;
-            color: #555;
-        }
-
-        .nav-toggle {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 8px;
-            color: #333;
-            transition: transform 0.2s ease;
-            min-width: 44px;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .matrix-selector {
-            display: flex;
-            gap: 10px;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-
-        .matrix-tab {
-            background: white;
-            border: 2px solid #ddd;
-            padding: 12px 20px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-        }
-
-        .matrix-tab:hover {
-            border-color: #999;
-        }
-
-        .matrix-tab.active {
-            background: #333;
-            color: white;
-            border-color: #333;
-        }
-
-        .matrix-container {
-            background: white;
-            border: 2px solid #333;
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            margin: 80px auto 60px;
-            aspect-ratio: 1;
-        }
-
-        .matrix-title {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            font-size: 1.1rem;
-            font-weight: 400;
-            color: #333;
-        }
-
-        .axis-line {
-            position: absolute;
-            background: #333;
-        }
-
-        .axis-line.vertical {
-            width: 2px;
-            height: 100%;
-            left: 50%;
-            top: 0;
-            transform: translateX(-1px);
-        }
-
-        .axis-line.horizontal {
-            height: 2px;
-            width: 100%;
-            top: 50%;
-            left: 0;
-            transform: translateY(-1px);
-        }
-
-        .axis-label {
-            position: absolute;
-            font-size: 0.85rem;
-            color: #666;
-            font-weight: 400;
-        }
-
-        .axis-label.top {
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-        }
-
-        .axis-label.bottom {
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-        }
-
-        .axis-label.left {
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%) rotate(-90deg);
-            transform-origin: center;
-            white-space: nowrap;
-        }
-
-        .axis-label.right {
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%) rotate(90deg);
-            transform-origin: center;
-            white-space: nowrap;
-        }
-
-        .quadrant-label {
-            position: absolute;
-            font-size: 0.75rem;
-            color: #bbb;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            pointer-events: none;
-        }
-
-        .quadrant-label.q1 {
-            top: 20%;
-            right: 20%;
-        }
-
-        .quadrant-label.q2 {
-            top: 20%;
-            left: 20%;
-        }
-
-        .quadrant-label.q3 {
-            bottom: 20%;
-            left: 20%;
-        }
-
-        .quadrant-label.q4 {
-            bottom: 20%;
-            right: 20%;
-        }
-
-        .speaker-dot {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            cursor: move;
-            transition: transform 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 3px solid white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            z-index: 10;
-        }
-
-        .speaker-dot:hover {
-            transform: scale(1.15);
-            z-index: 20;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
-        .speaker-dot.dragging {
-            opacity: 0.8;
-            z-index: 100;
-        }
-
-        .speaker-dot.inactive {
-            opacity: 0.3;
-            cursor: default;
-            pointer-events: none;
-        }
-
-        .speaker-dot.selected {
-            box-shadow: 0 0 0 3px #ff6b6b;
-            z-index: 30;
-        }
-
-        .movement-arrow {
-            position: absolute;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        .movement-arrow svg {
-            overflow: visible;
-        }
-
-        .movement-arrow line {
-            stroke: #ff6b6b;
-            stroke-width: 2;
-            stroke-dasharray: 5,5;
-        }
-
-        .movement-arrow .arrowhead {
-            fill: #ff6b6b;
-        }
-
-        .original-position {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 2px dashed #999;
-            background: rgba(200, 200, 200, 0.3);
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 4;
-        }
-
-        .distance-label {
-            position: absolute;
-            background: #ff6b6b;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            pointer-events: none;
-            z-index: 25;
-            white-space: nowrap;
-        }
-
-        .speaker-dot img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .speaker-dot .initials {
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: #666;
-            background: #f0f0f0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        .speaker-tooltip {
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.85);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-
-        .speaker-dot:hover .speaker-tooltip {
-            opacity: 1;
-        }
-
-        .controls {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .reset-btn, .show-movements-btn {
-            background: white;
-            border: 1px solid #333;
-            padding: 10px 20px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .reset-btn:hover, .show-movements-btn:hover {
-            background: #333;
-            color: white;
-        }
-
-        .show-movements-btn.active {
-            background: #ff6b6b;
-            border-color: #ff6b6b;
-            color: white;
-        }
-
-        .instructions {
-            background: #f9f9f9;
-            border: 1px solid #e0e0e0;
-            padding: 20px;
-            margin: 30px 0;
-            font-size: 0.9rem;
-            color: #555;
-        }
-
-        .instructions strong {
-            color: #333;
-        }
-
-        .panel-filter {
-            background: white;
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .filter-label {
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: #333;
-            margin-bottom: 12px;
-        }
-
-        .panel-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .panel-option {
-            background: #f5f5f5;
-            border: 1px solid #ddd;
-            padding: 8px 15px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .panel-option:hover {
-            border-color: #999;
-        }
-
-        .panel-option.active {
-            background: #333;
-            color: white;
-            border-color: #333;
-        }
-
-        /* Mobile Navigation */
-        .mobile-nav {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 280px;
-            height: 100vh;
-            background: white;
-            z-index: 1000;
-            transition: right 0.3s ease;
-            box-shadow: -2px 0 20px rgba(0,0,0,0.1);
-            overflow-y: auto;
-        }
-
-        .mobile-nav.active {
-            right: 0;
-        }
-
-        .nav-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .nav-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .nav-header {
-            padding: 30px 20px 20px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .nav-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            float: right;
-            color: #666;
-            min-width: 44px;
-            min-height: 44px;
-        }
-
-        .nav-title {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: #222;
-            margin-top: 10px;
-        }
-
-        .nav-section {
-            padding: 20px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .nav-section-title {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 0 20px 15px;
-        }
-
-        .nav-link {
-            display: block;
-            padding: 12px 20px;
-            color: #333;
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: background-color 0.2s ease;
-            border-left: 3px solid transparent;
-        }
-
-        .nav-link:hover, .nav-link.current {
-            background: #f8f8f8;
-            border-left-color: #333;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 30px 15px;
-            }
-
-            h1 {
-                font-size: 1.6rem;
-            }
-
-            .matrix-container {
-                max-width: 100%;
-            }
-
-            .speaker-dot {
-                width: 50px;
-                height: 50px;
-            }
-
-            .axis-label {
-                font-size: 0.75rem;
-            }
-        }
-    </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Speaker Matrix | Imago Dei & AI Conference</title>
+ <style>
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Helvetica Neue', Arial, sans-serif;
+ font-weight: 300;
+ line-height: 1.5;
+ color: #222;
+ background: #fafafa;
+ }
+
+ .container {
+ max-width: 1200px;
+ margin: 0 auto;
+ padding: 40px 20px;
+ }
+
+ header {
+ margin-bottom: 50px;
+ padding-bottom: 30px;
+ border-bottom: 1px solid #ddd;
+ }
+
+ .main-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: flex-start;
+ margin-bottom: 20px;
+ }
+
+ .header-content {
+ flex: 1;
+ }
+
+ h1 {
+ font-size: 2rem;
+ font-weight: 200;
+ color: #111;
+ margin-bottom: 8px;
+ letter-spacing: -1px;
+ }
+
+ .subtitle {
+ font-size: 1rem;
+ color: #666;
+ font-weight: 300;
+ margin-bottom: 20px;
+ }
+
+ .intro {
+ background: #f5f5f5;
+ padding: 20px;
+ border-left: 3px solid #333;
+ font-size: 0.95rem;
+ color: #555;
+ }
+
+ .nav-toggle {
+ background: none;
+ border: none;
+ font-size: 1.5rem;
+ cursor: pointer;
+ padding: 8px;
+ color: #333;
+ display: none; /* Show only on mobile */
+ transition: transform 0.2s ease;
+ min-width: 44px;
+ min-height: 44px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ position: fixed;
+ top: 20px;
+ right: 20px;
+ z-index: 1001;
+ background: white;
+ border-radius: 4px;
+ box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+ }
+
+ .matrix-selector {
+ display: flex;
+ gap: 10px;
+ margin: 30px 0;
+ flex-wrap: wrap;
+ }
+
+ .matrix-tab {
+ background: white;
+ border: 2px solid #ddd;
+ padding: 12px 20px;
+ cursor: pointer;
+ transition: all 0.2s ease;
+ font-size: 0.9rem;
+ }
+
+ .matrix-tab:hover {
+ border-color: #999;
+ }
+
+ .matrix-tab.active {
+ background: #333;
+ color: white;
+ border-color: #333;
+ }
+
+ .matrix-container {
+ background: white;
+ border: 2px solid #333;
+ position: relative;
+ width: 100%;
+ max-width: 800px;
+ margin: 80px auto 60px;
+ aspect-ratio: 1;
+ }
+
+ .matrix-title {
+ position: absolute;
+ top: -40px;
+ left: 0;
+ font-size: 1.1rem;
+ font-weight: 400;
+ color: #333;
+ }
+
+ .axis-line {
+ position: absolute;
+ background: #333;
+ }
+
+ .axis-line.vertical {
+ width: 2px;
+ height: 100%;
+ left: 50%;
+ top: 0;
+ transform: translateX(-1px);
+ }
+
+ .axis-line.horizontal {
+ height: 2px;
+ width: 100%;
+ top: 50%;
+ left: 0;
+ transform: translateY(-1px);
+ }
+
+ .axis-label {
+ position: absolute;
+ font-size: 0.85rem;
+ color: #666;
+ font-weight: 400;
+ }
+
+ .axis-label.top {
+ top: 10px;
+ left: 50%;
+ transform: translateX(-50%);
+ text-align: center;
+ }
+
+ .axis-label.bottom {
+ bottom: 10px;
+ left: 50%;
+ transform: translateX(-50%);
+ text-align: center;
+ }
+
+ .axis-label.left {
+ left: 10px;
+ top: 50%;
+ transform: translateY(-50%) rotate(-90deg);
+ transform-origin: center;
+ white-space: nowrap;
+ }
+
+ .axis-label.right {
+ right: 10px;
+ top: 50%;
+ transform: translateY(-50%) rotate(90deg);
+ transform-origin: center;
+ white-space: nowrap;
+ }
+
+ .quadrant-label {
+ position: absolute;
+ font-size: 0.75rem;
+ color: #bbb;
+ font-weight: 500;
+ text-transform: uppercase;
+ letter-spacing: 1px;
+ pointer-events: none;
+ }
+
+ .quadrant-label.q1 {
+ top: 20%;
+ right: 20%;
+ }
+
+ .quadrant-label.q2 {
+ top: 20%;
+ left: 20%;
+ }
+
+ .quadrant-label.q3 {
+ bottom: 20%;
+ left: 20%;
+ }
+
+ .quadrant-label.q4 {
+ bottom: 20%;
+ right: 20%;
+ }
+
+ .speaker-dot {
+ position: absolute;
+ width: 60px;
+ height: 60px;
+ border-radius: 50%;
+ cursor: move;
+ transition: transform 0.2s ease;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ border: 3px solid white;
+ box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+ z-index: 10;
+ }
+
+ .speaker-dot:hover {
+ transform: scale(1.15);
+ z-index: 20;
+ box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+ }
+
+ .speaker-dot.dragging {
+ opacity: 0.8;
+ z-index: 100;
+ }
+
+ .speaker-dot.inactive {
+ opacity: 0.3;
+ cursor: default;
+ pointer-events: none;
+ }
+
+ .speaker-dot.selected {
+ box-shadow: 0 0 0 3px #ff6b6b;
+ z-index: 30;
+ }
+
+ .movement-arrow {
+ position: absolute;
+ pointer-events: none;
+ z-index: 5;
+ }
+
+ .movement-arrow svg {
+ overflow: visible;
+ }
+
+ .movement-arrow line {
+ stroke: #ff6b6b;
+ stroke-width: 2;
+ stroke-dasharray: 5,5;
+ }
+
+ .movement-arrow .arrowhead {
+ fill: #ff6b6b;
+ }
+
+ .original-position {
+ position: absolute;
+ width: 60px;
+ height: 60px;
+ border-radius: 50%;
+ border: 2px dashed #999;
+ background: rgba(200, 200, 200, 0.3);
+ transform: translate(-50%, -50%);
+ pointer-events: none;
+ z-index: 4;
+ }
+
+ .distance-label {
+ position: absolute;
+ background: #ff6b6b;
+ color: white;
+ padding: 4px 8px;
+ border-radius: 3px;
+ font-size: 0.7rem;
+ font-weight: 500;
+ pointer-events: none;
+ z-index: 25;
+ white-space: nowrap;
+ }
+
+ .speaker-dot img {
+ width: 100%;
+ height: 100%;
+ border-radius: 50%;
+ object-fit: cover;
+ }
+
+ .speaker-dot .initials {
+ font-size: 1.2rem;
+ font-weight: 500;
+ color: #666;
+ background: #f0f0f0;
+ width: 100%;
+ height: 100%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ border-radius: 50%;
+ }
+
+ .speaker-tooltip {
+ position: absolute;
+ bottom: -30px;
+ left: 50%;
+ transform: translateX(-50%);
+ background: rgba(0,0,0,0.85);
+ color: white;
+ padding: 6px 12px;
+ border-radius: 4px;
+ font-size: 0.75rem;
+ white-space: nowrap;
+ pointer-events: none;
+ opacity: 0;
+ transition: opacity 0.2s ease;
+ }
+
+ .speaker-dot:hover .speaker-tooltip {
+ opacity: 1;
+ }
+
+ .controls {
+ display: flex;
+ gap: 15px;
+ justify-content: center;
+ margin: 20px 0;
+ flex-wrap: wrap;
+ }
+
+ .reset-btn, .show-movements-btn {
+ background: white;
+ border: 1px solid #333;
+ padding: 10px 20px;
+ font-size: 0.85rem;
+ cursor: pointer;
+ transition: all 0.2s ease;
+ }
+
+ .reset-btn:hover, .show-movements-btn:hover {
+ background: #333;
+ color: white;
+ }
+
+ .show-movements-btn.active {
+ background: #ff6b6b;
+ border-color: #ff6b6b;
+ color: white;
+ }
+
+ .instructions {
+ background: #f9f9f9;
+ border: 1px solid #e0e0e0;
+ padding: 20px;
+ margin: 30px 0;
+ font-size: 0.9rem;
+ color: #555;
+ }
+
+ .instructions strong {
+ color: #333;
+ }
+
+ .panel-filter {
+ background: white;
+ border: 1px solid #ddd;
+ padding: 20px;
+ margin: 20px 0;
+ }
+
+ .filter-label {
+ font-size: 0.9rem;
+ font-weight: 400;
+ color: #333;
+ margin-bottom: 12px;
+ }
+
+ .panel-options {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 8px;
+ }
+
+ .panel-option {
+ background: #f5f5f5;
+ border: 1px solid #ddd;
+ padding: 8px 15px;
+ font-size: 0.85rem;
+ cursor: pointer;
+ transition: all 0.2s ease;
+ }
+
+ .panel-option:hover {
+ border-color: #999;
+ }
+
+ .panel-option.active {
+ background: #333;
+ color: white;
+ border-color: #333;
+ }
+
+ /* Mobile Navigation */
+ .mobile-nav {
+ position: fixed;
+ top: 0;
+ right: -100%;
+ width: 280px;
+ height: 100vh;
+ background: white;
+ z-index: 1000;
+ transition: right 0.3s ease;
+ box-shadow: -2px 0 20px rgba(0,0,0,0.1);
+ overflow-y: auto;
+ }
+
+ .mobile-nav.active {
+ right: 0;
+ }
+
+ .nav-overlay {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: rgba(0,0,0,0.5);
+ z-index: 999;
+ opacity: 0;
+ visibility: hidden;
+ transition: all 0.3s ease;
+ }
+
+ .nav-overlay.active {
+ opacity: 1;
+ visibility: visible;
+ }
+
+ .nav-header {
+ padding: 30px 20px 20px;
+ border-bottom: 1px solid #eee;
+ }
+
+ .nav-close {
+ background: none;
+ border: none;
+ font-size: 1.5rem;
+ cursor: pointer;
+ float: right;
+ color: #666;
+ min-width: 44px;
+ min-height: 44px;
+ }
+
+ .nav-title {
+ font-size: 1.1rem;
+ font-weight: 500;
+ color: #222;
+ margin-top: 10px;
+ }
+
+ .nav-section {
+ padding: 20px 0;
+ border-bottom: 1px solid #f0f0f0;
+ }
+
+ .nav-section-title {
+ font-size: 0.85rem;
+ font-weight: 500;
+ color: #999;
+ text-transform: uppercase;
+ letter-spacing: 1px;
+ margin: 0 20px 15px;
+ }
+
+ .nav-link {
+ display: block;
+ padding: 12px 20px;
+ color: #333;
+ text-decoration: none;
+ font-size: 0.95rem;
+ transition: background-color 0.2s ease;
+ border-left: 3px solid transparent;
+ }
+
+ .nav-link:hover, .nav-link.current {
+ background: #f8f8f8;
+ border-left-color: #333;
+ }
+
+ @media (max-width: 768px) {
+ .container {
+ padding: 30px 15px;
+ }
+
+ h1 {
+ font-size: 1.6rem;
+ }
+
+ .matrix-container {
+ max-width: 100%;
+ }
+
+ .speaker-dot {
+ width: 50px;
+ height: 50px;
+ }
+
+ .axis-label {
+ font-size: 0.75rem;
+ }
+
+ /* Horizontal scroll for matrix selector on mobile */
+ .matrix-selector {
+ flex-wrap: nowrap;
+ overflow-x: auto;
+ -webkit-overflow-scrolling: touch;
+ gap: 8px;
+ padding-bottom: 10px;
+ scrollbar-width: thin;
+ }
+
+ .matrix-selector::-webkit-scrollbar {
+ height: 6px;
+ }
+
+ .matrix-selector::-webkit-scrollbar-thumb {
+ background: #999;
+ border-radius: 3px;
+ }
+
+ .matrix-tab {
+ flex-shrink: 0;
+ padding: 10px 16px;
+ font-size: 0.85rem;
+ white-space: nowrap;
+ }
+
+ /* Horizontal scroll for panel filter on mobile */
+ .panel-filter {
+ padding: 15px;
+ margin: 15px 0;
+ }
+
+ .filter-label {
+ font-size: 0.85rem;
+ margin-bottom: 10px;
+ }
+
+ .panel-options {
+ flex-wrap: nowrap;
+ overflow-x: auto;
+ -webkit-overflow-scrolling: touch;
+ gap: 6px;
+ padding-bottom: 10px;
+ scrollbar-width: thin;
+ }
+
+ .panel-options::-webkit-scrollbar {
+ height: 6px;
+ }
+
+ .panel-options::-webkit-scrollbar-thumb {
+ background: #999;
+ border-radius: 3px;
+ }
+
+ .panel-option {
+ flex-shrink: 0;
+ padding: 8px 14px;
+ font-size: 0.8rem;
+ white-space: nowrap;
+ }
+ }
+ </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="main-header">
-                <div class="header-content">
-                    <h1>📊 Speaker Matrix</h1>
-                    <p class="subtitle">Map speaker perspectives across key dimensions</p>
-                    <div class="intro">
-                        Explore where speakers sit on fundamental questions. These placements are educated guesses based on their work—drag speakers to adjust if you disagree!
-                    </div>
-                </div>
-                <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu">
-                    ☰
-                </button>
-            </div>
-        </header>
-
-        <div class="nav-overlay" id="navOverlay"></div>
-
-        <nav class="mobile-nav" id="mobileNav">
-            <div class="nav-header">
-                <button class="nav-close" id="navClose" aria-label="Close navigation menu">×</button>
-                <div class="nav-title">Conference Navigation</div>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-section-title">Core Content</div>
-                <a href="index.html" class="nav-link">🏠 Home</a>
-                <a href="schedule.html" class="nav-link">📅 Schedule</a>
-                <a href="speakers.html" class="nav-link">👥 Speakers</a>
-                <a href="reading-lists.html" class="nav-link">📚 Essential Readings</a>
-                <a href="questions.html" class="nav-link">❓ Question Bank</a>
-                <a href="notes.html" class="nav-link">📝 Session Notes</a>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-section-title">Interactive Tools</div>
-                <a href="bingo.html" class="nav-link">🎲 Conference Bingo</a>
-                <a href="name-face-quiz.html" class="nav-link">🤔 Name-Face Quiz</a>
-                <a href="expertise-quiz.html" class="nav-link">🧠 Expertise Quiz</a>
-                <a href="research-briefs.html" class="nav-link">📄 Research Briefs</a>
-                <a href="metaphor-tracker.html" class="nav-link">💭 Metaphor Tracker</a>
-                <a href="speaker-matrix.html" class="nav-link current">📊 Speaker Matrix</a>
-                <a href="insight-collector.html" class="nav-link">💡 Insight Collector</a>
-            </div>
-        </nav>
-
-        <div class="instructions">
-            <strong>How to use:</strong> Click a matrix below to view speaker positions. Filter by panel to focus on specific sessions. Drag any speaker's photo to reposition them based on your understanding. Your custom placements are saved locally.
-        </div>
-
-        <div class="panel-filter">
-            <div class="filter-label">Filter by Panel/Session:</div>
-            <div class="panel-options" id="panelOptions">
-                <div class="panel-option active" data-panel="all">All Participants</div>
-                <div class="panel-option" data-panel="keynotes">Keynote Speakers</div>
-                <div class="panel-option" data-panel="frontiers">Fireside: Frontiers of AI</div>
-                <div class="panel-option" data-panel="session-i">Session I: Technos, Telos, Theology</div>
-                <div class="panel-option" data-panel="session-ii">Session II: Education</div>
-                <div class="panel-option" data-panel="session-iii">Session III: Relationships</div>
-                <div class="panel-option" data-panel="session-iv">Session IV: AI at Church</div>
-            </div>
-        </div>
-
-        <div class="matrix-selector" id="matrixSelector">
-            <button class="matrix-tab active" data-matrix="tech-theology">Technology ↔ Theology</button>
-            <button class="matrix-tab" data-matrix="theory-practice">Theory ↔ Practice</button>
-            <button class="matrix-tab" data-matrix="optimism-caution">Optimism ↔ Caution</button>
-            <button class="matrix-tab" data-matrix="tradition-innovation">Tradition ↔ Innovation</button>
-            <button class="matrix-tab" data-matrix="individual-collective">Individual ↔ Collective</button>
-        </div>
-
-        <div id="matrixDisplay"></div>
-
-        <div class="controls">
-            <button class="show-movements-btn" id="showMovementsBtn">Show All Movements</button>
-            <button class="reset-btn" id="resetBtn">Reset to Default Positions</button>
-        </div>
-    </div>
-
-    <script>
-        const matrices = {
-            'tech-theology': {
-                title: 'Technology Focus ↔ Theology Focus',
-                xLabel: { left: 'Deep Theology', right: 'Technical Expertise' },
-                yLabel: { top: 'Speculative', bottom: 'Applied' },
-                speakers: {
-                    'picard': { x: 75, y: 40 },      // Technical + Applied
-                    'dorobantu': { x: 25, y: 35 },   // Theological + Applied
-                    'zhang': { x: 85, y: 45 },       // Very technical + Applied
-                    'weyl': { x: 70, y: 25 },        // Technical + Speculative
-                    'kim-theodore': { x: 80, y: 50 }, // Technical + Applied
-                    'johnson': { x: 60, y: 35 },     // Balanced + Applied
-                    'wales': { x: 30, y: 30 },       // Theological + Speculative
-                    'drake': { x: 35, y: 40 },       // Theological + Applied
-                    'cross': { x: 25, y: 25 },       // Theological + Speculative
-                    'crouch': { x: 45, y: 35 },      // Slight tech + Applied
-                    'simpson': { x: 40, y: 45 },     // Mixed + Applied
-                    'zittrain': { x: 65, y: 30 },    // Tech + Speculative
-                    'vanderweele': { x: 55, y: 55 }, // Balanced + Very applied
-                    'teubner': { x: 35, y: 50 },     // Theological + Applied
-                    'lumbreras': { x: 70, y: 55 },   // Technical + Applied
-                    'kelly': { x: 75, y: 60 },       // Tech + Very applied
-                    'wright': { x: 20, y: 30 },      // Very theological + Speculative
-                    'ha': { x: 15, y: 25 },          // Very theological + Speculative
-                    'thio': { x: 30, y: 50 },        // Theological + Applied
-                    'tan': { x: 35, y: 45 },         // Theological + Applied
-                    'durr': { x: 25, y: 45 },        // Theological + Applied
-                    'okediji': { x: 40, y: 55 },     // Mixed + Applied
-                    'west': { x: 50, y: 65 },        // Balanced + Very applied
-                    'kim': { x: 50, y: 40 }          // Balanced + Applied
-                }
-            },
-            'theory-practice': {
-                title: 'Theoretical Analysis ↔ Practical Implementation',
-                xLabel: { left: 'Abstract Theory', right: 'Hands-On Practice' },
-                yLabel: { top: 'Research Focus', bottom: 'Policy Focus' },
-                speakers: {
-                    'picard': { x: 65, y: 45 },
-                    'dorobantu': { x: 30, y: 30 },
-                    'zhang': { x: 70, y: 35 },
-                    'weyl': { x: 45, y: 40 },
-                    'kim-theodore': { x: 75, y: 25 },
-                    'johnson': { x: 50, y: 70 },     // Practice + Policy
-                    'wales': { x: 25, y: 35 },
-                    'drake': { x: 35, y: 40 },
-                    'cross': { x: 30, y: 65 },       // Theory + Policy
-                    'crouch': { x: 45, y: 55 },
-                    'simpson': { x: 35, y: 60 },
-                    'zittrain': { x: 40, y: 75 },    // Theory + Very policy
-                    'vanderweele': { x: 55, y: 35 },
-                    'teubner': { x: 60, y: 50 },
-                    'lumbreras': { x: 65, y: 45 },
-                    'kelly': { x: 80, y: 60 },       // Very practice + Policy
-                    'wright': { x: 20, y: 30 },
-                    'ha': { x: 15, y: 25 },
-                    'thio': { x: 30, y: 75 },        // Theory + Very policy
-                    'tan': { x: 35, y: 70 },
-                    'durr': { x: 40, y: 55 },
-                    'okediji': { x: 35, y: 80 },     // Theory + Very policy
-                    'west': { x: 50, y: 70 },
-                    'kim': { x: 55, y: 50 }
-                }
-            },
-            'optimism-caution': {
-                title: 'AI Optimism ↔ AI Caution',
-                xLabel: { left: 'Cautious/Critical', right: 'Optimistic/Embracing' },
-                yLabel: { top: 'Focuses on Risks', bottom: 'Focuses on Opportunities' },
-                speakers: {
-                    'picard': { x: 65, y: 55 },      // Optimistic + Opportunities
-                    'dorobantu': { x: 45, y: 35 },   // Balanced + Risks
-                    'zhang': { x: 70, y: 50 },       // Optimistic + Balanced
-                    'weyl': { x: 75, y: 60 },        // Very optimistic + Opportunities
-                    'kim-theodore': { x: 70, y: 55 },
-                    'johnson': { x: 55, y: 40 },
-                    'wales': { x: 40, y: 30 },       // Cautious + Risks
-                    'drake': { x: 50, y: 35 },
-                    'cross': { x: 35, y: 25 },       // Cautious + Risks
-                    'crouch': { x: 25, y: 20 },      // Very cautious + Very risks
-                    'simpson': { x: 45, y: 35 },
-                    'zittrain': { x: 40, y: 30 },
-                    'vanderweele': { x: 60, y: 60 }, // Optimistic + Opportunities
-                    'teubner': { x: 55, y: 55 },
-                    'lumbreras': { x: 65, y: 60 },
-                    'kelly': { x: 75, y: 65 },       // Very optimistic + Opportunities
-                    'wright': { x: 35, y: 30 },
-                    'ha': { x: 40, y: 35 },
-                    'thio': { x: 45, y: 40 },
-                    'tan': { x: 50, y: 40 },
-                    'durr': { x: 40, y: 35 },
-                    'okediji': { x: 50, y: 45 },
-                    'west': { x: 55, y: 50 },
-                    'kim': { x: 60, y: 55 }
-                }
-            },
-            'tradition-innovation': {
-                title: 'Traditional Frameworks ↔ Novel Approaches',
-                xLabel: { left: 'Grounded in Tradition', right: 'Pioneering New Methods' },
-                yLabel: { top: 'Questions Disruption', bottom: 'Embraces Disruption' },
-                speakers: {
-                    'picard': { x: 60, y: 60 },
-                    'dorobantu': { x: 35, y: 40 },   // Traditional + Questions
-                    'zhang': { x: 75, y: 65 },
-                    'weyl': { x: 85, y: 75 },        // Very innovative + Very embraces
-                    'kim-theodore': { x: 70, y: 70 },
-                    'johnson': { x: 55, y: 50 },
-                    'wales': { x: 25, y: 35 },       // Very traditional + Questions
-                    'drake': { x: 45, y: 50 },
-                    'cross': { x: 30, y: 30 },
-                    'crouch': { x: 35, y: 25 },      // Traditional + Very questions
-                    'simpson': { x: 40, y: 40 },
-                    'zittrain': { x: 65, y: 55 },
-                    'vanderweele': { x: 50, y: 60 },
-                    'teubner': { x: 40, y: 55 },
-                    'lumbreras': { x: 60, y: 65 },
-                    'kelly': { x: 75, y: 70 },
-                    'wright': { x: 20, y: 30 },      // Very traditional + Questions
-                    'ha': { x: 15, y: 25 },          // Very traditional + Very questions
-                    'thio': { x: 30, y: 35 },
-                    'tan': { x: 35, y: 40 },
-                    'durr': { x: 35, y: 40 },
-                    'okediji': { x: 45, y: 45 },
-                    'west': { x: 50, y: 55 },
-                    'kim': { x: 55, y: 60 }
-                }
-            },
-            'individual-collective': {
-                title: 'Individual Flourishing ↔ Collective Good',
-                xLabel: { left: 'Individual Agency', right: 'Social/Collective Focus' },
-                yLabel: { top: 'Philosophical/Abstract', bottom: 'Institutional/Structural' },
-                speakers: {
-                    'picard': { x: 40, y: 50 },      // Individual + Institutional
-                    'dorobantu': { x: 50, y: 25 },   // Balanced + Philosophical
-                    'zhang': { x: 55, y: 45 },
-                    'weyl': { x: 75, y: 60 },        // Very collective + Institutional
-                    'kim-theodore': { x: 45, y: 30 },
-                    'johnson': { x: 50, y: 70 },     // Balanced + Very institutional
-                    'wales': { x: 45, y: 25 },
-                    'drake': { x: 50, y: 30 },
-                    'cross': { x: 60, y: 65 },       // Collective + Institutional
-                    'crouch': { x: 35, y: 30 },      // Individual + Philosophical
-                    'simpson': { x: 45, y: 60 },
-                    'zittrain': { x: 65, y: 75 },    // Collective + Very institutional
-                    'vanderweele': { x: 40, y: 35 }, // Individual + Philosophical
-                    'teubner': { x: 55, y: 55 },
-                    'lumbreras': { x: 55, y: 50 },
-                    'kelly': { x: 60, y: 60 },
-                    'wright': { x: 50, y: 20 },      // Balanced + Very philosophical
-                    'ha': { x: 55, y: 25 },
-                    'thio': { x: 50, y: 75 },        // Balanced + Very institutional
-                    'tan': { x: 55, y: 70 },
-                    'durr': { x: 60, y: 55 },
-                    'okediji': { x: 65, y: 80 },     // Collective + Very institutional
-                    'west': { x: 55, y: 70 },
-                    'kim': { x: 50, y: 45 }
-                }
-            }
-        };
-
-        const speakerData = {
-            'picard': { name: 'Rosalind Picard', img: 'images/68bf34005db9773f6f3076a5_Rosalind.png', initials: 'RP' },
-            'dorobantu': { name: 'Marius Dorobantu', img: 'images/68c2377af103c367d351ba0d_Dorobantu_nb.png', initials: 'MD' },
-            'zhang': { name: 'Richard Zhang', img: 'images/68d2037dc584fa704afb56f9_Zhang_nb.png', initials: 'RZ' },
-            'weyl': { name: 'Glen Weyl', img: 'images/68cc34a922629a84c367e934_Weyl_nb.png', initials: 'GW' },
-            'kim-theodore': { name: 'Theodore Kim', img: 'images/68c237331ffbfdc0af78d85b_T_Kim_nb.png', initials: 'TK' },
-            'johnson': { name: 'Matthew Johnson', img: 'images/68cc29457f8526310612f749_Johnson_2_nb.png', initials: 'MJ' },
-            'wales': { name: 'Jordan Wales', img: 'images/68d70ec87b700c234dd8c5ea_Wales_nb.png', initials: 'JW' },
-            'drake': { name: 'Lyndon Drake', img: 'images/68bf348c045bfbfb2bb08b8b_Drake_nb.png', initials: 'LD' },
-            'cross': { name: 'Simon Cross', img: 'images/68bf343334dacf5c8949a753_Simon.png', initials: 'SC' },
-            'crouch': { name: 'Andy Crouch', img: 'images/68d2075e4b3a1d21c8593a1b_Crouch_3_nb_cropped.png', initials: 'AC' },
-            'simpson': { name: 'Tom Simpson', img: 'images/68bf3557e24b0b6afd52178b_Simpson_nb.png', initials: 'TS' },
-            'zittrain': { name: 'Jonathan Zittrain', img: 'images/68d948abefa9245db3c682d7_Zittrain_nb.png', initials: 'JZ' },
-            'vanderweele': { name: 'Tyler VanderWeele', img: 'images/68bf366737555730781a7ce4_VanderWeele_nb.png', initials: 'TV' },
-            'teubner': { name: 'Jonathan Teubner', img: 'images/68bf35d6de9d761c38c2e52d_Teubner_2_nb.png', initials: 'JT' },
-            'lumbreras': { name: 'Sara Lumbreras', img: 'images/68bf34c7aaab80d20ba278ff_Lumbreras_nb.png', initials: 'SL' },
-            'kelly': { name: 'James Kelly', img: 'images/68d210770f4ecf1ac7d4aeb2_Kelly_nb.png', initials: 'JK' },
-            'wright': { name: 'Oliver Wright', img: 'images/68d200abae19d0f5ba7a5b08_Wright_nb_2.png', initials: 'OW' },
-            'ha': { name: 'Polly Ha', img: 'images/68d6b058a135d479c482c06d_Ha_nb_compressed.png', initials: 'PH' },
-            'thio': { name: 'Li-ann Thio', img: 'images/68bf360dd4e55d41be075fad_Thio_nb.png', initials: 'LT' },
-            'tan': { name: 'Seow Hon Tan', img: 'images/68bf35875d7efe1da673d1c5_Tan_nb.png', initials: 'ST' },
-            'durr': { name: 'Oliver Dürr', img: 'images/68d94521b010df995f6ca300_Durr_nb.png', initials: 'OD' },
-            'okediji': { name: 'Ruth Okediji', img: 'images/68bf3500e5ada2afa39974e7_Okediji_nb.png', initials: 'RO' },
-            'west': { name: 'Martin West', img: 'images/68bf368da19d027e3e602c72_West_2.png', initials: 'MW' },
-            'kim': { name: 'John Kim', img: 'images/68dc1c89e593114d3bff931e_Kim_2_nb.png', initials: 'JK' }
-        };
-
-        const panelRosters = {
-            'all': ['picard', 'dorobantu', 'zhang', 'weyl', 'kim-theodore', 'johnson', 'wales', 'drake', 'cross', 'crouch', 'simpson', 'zittrain', 'vanderweele', 'teubner', 'lumbreras', 'kelly', 'wright', 'ha', 'thio', 'tan', 'durr', 'okediji', 'west', 'kim'],
-            'keynotes': ['picard', 'kim', 'vanderweele'],
-            'frontiers': ['zittrain', 'zhang', 'weyl', 'kim-theodore', 'johnson'], // Chair + participants
-            'session-i': ['simpson', 'cross', 'ha', 'thio', 'dorobantu'], // Chair + panelists
-            'session-ii': ['west', 'dorobantu', 'lumbreras'], // Chair + panelists
-            'session-iii': ['drake', 'teubner', 'wales', 'tan'], // Chair + panelists
-            'session-iv': ['crouch', 'kelly', 'wright', 'durr'] // Chair + panelists
-        };
-
-        let currentMatrix = 'tech-theology';
-        let currentPanel = 'all';
-        let customPositions = JSON.parse(localStorage.getItem('speakerMatrixPositions') || '{}');
-        let draggedElement = null;
-        let dragOffset = { x: 0, y: 0 };
-        let selectedSpeaker = null;
-        let showAllMovements = false;
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Navigation
-            const navToggle = document.getElementById('navToggle');
-            const navClose = document.getElementById('navClose');
-            const mobileNav = document.getElementById('mobileNav');
-            const navOverlay = document.getElementById('navOverlay');
-
-            navToggle.addEventListener('click', () => {
-                mobileNav.classList.add('active');
-                navOverlay.classList.add('active');
-            });
-
-            navClose.addEventListener('click', closeNav);
-            navOverlay.addEventListener('click', closeNav);
-
-            function closeNav() {
-                mobileNav.classList.remove('active');
-                navOverlay.classList.remove('active');
-            }
-
-            // Matrix tabs
-            const tabs = document.querySelectorAll('.matrix-tab');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    currentMatrix = tab.dataset.matrix;
-                    renderMatrix();
-                });
-            });
-
-            // Panel filter
-            const panelOptions = document.querySelectorAll('.panel-option');
-            panelOptions.forEach(option => {
-                option.addEventListener('click', () => {
-                    panelOptions.forEach(o => o.classList.remove('active'));
-                    option.classList.add('active');
-                    currentPanel = option.dataset.panel;
-                    renderMatrix();
-                });
-            });
-
-            // Reset button
-            document.getElementById('resetBtn').addEventListener('click', () => {
-                if (confirm('Reset all speakers to default positions?')) {
-                    customPositions = {};
-                    localStorage.removeItem('speakerMatrixPositions');
-                    selectedSpeaker = null;
-                    renderMatrix();
-                }
-            });
-
-            // Show all movements button
-            document.getElementById('showMovementsBtn').addEventListener('click', () => {
-                showAllMovements = !showAllMovements;
-                const btn = document.getElementById('showMovementsBtn');
-                if (showAllMovements) {
-                    btn.classList.add('active');
-                    btn.textContent = 'Hide All Movements';
-                } else {
-                    btn.classList.remove('active');
-                    btn.textContent = 'Show All Movements';
-                }
-                renderMatrix();
-            });
-
-            renderMatrix();
-        });
-
-        function renderMatrix() {
-            const matrix = matrices[currentMatrix];
-            const display = document.getElementById('matrixDisplay');
-
-            const html = `
-                <div class="matrix-container" id="matrixContainer">
-                    <div class="matrix-title">${matrix.title}</div>
-
-                    <div class="axis-line vertical"></div>
-                    <div class="axis-line horizontal"></div>
-
-                    <div class="axis-label top">${matrix.yLabel.top}</div>
-                    <div class="axis-label bottom">${matrix.yLabel.bottom}</div>
-                    <div class="axis-label left">${matrix.xLabel.left}</div>
-                    <div class="axis-label right">${matrix.xLabel.right}</div>
-
-                    ${Object.entries(matrix.speakers).map(([id, pos]) => {
-                        const speaker = speakerData[id];
-                        const customPos = customPositions[currentMatrix]?.[id];
-                        const finalPos = customPos || pos;
-                        const isActive = panelRosters[currentPanel].includes(id);
-                        const inactiveClass = isActive ? '' : 'inactive';
-
-                        return `
-                            <div class="speaker-dot ${inactiveClass}"
-                                 data-speaker-id="${id}"
-                                 style="left: ${finalPos.x}%; top: ${finalPos.y}%; transform: translate(-50%, -50%);">
-                                <img src="${speaker.img}"
-                                     alt="${speaker.name}"
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                <div class="initials" style="display: none;">${speaker.initials}</div>
-                                <div class="speaker-tooltip">${speaker.name}</div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
-
-            display.innerHTML = html;
-
-            // Add drag and click handlers
-            const dots = document.querySelectorAll('.speaker-dot');
-            dots.forEach(dot => {
-                dot.addEventListener('mousedown', startDrag);
-                dot.addEventListener('touchstart', startDrag);
-                dot.addEventListener('click', (e) => {
-                    if (!dot.classList.contains('inactive')) {
-                        e.stopPropagation();
-                        selectSpeaker(dot.dataset.speakerId);
-                    }
-                });
-            });
-
-            // Click outside to deselect
-            document.getElementById('matrixContainer').addEventListener('click', (e) => {
-                if (e.target.id === 'matrixContainer') {
-                    selectedSpeaker = null;
-                    renderMatrix();
-                }
-            });
-
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('touchmove', drag);
-            document.addEventListener('mouseup', endDrag);
-            document.addEventListener('touchend', endDrag);
-
-            // Render movements if needed
-            if (showAllMovements || selectedSpeaker) {
-                renderMovementIndicators();
-            }
-        }
-
-        function selectSpeaker(speakerId) {
-            selectedSpeaker = selectedSpeaker === speakerId ? null : speakerId;
-            renderMatrix();
-        }
-
-        function renderMovementIndicators() {
-            const container = document.getElementById('matrixContainer');
-            const matrix = matrices[currentMatrix];
-            const containerRect = container.getBoundingClientRect();
-
-            // Remove existing indicators
-            container.querySelectorAll('.movement-arrow, .original-position, .distance-label').forEach(el => el.remove());
-
-            const speakersToShow = showAllMovements
-                ? Object.keys(matrix.speakers)
-                : selectedSpeaker ? [selectedSpeaker] : [];
-
-            speakersToShow.forEach(speakerId => {
-                const customPos = customPositions[currentMatrix]?.[speakerId];
-                if (!customPos) return; // No movement
-
-                const originalPos = matrix.speakers[speakerId];
-                const isActive = panelRosters[currentPanel].includes(speakerId);
-                if (!isActive && !showAllMovements) return;
-
-                // Calculate pixel positions
-                const origX = (originalPos.x / 100) * containerRect.width;
-                const origY = (originalPos.y / 100) * containerRect.height;
-                const newX = (customPos.x / 100) * containerRect.width;
-                const newY = (customPos.y / 100) * containerRect.height;
-
-                // Calculate distance
-                const distance = Math.sqrt(Math.pow(newX - origX, 2) + Math.pow(newY - origY, 2));
-                const distancePercent = Math.round((distance / containerRect.width) * 100);
-
-                // Add original position marker
-                const originalMarker = document.createElement('div');
-                originalMarker.className = 'original-position';
-                originalMarker.style.left = originalPos.x + '%';
-                originalMarker.style.top = originalPos.y + '%';
-                container.appendChild(originalMarker);
-
-                // Add arrow
-                const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                arrow.setAttribute('class', 'movement-arrow');
-                arrow.style.position = 'absolute';
-                arrow.style.left = '0';
-                arrow.style.top = '0';
-                arrow.style.width = '100%';
-                arrow.style.height = '100%';
-
-                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                line.setAttribute('x1', originalPos.x + '%');
-                line.setAttribute('y1', originalPos.y + '%');
-                line.setAttribute('x2', customPos.x + '%');
-                line.setAttribute('y2', customPos.y + '%');
-                arrow.appendChild(line);
-
-                // Add arrowhead
-                const angle = Math.atan2(customPos.y - originalPos.y, customPos.x - originalPos.x);
-                const arrowSize = 8;
-                const arrowX = customPos.x;
-                const arrowY = customPos.y;
-
-                const arrowhead = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-                const points = [
-                    [arrowX, arrowY],
-                    [arrowX - arrowSize * Math.cos(angle - Math.PI / 6), arrowY - arrowSize * Math.sin(angle - Math.PI / 6)],
-                    [arrowX - arrowSize * Math.cos(angle + Math.PI / 6), arrowY - arrowSize * Math.sin(angle + Math.PI / 6)]
-                ];
-                arrowhead.setAttribute('points', points.map(p => p.join(',')).join(' '));
-                arrowhead.setAttribute('class', 'arrowhead');
-                arrow.appendChild(arrowhead);
-
-                container.appendChild(arrow);
-
-                // Add distance label
-                const label = document.createElement('div');
-                label.className = 'distance-label';
-                label.textContent = `Moved ${distancePercent}%`;
-                label.style.left = ((originalPos.x + customPos.x) / 2) + '%';
-                label.style.top = ((originalPos.y + customPos.y) / 2 - 3) + '%';
-                label.style.transform = 'translate(-50%, -50%)';
-                container.appendChild(label);
-            });
-
-            // Update selected state
-            container.querySelectorAll('.speaker-dot').forEach(dot => {
-                dot.classList.toggle('selected', dot.dataset.speakerId === selectedSpeaker);
-            });
-        }
-
-        function startDrag(e) {
-            // Don't allow dragging inactive speakers
-            if (e.currentTarget.classList.contains('inactive')) {
-                return;
-            }
-
-            e.preventDefault();
-            draggedElement = e.currentTarget;
-            draggedElement.classList.add('dragging');
-
-            const rect = draggedElement.getBoundingClientRect();
-            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
-
-            dragOffset.x = clientX - rect.left - rect.width / 2;
-            dragOffset.y = clientY - rect.top - rect.height / 2;
-        }
-
-        function drag(e) {
-            if (!draggedElement) return;
-            e.preventDefault();
-
-            const container = document.getElementById('matrixContainer');
-            const containerRect = container.getBoundingClientRect();
-
-            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
-
-            let x = clientX - containerRect.left - dragOffset.x;
-            let y = clientY - containerRect.top - dragOffset.y;
-
-            // Constrain to container
-            x = Math.max(0, Math.min(x, containerRect.width));
-            y = Math.max(0, Math.min(y, containerRect.height));
-
-            // Convert to percentage
-            const xPercent = (x / containerRect.width) * 100;
-            const yPercent = (y / containerRect.height) * 100;
-
-            draggedElement.style.left = xPercent + '%';
-            draggedElement.style.top = yPercent + '%';
-        }
-
-        function endDrag(e) {
-            if (!draggedElement) return;
-            e.preventDefault();
-
-            draggedElement.classList.remove('dragging');
-
-            const speakerId = draggedElement.dataset.speakerId;
-            const left = parseFloat(draggedElement.style.left);
-            const top = parseFloat(draggedElement.style.top);
-
-            // Save custom position
-            if (!customPositions[currentMatrix]) {
-                customPositions[currentMatrix] = {};
-            }
-            customPositions[currentMatrix][speakerId] = { x: left, y: top };
-            localStorage.setItem('speakerMatrixPositions', JSON.stringify(customPositions));
-
-            // Auto-select the speaker after dragging
-            selectedSpeaker = speakerId;
-            draggedElement = null;
-
-            renderMatrix();
-        }
-    </script>
+ <div class="container">
+ <header>
+ <div class="main-header">
+ <div class="header-content">
+ <h1>Speaker Matrix</h1>
+ <p class="subtitle">Map speaker perspectives across key dimensions</p>
+ <div class="intro">Explore where speakers sit on fundamental questions. These placements are educated guesses based on their work—drag speakers to adjust if you disagree!
+ </div>
+ </div>
+ <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu">
+ ☰
+ </button>
+ </div>
+ </header>
+
+ <div class="nav-overlay" id="navOverlay"></div>
+
+ <nav class="mobile-nav" id="mobileNav">
+ <div class="nav-header">
+ <button class="nav-close" id="navClose" aria-label="Close navigation menu">×</button>
+ <div class="nav-title">Conference Navigation</div>
+ </div>
+
+ 
+ <div class="nav-section">
+ <div class="nav-section-title">Quick Access</div>
+ <a href="#" id="showQRNav" class="nav-link" style="border-left-color: #333;">View QR Code</a>
+ </div>
+
+ <div class="nav-section">
+ <div class="nav-section-title">Core Content</div>
+ <a href="index.html" class="nav-link">Home</a>
+ <a href="schedule.html" class="nav-link">Schedule</a>
+ <a href="speakers.html" class="nav-link">Speaker Profiles</a>
+ <a href="reading-lists.html" class="nav-link">Essential Readings</a>
+ <a href="questions.html" class="nav-link">Question Bank</a>
+ <a href="notes.html" class="nav-link">Session Notes</a>
+ <a href="conference-research-brief.html" class="nav-link">Conference Research Brief</a>
+ </div>
+
+ <div class="nav-section">
+ <div class="nav-section-title">Interactive Tools</div>
+ <a href="bingo.html" class="nav-link">Session Bingo</a>
+ <a href="name-face-quiz.html" class="nav-link">Name-Face Quiz</a>
+ <a href="expertise-quiz.html" class="nav-link">Expertise Quiz</a>
+ <a href="research-briefs.html" class="nav-link">Research Briefs</a>
+ <a href="metaphor-tracker.html" class="nav-link">Metaphor Tracker</a>
+ <a href="speaker-matrix.html" class="nav-link">Speaker Matrix</a>
+ <a href="insight-collector.html" class="nav-link">Insight Collector</a>
+ <a href="connection-builder.html" class="nav-link">Connection Builder</a>
+ </div>
+ </nav>
+
+ <div class="instructions">
+ <strong>How to use:</strong>Click a matrix below to view speaker positions. Filter by panel to focus on specific sessions. Drag any speaker's photo to reposition them based on your understanding. Your custom placements are saved locally.
+ </div>
+
+ <div class="panel-filter">
+ <div class="filter-label">Filter by Panel/Session:</div>
+ <div class="panel-options" id="panelOptions">
+ <div class="panel-option active" data-panel="all">All Participants</div>
+ <div class="panel-option" data-panel="keynotes">Keynote Speakers</div>
+ <div class="panel-option" data-panel="frontiers">Fireside: Frontiers of AI</div>
+ <div class="panel-option" data-panel="session-i">Session I: Technos, Telos, Theology</div>
+ <div class="panel-option" data-panel="session-ii">Session II: Education</div>
+ <div class="panel-option" data-panel="session-iii">Session III: Relationships</div>
+ <div class="panel-option" data-panel="session-iv">Session IV: AI at Church</div>
+ </div>
+ </div>
+
+ <div class="matrix-selector" id="matrixSelector">
+ <button class="matrix-tab active" data-matrix="tech-theology">Technology ↔ Theology</button>
+ <button class="matrix-tab" data-matrix="theory-practice">Theory ↔ Practice</button>
+ <button class="matrix-tab" data-matrix="optimism-caution">Optimism ↔ Caution</button>
+ <button class="matrix-tab" data-matrix="tradition-innovation">Tradition ↔ Innovation</button>
+ <button class="matrix-tab" data-matrix="individual-collective">Individual ↔ Collective</button>
+ </div>
+
+ <div id="matrixDisplay"></div>
+
+ <div class="controls">
+ <button class="show-movements-btn" id="showMovementsBtn">Show All Movements</button>
+ <button class="reset-btn" id="resetBtn">Reset to Default Positions</button>
+ </div>
+ </div>
+
+ <script>
+ const matrices = {
+ 'tech-theology': {
+ title: 'Technology Focus ↔ Theology Focus',
+ xLabel: { left: 'Deep Theology', right: 'Technical Expertise' },
+ yLabel: { top: 'Speculative', bottom: 'Applied' },
+ speakers: {
+ 'picard': { x: 75, y: 40 }, // Technical + Applied
+ 'dorobantu': { x: 25, y: 35 }, // Theological + Applied
+ 'zhang': { x: 85, y: 45 }, // Very technical + Applied
+ 'weyl': { x: 70, y: 25 }, // Technical + Speculative
+ 'kim-theodore': { x: 80, y: 50 }, // Technical + Applied
+ 'johnson': { x: 60, y: 35 }, // Balanced + Applied
+ 'wales': { x: 30, y: 30 }, // Theological + Speculative
+ 'drake': { x: 35, y: 40 }, // Theological + Applied
+ 'cross': { x: 25, y: 25 }, // Theological + Speculative
+ 'crouch': { x: 45, y: 35 }, // Slight tech + Applied
+ 'simpson': { x: 40, y: 45 }, // Mixed + Applied
+ 'zittrain': { x: 65, y: 30 }, // Tech + Speculative
+ 'vanderweele': { x: 55, y: 55 }, // Balanced + Very applied
+ 'teubner': { x: 35, y: 50 }, // Theological + Applied
+ 'lumbreras': { x: 70, y: 55 }, // Technical + Applied
+ 'kelly': { x: 75, y: 60 }, // Tech + Very applied
+ 'wright': { x: 20, y: 30 }, // Very theological + Speculative
+ 'ha': { x: 15, y: 25 }, // Very theological + Speculative
+ 'thio': { x: 30, y: 50 }, // Theological + Applied
+ 'tan': { x: 35, y: 45 }, // Theological + Applied
+ 'durr': { x: 25, y: 45 }, // Theological + Applied
+ 'okediji': { x: 40, y: 55 }, // Mixed + Applied
+ 'west': { x: 50, y: 65 }, // Balanced + Very applied
+ 'kim': { x: 50, y: 40 } // Balanced + Applied
+ }
+ },
+ 'theory-practice': {
+ title: 'Theoretical Analysis ↔ Practical Implementation',
+ xLabel: { left: 'Abstract Theory', right: 'Hands-On Practice' },
+ yLabel: { top: 'Research Focus', bottom: 'Policy Focus' },
+ speakers: {
+ 'picard': { x: 65, y: 45 },
+ 'dorobantu': { x: 30, y: 30 },
+ 'zhang': { x: 70, y: 35 },
+ 'weyl': { x: 45, y: 40 },
+ 'kim-theodore': { x: 75, y: 25 },
+ 'johnson': { x: 50, y: 70 }, // Practice + Policy
+ 'wales': { x: 25, y: 35 },
+ 'drake': { x: 35, y: 40 },
+ 'cross': { x: 30, y: 65 }, // Theory + Policy
+ 'crouch': { x: 45, y: 55 },
+ 'simpson': { x: 35, y: 60 },
+ 'zittrain': { x: 40, y: 75 }, // Theory + Very policy
+ 'vanderweele': { x: 55, y: 35 },
+ 'teubner': { x: 60, y: 50 },
+ 'lumbreras': { x: 65, y: 45 },
+ 'kelly': { x: 80, y: 60 }, // Very practice + Policy
+ 'wright': { x: 20, y: 30 },
+ 'ha': { x: 15, y: 25 },
+ 'thio': { x: 30, y: 75 }, // Theory + Very policy
+ 'tan': { x: 35, y: 70 },
+ 'durr': { x: 40, y: 55 },
+ 'okediji': { x: 35, y: 80 }, // Theory + Very policy
+ 'west': { x: 50, y: 70 },
+ 'kim': { x: 55, y: 50 }
+ }
+ },
+ 'optimism-caution': {
+ title: 'AI Optimism ↔ AI Caution',
+ xLabel: { left: 'Cautious/Critical', right: 'Optimistic/Embracing' },
+ yLabel: { top: 'Focuses on Risks', bottom: 'Focuses on Opportunities' },
+ speakers: {
+ 'picard': { x: 65, y: 55 }, // Optimistic + Opportunities
+ 'dorobantu': { x: 45, y: 35 }, // Balanced + Risks
+ 'zhang': { x: 70, y: 50 }, // Optimistic + Balanced
+ 'weyl': { x: 75, y: 60 }, // Very optimistic + Opportunities
+ 'kim-theodore': { x: 70, y: 55 },
+ 'johnson': { x: 55, y: 40 },
+ 'wales': { x: 40, y: 30 }, // Cautious + Risks
+ 'drake': { x: 50, y: 35 },
+ 'cross': { x: 35, y: 25 }, // Cautious + Risks
+ 'crouch': { x: 25, y: 20 }, // Very cautious + Very risks
+ 'simpson': { x: 45, y: 35 },
+ 'zittrain': { x: 40, y: 30 },
+ 'vanderweele': { x: 60, y: 60 }, // Optimistic + Opportunities
+ 'teubner': { x: 55, y: 55 },
+ 'lumbreras': { x: 65, y: 60 },
+ 'kelly': { x: 75, y: 65 }, // Very optimistic + Opportunities
+ 'wright': { x: 35, y: 30 },
+ 'ha': { x: 40, y: 35 },
+ 'thio': { x: 45, y: 40 },
+ 'tan': { x: 50, y: 40 },
+ 'durr': { x: 40, y: 35 },
+ 'okediji': { x: 50, y: 45 },
+ 'west': { x: 55, y: 50 },
+ 'kim': { x: 60, y: 55 }
+ }
+ },
+ 'tradition-innovation': {
+ title: 'Traditional Frameworks ↔ Novel Approaches',
+ xLabel: { left: 'Grounded in Tradition', right: 'Pioneering New Methods' },
+ yLabel: { top: 'Questions Disruption', bottom: 'Embraces Disruption' },
+ speakers: {
+ 'picard': { x: 60, y: 60 },
+ 'dorobantu': { x: 35, y: 40 }, // Traditional + Questions
+ 'zhang': { x: 75, y: 65 },
+ 'weyl': { x: 85, y: 75 }, // Very innovative + Very embraces
+ 'kim-theodore': { x: 70, y: 70 },
+ 'johnson': { x: 55, y: 50 },
+ 'wales': { x: 25, y: 35 }, // Very traditional + Questions
+ 'drake': { x: 45, y: 50 },
+ 'cross': { x: 30, y: 30 },
+ 'crouch': { x: 35, y: 25 }, // Traditional + Very questions
+ 'simpson': { x: 40, y: 40 },
+ 'zittrain': { x: 65, y: 55 },
+ 'vanderweele': { x: 50, y: 60 },
+ 'teubner': { x: 40, y: 55 },
+ 'lumbreras': { x: 60, y: 65 },
+ 'kelly': { x: 75, y: 70 },
+ 'wright': { x: 20, y: 30 }, // Very traditional + Questions
+ 'ha': { x: 15, y: 25 }, // Very traditional + Very questions
+ 'thio': { x: 30, y: 35 },
+ 'tan': { x: 35, y: 40 },
+ 'durr': { x: 35, y: 40 },
+ 'okediji': { x: 45, y: 45 },
+ 'west': { x: 50, y: 55 },
+ 'kim': { x: 55, y: 60 }
+ }
+ },
+ 'individual-collective': {
+ title: 'Individual Flourishing ↔ Collective Good',
+ xLabel: { left: 'Individual Agency', right: 'Social/Collective Focus' },
+ yLabel: { top: 'Philosophical/Abstract', bottom: 'Institutional/Structural' },
+ speakers: {
+ 'picard': { x: 40, y: 50 }, // Individual + Institutional
+ 'dorobantu': { x: 50, y: 25 }, // Balanced + Philosophical
+ 'zhang': { x: 55, y: 45 },
+ 'weyl': { x: 75, y: 60 }, // Very collective + Institutional
+ 'kim-theodore': { x: 45, y: 30 },
+ 'johnson': { x: 50, y: 70 }, // Balanced + Very institutional
+ 'wales': { x: 45, y: 25 },
+ 'drake': { x: 50, y: 30 },
+ 'cross': { x: 60, y: 65 }, // Collective + Institutional
+ 'crouch': { x: 35, y: 30 }, // Individual + Philosophical
+ 'simpson': { x: 45, y: 60 },
+ 'zittrain': { x: 65, y: 75 }, // Collective + Very institutional
+ 'vanderweele': { x: 40, y: 35 }, // Individual + Philosophical
+ 'teubner': { x: 55, y: 55 },
+ 'lumbreras': { x: 55, y: 50 },
+ 'kelly': { x: 60, y: 60 },
+ 'wright': { x: 50, y: 20 }, // Balanced + Very philosophical
+ 'ha': { x: 55, y: 25 },
+ 'thio': { x: 50, y: 75 }, // Balanced + Very institutional
+ 'tan': { x: 55, y: 70 },
+ 'durr': { x: 60, y: 55 },
+ 'okediji': { x: 65, y: 80 }, // Collective + Very institutional
+ 'west': { x: 55, y: 70 },
+ 'kim': { x: 50, y: 45 }
+ }
+ }
+ };
+
+ const speakerData = {
+ 'picard': { name: 'Rosalind Picard', img: 'images/68bf34005db9773f6f3076a5_Rosalind.png', initials: 'RP' },
+ 'dorobantu': { name: 'Marius Dorobantu', img: 'images/68c2377af103c367d351ba0d_Dorobantu_nb.png', initials: 'MD' },
+ 'zhang': { name: 'Richard Zhang', img: 'images/68d2037dc584fa704afb56f9_Zhang_nb.png', initials: 'RZ' },
+ 'weyl': { name: 'Glen Weyl', img: 'images/68cc34a922629a84c367e934_Weyl_nb.png', initials: 'GW' },
+ 'kim-theodore': { name: 'Theodore Kim', img: 'images/68c237331ffbfdc0af78d85b_T_Kim_nb.png', initials: 'TK' },
+ 'johnson': { name: 'Matthew Johnson', img: 'images/68cc29457f8526310612f749_Johnson_2_nb.png', initials: 'MJ' },
+ 'wales': { name: 'Jordan Wales', img: 'images/68d70ec87b700c234dd8c5ea_Wales_nb.png', initials: 'JW' },
+ 'drake': { name: 'Lyndon Drake', img: 'images/68bf348c045bfbfb2bb08b8b_Drake_nb.png', initials: 'LD' },
+ 'cross': { name: 'Simon Cross', img: 'images/68bf343334dacf5c8949a753_Simon.png', initials: 'SC' },
+ 'crouch': { name: 'Andy Crouch', img: 'images/68d2075e4b3a1d21c8593a1b_Crouch_3_nb_cropped.png', initials: 'AC' },
+ 'simpson': { name: 'Tom Simpson', img: 'images/68bf3557e24b0b6afd52178b_Simpson_nb.png', initials: 'TS' },
+ 'zittrain': { name: 'Jonathan Zittrain', img: 'images/68d948abefa9245db3c682d7_Zittrain_nb.png', initials: 'JZ' },
+ 'vanderweele': { name: 'Tyler VanderWeele', img: 'images/68bf366737555730781a7ce4_VanderWeele_nb.png', initials: 'TV' },
+ 'teubner': { name: 'Jonathan Teubner', img: 'images/68bf35d6de9d761c38c2e52d_Teubner_2_nb.png', initials: 'JT' },
+ 'lumbreras': { name: 'Sara Lumbreras', img: 'images/68bf34c7aaab80d20ba278ff_Lumbreras_nb.png', initials: 'SL' },
+ 'kelly': { name: 'James Kelly', img: 'images/68d210770f4ecf1ac7d4aeb2_Kelly_nb.png', initials: 'JK' },
+ 'wright': { name: 'Oliver Wright', img: 'images/68d200abae19d0f5ba7a5b08_Wright_nb_2.png', initials: 'OW' },
+ 'ha': { name: 'Polly Ha', img: 'images/68d6b058a135d479c482c06d_Ha_nb_compressed.png', initials: 'PH' },
+ 'thio': { name: 'Li-ann Thio', img: 'images/68bf360dd4e55d41be075fad_Thio_nb.png', initials: 'LT' },
+ 'tan': { name: 'Seow Hon Tan', img: 'images/68bf35875d7efe1da673d1c5_Tan_nb.png', initials: 'ST' },
+ 'durr': { name: 'Oliver Dürr', img: 'images/68d94521b010df995f6ca300_Durr_nb.png', initials: 'OD' },
+ 'okediji': { name: 'Ruth Okediji', img: 'images/68bf3500e5ada2afa39974e7_Okediji_nb.png', initials: 'RO' },
+ 'west': { name: 'Martin West', img: 'images/68bf368da19d027e3e602c72_West_2.png', initials: 'MW' },
+ 'kim': { name: 'John Kim', img: 'images/68dc1c89e593114d3bff931e_Kim_2_nb.png', initials: 'JK' }
+ };
+
+ const panelRosters = {
+ 'all': ['picard', 'dorobantu', 'zhang', 'weyl', 'kim-theodore', 'johnson', 'wales', 'drake', 'cross', 'crouch', 'simpson', 'zittrain', 'vanderweele', 'teubner', 'lumbreras', 'kelly', 'wright', 'ha', 'thio', 'tan', 'durr', 'okediji', 'west', 'kim'],
+ 'keynotes': ['picard', 'kim', 'vanderweele'],
+ 'frontiers': ['zittrain', 'zhang', 'weyl', 'kim-theodore', 'johnson'], // Chair + participants
+ 'session-i': ['simpson', 'cross', 'ha', 'thio', 'dorobantu'], // Chair + panelists
+ 'session-ii': ['west', 'dorobantu', 'lumbreras'], // Chair + panelists
+ 'session-iii': ['drake', 'teubner', 'wales', 'tan'], // Chair + panelists
+ 'session-iv': ['crouch', 'kelly', 'wright', 'durr'] // Chair + panelists
+ };
+
+ let currentMatrix = 'tech-theology';
+ let currentPanel = 'all';
+ let customPositions = JSON.parse(localStorage.getItem('speakerMatrixPositions') || '{}');
+ let draggedElement = null;
+ let dragOffset = { x: 0, y: 0 };
+ let selectedSpeaker = null;
+ let showAllMovements = false;
+
+ document.addEventListener('DOMContentLoaded', function() {
+ // Navigation
+ const navToggle = document.getElementById('navToggle');
+ const navClose = document.getElementById('navClose');
+ const mobileNav = document.getElementById('mobileNav');
+ const navOverlay = document.getElementById('navOverlay');
+
+ navToggle.addEventListener('click', () => {
+ mobileNav.classList.add('active');
+ navOverlay.classList.add('active');
+ });
+
+ navClose.addEventListener('click', closeNav);
+ navOverlay.addEventListener('click', closeNav);
+
+ function closeNav() {
+ mobileNav.classList.remove('active');
+ navOverlay.classList.remove('active');
+ }
+
+ // Matrix tabs
+ const tabs = document.querySelectorAll('.matrix-tab');
+ tabs.forEach(tab => {
+ tab.addEventListener('click', () => {
+ tabs.forEach(t => t.classList.remove('active'));
+ tab.classList.add('active');
+ currentMatrix = tab.dataset.matrix;
+ renderMatrix();
+ });
+ });
+
+ // Panel filter
+ const panelOptions = document.querySelectorAll('.panel-option');
+ panelOptions.forEach(option => {
+ option.addEventListener('click', () => {
+ panelOptions.forEach(o => o.classList.remove('active'));
+ option.classList.add('active');
+ currentPanel = option.dataset.panel;
+ renderMatrix();
+ });
+ });
+
+ // Reset button
+ document.getElementById('resetBtn').addEventListener('click', () => {
+ if (confirm('Reset all speakers to default positions')) {
+ customPositions = {};
+ localStorage.removeItem('speakerMatrixPositions');
+ selectedSpeaker = null;
+ renderMatrix();
+ }
+ });
+
+ // Show all movements button
+ document.getElementById('showMovementsBtn').addEventListener('click', () => {
+ showAllMovements = !showAllMovements;
+ const btn = document.getElementById('showMovementsBtn');
+ if (showAllMovements) {
+ btn.classList.add('active');
+ btn.textContent = 'Hide All Movements';
+ } else {
+ btn.classList.remove('active');
+ btn.textContent = 'Show All Movements';
+ }
+ renderMatrix();
+ });
+
+ renderMatrix();
+ });
+
+ function renderMatrix() {
+ const matrix = matrices[currentMatrix];
+ const display = document.getElementById('matrixDisplay');
+
+ const html = `
+ <div class="matrix-container" id="matrixContainer">
+ <div class="matrix-title">${matrix.title}</div>
+
+ <div class="axis-line vertical"></div>
+ <div class="axis-line horizontal"></div>
+
+ <div class="axis-label top">${matrix.yLabel.top}</div>
+ <div class="axis-label bottom">${matrix.yLabel.bottom}</div>
+ <div class="axis-label left">${matrix.xLabel.left}</div>
+ <div class="axis-label right">${matrix.xLabel.right}</div>
+
+ ${Object.entries(matrix.speakers).map(([id, pos]) => {
+ const speaker = speakerData[id];
+ const customPos = customPositions[currentMatrix].[id];
+ const finalPos = customPos || pos;
+ const isActive = panelRosters[currentPanel].includes(id);
+ const inactiveClass = isActive '' : 'inactive';
+
+ return `
+ <div class="speaker-dot ${inactiveClass}"
+ data-speaker-id="${id}"
+ style="left: ${finalPos.x}%; top: ${finalPos.y}%; transform: translate(-50%, -50%);">
+ <img src="${speaker.img}"
+ alt="${speaker.name}"
+ onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+ <div class="initials" style="display: none;">${speaker.initials}</div>
+ <div class="speaker-tooltip">${speaker.name}</div>
+ </div>
+ `;
+ }).join('')}
+ </div>
+ `;
+
+ display.innerHTML = html;
+
+ // Add drag and click handlers
+ const dots = document.querySelectorAll('.speaker-dot');
+ dots.forEach(dot => {
+ dot.addEventListener('mousedown', startDrag);
+ dot.addEventListener('touchstart', startDrag);
+ dot.addEventListener('click', (e) => {
+ if (!dot.classList.contains('inactive')) {
+ e.stopPropagation();
+ selectSpeaker(dot.dataset.speakerId);
+ }
+ });
+ });
+
+ // Click outside to deselect
+ document.getElementById('matrixContainer').addEventListener('click', (e) => {
+ if (e.target.id === 'matrixContainer') {
+ selectedSpeaker = null;
+ renderMatrix();
+ }
+ });
+
+ document.addEventListener('mousemove', drag);
+ document.addEventListener('touchmove', drag);
+ document.addEventListener('mouseup', endDrag);
+ document.addEventListener('touchend', endDrag);
+
+ // Render movements if needed
+ if (showAllMovements || selectedSpeaker) {
+ renderMovementIndicators();
+ }
+ }
+
+ function selectSpeaker(speakerId) {
+ selectedSpeaker = selectedSpeaker === speakerId null : speakerId;
+ renderMatrix();
+ }
+
+ function renderMovementIndicators() {
+ const container = document.getElementById('matrixContainer');
+ const matrix = matrices[currentMatrix];
+ const containerRect = container.getBoundingClientRect();
+
+ // Remove existing indicators
+ container.querySelectorAll('.movement-arrow, .original-position, .distance-label').forEach(el => el.remove());
+
+ const speakersToShow = showAllMovements
+ Object.keys(matrix.speakers)
+ : selectedSpeaker [selectedSpeaker] : [];
+
+ speakersToShow.forEach(speakerId => {
+ const customPos = customPositions[currentMatrix].[speakerId];
+ if (!customPos) return; // No movement
+
+ const originalPos = matrix.speakers[speakerId];
+ const isActive = panelRosters[currentPanel].includes(speakerId);
+ if (!isActive && !showAllMovements) return;
+
+ // Calculate pixel positions
+ const origX = (originalPos.x / 100) * containerRect.width;
+ const origY = (originalPos.y / 100) * containerRect.height;
+ const newX = (customPos.x / 100) * containerRect.width;
+ const newY = (customPos.y / 100) * containerRect.height;
+
+ // Calculate distance
+ const distance = Math.sqrt(Math.pow(newX - origX, 2) + Math.pow(newY - origY, 2));
+ const distancePercent = Math.round((distance / containerRect.width) * 100);
+
+ // Add original position marker
+ const originalMarker = document.createElement('div');
+ originalMarker.className = 'original-position';
+ originalMarker.style.left = originalPos.x + '%';
+ originalMarker.style.top = originalPos.y + '%';
+ container.appendChild(originalMarker);
+
+ // Add arrow
+ const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+ arrow.setAttribute('class', 'movement-arrow');
+ arrow.style.position = 'absolute';
+ arrow.style.left = '0';
+ arrow.style.top = '0';
+ arrow.style.width = '100%';
+ arrow.style.height = '100%';
+
+ const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+ line.setAttribute('x1', originalPos.x + '%');
+ line.setAttribute('y1', originalPos.y + '%');
+ line.setAttribute('x2', customPos.x + '%');
+ line.setAttribute('y2', customPos.y + '%');
+ arrow.appendChild(line);
+
+ // Add arrowhead
+ const angle = Math.atan2(customPos.y - originalPos.y, customPos.x - originalPos.x);
+ const arrowSize = 8;
+ const arrowX = customPos.x;
+ const arrowY = customPos.y;
+
+ const arrowhead = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+ const points = [
+ [arrowX, arrowY],
+ [arrowX - arrowSize * Math.cos(angle - Math.PI / 6), arrowY - arrowSize * Math.sin(angle - Math.PI / 6)],
+ [arrowX - arrowSize * Math.cos(angle + Math.PI / 6), arrowY - arrowSize * Math.sin(angle + Math.PI / 6)]
+ ];
+ arrowhead.setAttribute('points', points.map(p => p.join(',')).join(' '));
+ arrowhead.setAttribute('class', 'arrowhead');
+ arrow.appendChild(arrowhead);
+
+ container.appendChild(arrow);
+
+ // Add distance label
+ const label = document.createElement('div');
+ label.className = 'distance-label';
+ label.textContent = `Moved ${distancePercent}%`;
+ label.style.left = ((originalPos.x + customPos.x) / 2) + '%';
+ label.style.top = ((originalPos.y + customPos.y) / 2 - 3) + '%';
+ label.style.transform = 'translate(-50%, -50%)';
+ container.appendChild(label);
+ });
+
+ // Update selected state
+ container.querySelectorAll('.speaker-dot').forEach(dot => {
+ dot.classList.toggle('selected', dot.dataset.speakerId === selectedSpeaker);
+ });
+ }
+
+ function startDrag(e) {
+ // Don't allow dragging inactive speakers
+ if (e.currentTarget.classList.contains('inactive')) {
+ return;
+ }
+
+ e.preventDefault();
+ draggedElement = e.currentTarget;
+ draggedElement.classList.add('dragging');
+
+ const rect = draggedElement.getBoundingClientRect();
+ const clientX = e.type.includes('touch') e.touches[0].clientX : e.clientX;
+ const clientY = e.type.includes('touch') e.touches[0].clientY : e.clientY;
+
+ dragOffset.x = clientX - rect.left - rect.width / 2;
+ dragOffset.y = clientY - rect.top - rect.height / 2;
+ }
+
+ function drag(e) {
+ if (!draggedElement) return;
+ e.preventDefault();
+
+ const container = document.getElementById('matrixContainer');
+ const containerRect = container.getBoundingClientRect();
+
+ const clientX = e.type.includes('touch') e.touches[0].clientX : e.clientX;
+ const clientY = e.type.includes('touch') e.touches[0].clientY : e.clientY;
+
+ let x = clientX - containerRect.left - dragOffset.x;
+ let y = clientY - containerRect.top - dragOffset.y;
+
+ // Constrain to container
+ x = Math.max(0, Math.min(x, containerRect.width));
+ y = Math.max(0, Math.min(y, containerRect.height));
+
+ // Convert to percentage
+ const xPercent = (x / containerRect.width) * 100;
+ const yPercent = (y / containerRect.height) * 100;
+
+ draggedElement.style.left = xPercent + '%';
+ draggedElement.style.top = yPercent + '%';
+ }
+
+ function endDrag(e) {
+ if (!draggedElement) return;
+ e.preventDefault();
+
+ draggedElement.classList.remove('dragging');
+
+ const speakerId = draggedElement.dataset.speakerId;
+ const left = parseFloat(draggedElement.style.left);
+ const top = parseFloat(draggedElement.style.top);
+
+ // Save custom position
+ if (!customPositions[currentMatrix]) {
+ customPositions[currentMatrix] = {};
+ }
+ customPositions[currentMatrix][speakerId] = { x: left, y: top };
+ localStorage.setItem('speakerMatrixPositions', JSON.stringify(customPositions));
+
+ // Auto-select the speaker after dragging
+ selectedSpeaker = speakerId;
+ draggedElement = null;
+
+ renderMatrix();
+ }
+	<footer>
+ <p>This unofficial conference companion was generated by <a href="https://claude.ai/code" target="_blank" style="color: #555; text-decoration: underline;">Claude Code</a> with project management from Nate Barksdale.</p>
+ <p style="margin-top: 8px;">
+ <a href="https://natebarksdale.xyz" target="_blank" style="color: #555; text-decoration: underline;">Visit natebarksdale.xyz</a>
+ •
+ <a href="#" id="showQR" style="color: #555; text-decoration: underline; cursor: pointer;">View QR Code</a>
+ </p>
+ </footer>
+	</div>
+
+	<!-- QR Code Modal -->
+	<div id="qrModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center;">
+		<div style="background: white; padding: 40px; border-radius: 8px; text-align: center; max-width: 400px; position: relative;">
+			<button id="closeQR" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2rem; cursor: pointer; color: #666;">&times;</button>
+			<h3 style="margin-bottom: 20px; font-weight: 400; color: #222;">Conference Companion</h3>
+			<img src="qr-code.png" alt="QR Code" style="width: 250px; height: 250px; margin: 0 auto; display: block; border: 2px solid #ddd; padding: 10px;">
+			<p style="margin-top: 20px; color: #666; font-size: 0.9rem;">Scan to access this guide on your phone</p>
+			<p style="margin-top: 8px; color: #999; font-size: 0.8rem;">natebarksdale.xyz/imago-dei-ai</p>
+		</div>
+	</div>
+
+	<script>
+	// QR Modal functionality
+	(function() {
+		function initQRModal() {
+			const showQR = document.getElementById('showQR');
+ const showQRNav = document.getElementById('showQRNav');
+			const closeQR = document.getElementById('closeQR');
+			const qrModal = document.getElementById('qrModal');
+
+			if (showQR) {
+				showQR.addEventListener('click', function(e) {
+					e.preventDefault();
+					qrModal.style.display = 'flex';
+				});
+			}
+
+			if (closeQR) {
+				closeQR.addEventListener('click', function() {
+					qrModal.style.display = 'none';
+				});
+			}
+
+			if (qrModal) {
+				qrModal.addEventListener('click', function(e) {
+					if (e.target === qrModal) {
+						qrModal.style.display = 'none';
+					}
+				}
+
+ if (showQRNav) {
+ showQRNav.addEventListener('click', function(e) {
+ e.preventDefault();
+ qrModal.style.display = 'flex';
+ // Close the mobile nav
+ const mobileNav = document.getElementById('mobileNav');
+ const navOverlay = document.getElementById('navOverlay');
+ const navToggle = document.getElementById('navToggle');
+ if (mobileNav) mobileNav.classList.remove('active');
+ if (navOverlay) navOverlay.classList.remove('active');
+ if (navToggle) navToggle.classList.remove('active');
+ document.body.style.overflow = '';
+ });
+ });
+			}
+
+			// Close on escape
+			document.addEventListener('keydown', function(e) {
+				if (e.key === 'Escape' && qrModal && qrModal.style.display === 'flex') {
+					qrModal.style.display = 'none';
+				}
+			});
+		}
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initQRModal);
+		} else {
+			initQRModal();
+		}
+	})();
+	</script>
+
 </body>
 </html>

@@ -1,1029 +1,1124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metaphor Tracker - Imago Dei & AI</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-weight: 300;
-            line-height: 1.5;
-            color: #222;
-            background: #fafafa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            margin-bottom: 60px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 40px;
-        }
-
-        .nav-home {
-            color: #666;
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 30px;
-            display: inline-block;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.2s ease;
-        }
-
-        .nav-home:hover {
-            border-color: #666;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 200;
-            color: #111;
-            margin-bottom: 8px;
-            letter-spacing: -1px;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            color: #666;
-            font-weight: 300;
-            margin-bottom: 30px;
-        }
-
-        .intro-section {
-            background: #f9f9f9;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-left: 3px solid #333;
-        }
-
-        .intro-section h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            font-weight: 400;
-        }
-
-        .metaphor-category {
-            background: white;
-            border: 1px solid #ddd;
-            margin-bottom: 25px;
-            overflow: hidden;
-        }
-
-        .category-header {
-            background: #f5f5f5;
-            border-bottom: 1px solid #ddd;
-            border-left: 3px solid #333;
-            padding: 20px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .category-title {
-            font-size: 1.3rem;
-            font-weight: 400;
-            color: #222;
-        }
-
-        .category-subtitle {
-            font-size: 0.95rem;
-            color: #666;
-            margin-top: 3px;
-            font-weight: 300;
-        }
-
-        .collapse-icon {
-            font-size: 1.2rem;
-            color: #666;
-            transition: transform 0.3s ease;
-        }
-
-        .category-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .category-content.expanded {
-            max-height: 2000px;
-        }
-
-        .category-inner {
-            padding: 25px;
-        }
-
-        .metaphor-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
-        }
-
-        .metaphor-card {
-            background: #f9f9f9;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-left: 2px solid #333;
-            margin-bottom: 15px;
-            transition: box-shadow 0.2s ease;
-        }
-
-        .metaphor-card:hover {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .metaphor-title {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: #222;
-            margin-bottom: 10px;
-        }
-
-        .metaphor-example {
-            font-style: italic;
-            color: #666;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-        }
-
-        .metaphor-analysis {
-            font-size: 0.9rem;
-            color: #555;
-            margin-bottom: 12px;
-        }
-
-        .metaphor-implications {
-            background: white;
-            padding: 10px;
-            border-left: 2px solid #666;
-        }
-
-        .implications-title {
-            font-weight: 500;
-            color: #333;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-        }
-
-        .implications-text {
-            font-size: 0.85rem;
-            color: #666;
-        }
-
-        .tracking-section {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            border-left: 3px solid #333;
-            padding: 20px;
-            margin-bottom: 25px;
-        }
-
-        .tracking-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .tracking-item {
-            background: white;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-left: 2px solid #333;
-        }
-
-        .tracking-metaphor {
-            font-weight: 500;
-            color: #222;
-            margin-bottom: 5px;
-        }
-
-        .tracking-count {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 8px;
-        }
-
-        .tracking-notes {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 0.8em;
-            resize: vertical;
-            min-height: 60px;
-        }
-
-        .add-tracking {
-            background: #333;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            cursor: pointer;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            transition: background-color 0.2s ease;
-        }
-
-        .add-tracking:hover {
-            background: #555;
-        }
-
-        .expand-all {
-            background: #333;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            font-weight: 400;
-            transition: background-color 0.2s ease;
-        }
-
-        .expand-all:hover {
-            background: #555;
-        }
-
-        .historical-examples {
-            background: #f9f9f9;
-            padding: 15px;
-            margin-top: 15px;
-            border-left: 2px solid #666;
-        }
-
-        .historical-examples h4 {
-            color: #333;
-            margin-bottom: 8px;
-            font-weight: 400;
-        }
-
-        /* ===== MOBILE NAVIGATION SYSTEM ===== */
-        /* UPDATE ALL PAGES: Add this entire navigation section when iterating */
-
-        .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-        }
-
-        .header-content {
-            flex: 1;
-        }
-
-        .nav-toggle {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 8px;
-            color: #333;
-            display: none; /* Show only on mobile */
-            transition: transform 0.2s ease;
-            min-width: 44px;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav-toggle:hover {
-            transform: scale(1.1);
-        }
-
-        .nav-toggle.active {
-            transform: rotate(90deg);
-        }
-
-        .mobile-nav {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 280px;
-            height: 100vh;
-            background: white;
-            z-index: 1000;
-            transition: right 0.3s ease;
-            box-shadow: -2px 0 20px rgba(0,0,0,0.1);
-            overflow-y: auto;
-        }
-
-        .mobile-nav.active {
-            right: 0;
-        }
-
-        .nav-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .nav-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .nav-header {
-            padding: 30px 20px 20px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .nav-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            float: right;
-            color: #666;
-            min-width: 44px;
-            min-height: 44px;
-        }
-
-        .nav-title {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: #222;
-            margin-top: 10px;
-        }
-
-        .nav-section {
-            padding: 20px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .nav-section:last-child {
-            border-bottom: none;
-        }
-
-        .nav-section-title {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 0 20px 15px;
-        }
-
-        .nav-link {
-            display: block;
-            padding: 12px 20px;
-            color: #333;
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: background-color 0.2s ease;
-            border-left: 3px solid transparent;
-        }
-
-        .nav-link:hover, .nav-link.current {
-            background: #f8f8f8;
-            border-left-color: #333;
-        }
-
-        .nav-link.current {
-            color: #000;
-            font-weight: 500;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            .metaphor-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .tracking-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .category-inner {
-                padding: 15px;
-            }
-
-            .nav-toggle {
-                display: flex; /* Show hamburger menu on mobile */
-            }
-
-            .nav-home {
-                display: none; /* Hide back link on mobile, use hamburger instead */
-            }
-        }
-
-        @media (min-width: 769px) {
-            .nav-toggle {
-                display: none; /* Hide hamburger on desktop */
-            }
-        }
-    </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Metaphor Tracker - Imago Dei & AI</title>
+ <style>
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Helvetica Neue', Arial, sans-serif;
+ font-weight: 300;
+ line-height: 1.5;
+ color: #222;
+ background: #fafafa;
+ }
+
+ .container {
+ max-width: 1200px;
+ margin: 0 auto;
+ padding: 20px;
+ }
+
+ header {
+ margin-bottom: 60px;
+ border-bottom: 1px solid #ddd;
+ padding-bottom: 40px;
+ }
+
+ .nav-home {
+ color: #666;
+ text-decoration: none;
+ font-size: 0.9rem;
+ margin-bottom: 30px;
+ display: inline-block;
+ border-bottom: 1px solid transparent;
+ transition: border-color 0.2s ease;
+ }
+
+ .nav-home:hover {
+ border-color: #666;
+ }
+
+ h1 {
+ font-size: 2.5rem;
+ font-weight: 200;
+ color: #111;
+ margin-bottom: 8px;
+ letter-spacing: -1px;
+ }
+
+ .subtitle {
+ font-size: 1.1rem;
+ color: #666;
+ font-weight: 300;
+ margin-bottom: 30px;
+ }
+
+ .intro-section {
+ background: #f9f9f9;
+ padding: 20px;
+ margin-bottom: 30px;
+ border-left: 3px solid #333;
+ }
+
+ .intro-section h3 {
+ color: #333;
+ margin-bottom: 15px;
+ font-size: 1.1rem;
+ font-weight: 400;
+ }
+
+ .metaphor-category {
+ background: white;
+ border: 1px solid #ddd;
+ margin-bottom: 25px;
+ overflow: hidden;
+ }
+
+ .category-header {
+ background: #f5f5f5;
+ border-bottom: 1px solid #ddd;
+ border-left: 3px solid #333;
+ padding: 20px;
+ cursor: pointer;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ }
+
+ .category-title {
+ font-size: 1.3rem;
+ font-weight: 400;
+ color: #222;
+ }
+
+ .category-subtitle {
+ font-size: 0.95rem;
+ color: #666;
+ margin-top: 3px;
+ font-weight: 300;
+ }
+
+ .collapse-icon {
+ font-size: 1.2rem;
+ color: #666;
+ transition: transform 0.3s ease;
+ }
+
+ .category-content {
+ max-height: 0;
+ overflow: hidden;
+ transition: max-height 0.3s ease;
+ }
+
+ .category-content.expanded {
+ max-height: 2000px;
+ }
+
+ .category-inner {
+ padding: 25px;
+ }
+
+ .metaphor-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+ gap: 20px;
+ }
+
+ .metaphor-card {
+ background: #f9f9f9;
+ padding: 20px;
+ border: 1px solid #ddd;
+ border-left: 2px solid #333;
+ margin-bottom: 15px;
+ transition: box-shadow 0.2s ease;
+ }
+
+ .metaphor-card:hover {
+ box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+ }
+
+ .metaphor-title {
+ font-size: 1.1rem;
+ font-weight: 500;
+ color: #222;
+ margin-bottom: 10px;
+ }
+
+ .metaphor-example {
+ font-style: italic;
+ color: #666;
+ margin-bottom: 10px;
+ font-size: 0.9rem;
+ }
+
+ .metaphor-analysis {
+ font-size: 0.9rem;
+ color: #555;
+ margin-bottom: 12px;
+ }
+
+ .metaphor-implications {
+ background: white;
+ padding: 10px;
+ border-left: 2px solid #666;
+ }
+
+ .implications-title {
+ font-weight: 500;
+ color: #333;
+ margin-bottom: 5px;
+ font-size: 0.9rem;
+ }
+
+ .implications-text {
+ font-size: 0.85rem;
+ color: #666;
+ }
+
+ .tracking-section {
+ background: #f9f9f9;
+ border: 1px solid #ddd;
+ border-left: 3px solid #333;
+ padding: 20px;
+ margin-bottom: 25px;
+ }
+
+ .tracking-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+ gap: 15px;
+ margin-top: 15px;
+ }
+
+ .tracking-item {
+ background: white;
+ padding: 15px;
+ border: 1px solid #ddd;
+ border-left: 2px solid #333;
+ }
+
+ .tracking-metaphor {
+ font-weight: 500;
+ color: #222;
+ margin-bottom: 5px;
+ }
+
+ .tracking-count {
+ font-size: 0.9rem;
+ color: #666;
+ margin-bottom: 8px;
+ }
+
+ .tracking-notes {
+ width: 100%;
+ padding: 8px;
+ border: 1px solid #ddd;
+ border-radius: 4px;
+ font-size: 0.8em;
+ resize: vertical;
+ min-height: 60px;
+ }
+
+ .add-tracking {
+ background: #333;
+ color: white;
+ border: none;
+ padding: 8px 15px;
+ cursor: pointer;
+ margin-top: 10px;
+ font-size: 0.9rem;
+ transition: background-color 0.2s ease;
+ }
+
+ .add-tracking:hover {
+ background: #555;
+ }
+
+ .expand-all {
+ background: #333;
+ color: white;
+ border: none;
+ padding: 10px 20px;
+ cursor: pointer;
+ margin-bottom: 20px;
+ font-weight: 400;
+ transition: background-color 0.2s ease;
+ }
+
+ .expand-all:hover {
+ background: #555;
+ }
+
+ .historical-examples {
+ background: #f9f9f9;
+ padding: 15px;
+ margin-top: 15px;
+ border-left: 2px solid #666;
+ }
+
+ .historical-examples h4 {
+ color: #333;
+ margin-bottom: 8px;
+ font-weight: 400;
+ }
+
+ /* ===== MOBILE NAVIGATION SYSTEM ===== */
+ /* UPDATE ALL PAGES: Add this entire navigation section when iterating */
+
+ .main-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: flex-start;
+ margin-bottom: 20px;
+ }
+
+ .header-content {
+ flex: 1;
+ }
+
+ .nav-toggle {
+ background: none;
+ border: none;
+ font-size: 1.5rem;
+ cursor: pointer;
+ padding: 8px;
+ color: #333;
+ display: none; /* Show only on mobile */
+ transition: transform 0.2s ease;
+ min-width: 44px;
+ min-height: 44px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ position: fixed;
+ top: 20px;
+ right: 20px;
+ z-index: 1001;
+ background: white;
+ border-radius: 4px;
+ box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+ }
+
+ .nav-toggle:hover {
+ transform: scale(1.1);
+ }
+
+ .nav-toggle.active {
+ transform: rotate(90deg);
+ }
+
+ .mobile-nav {
+ position: fixed;
+ top: 0;
+ right: -100%;
+ width: 280px;
+ height: 100vh;
+ height: 100dvh; /* Use dynamic viewport height for iOS */
+ background: white;
+ z-index: 1000;
+ transition: right 0.3s ease;
+ box-shadow: -2px 0 20px rgba(0,0,0,0.1);
+ overflow-y: auto;
+ -webkit-overflow-scrolling: touch;
+ padding-bottom: 80px; /* Extra padding for iOS Safari bottom bar */
+ }
+
+ .mobile-nav.active {
+ right: 0;
+ }
+
+ .nav-overlay {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: rgba(0,0,0,0.5);
+ z-index: 999;
+ opacity: 0;
+ visibility: hidden;
+ transition: all 0.3s ease;
+ }
+
+ .nav-overlay.active {
+ opacity: 1;
+ visibility: visible;
+ }
+
+ .nav-header {
+ padding: 30px 20px 20px;
+ border-bottom: 1px solid #eee;
+ }
+
+ .nav-close {
+ background: none;
+ border: none;
+ font-size: 1.5rem;
+ cursor: pointer;
+ float: right;
+ color: #666;
+ min-width: 44px;
+ min-height: 44px;
+ }
+
+ .nav-title {
+ font-size: 1.1rem;
+ font-weight: 500;
+ color: #222;
+ margin-top: 10px;
+ }
+
+ .nav-section {
+ padding: 12px 0;
+ border-bottom: 1px solid #f0f0f0;
+ }
+
+ .nav-section:last-child {
+ border-bottom: none;
+ }
+
+ .nav-section-title {
+ font-size: 0.8rem;
+ font-weight: 500;
+ color: #999;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ margin: 0 20px 10px;
+ }
+
+ .nav-link {
+ display: block;
+ padding: 10px 20px;
+ color: #333;
+ text-decoration: none;
+ font-size: 0.9rem;
+ transition: background-color 0.2s ease;
+ border-left: 3px solid transparent;
+ }
+
+ .nav-link:hover, .nav-link.current {
+ background: #f8f8f8;
+ border-left-color: #333;
+ }
+
+ .nav-link.current {
+ color: #000;
+ font-weight: 500;
+ }
+
+ @media (max-width: 768px) {
+ .container {
+ padding: 10px;
+ }
+
+ .metaphor-grid {
+ grid-template-columns: 1fr;
+ }
+
+ .tracking-grid {
+ grid-template-columns: 1fr;
+ }
+
+ .category-inner {
+ padding: 15px;
+ }
+
+ .nav-toggle {
+ display: flex; /* Show hamburger menu on mobile */
+ }
+
+ .nav-home {
+ display: none; /* Hide back link on mobile, use hamburger instead */
+ }
+ }
+
+ @media (min-width: 769px) {
+ .nav-toggle {
+ display: none; /* Hide hamburger on desktop */
+ }
+ }
+ </style>
 </head>
 <body>
-    <div class="container">
-        <!-- UPDATE ALL PAGES: Replace <header> section with this structure -->
-        <header>
-            <div class="main-header">
-                <div class="header-content">
-                    <a href="index.html" class="nav-home">← Back to Home</a>
-                    <h1>Metaphor Tracker</h1>
-                    <p class="subtitle">How Language Shapes Our Understanding of AI and Human Nature</p>
-                    <button class="expand-all" onclick="expandAll()">Expand All Categories</button>
-                </div>
-                <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu">
-                    ☰
-                </button>
-            </div>
-        </header>
+ <div class="container">
+ <!-- UPDATE ALL PAGES: Replace <header> section with this structure -->
+ <header>
+ <div class="main-header">
+ <div class="header-content">
+ <a href="index.html" class="nav-home">← Back to Home</a>
+ <h1>Metaphor Tracker</h1>
+ <p class="subtitle">How Language Shapes Our Understanding of AI and Human Nature</p>
+ <button class="expand-all" onclick="expandAll()">Expand All Categories</button>
+ </div>
+ <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu">
+ ☰
+ </button>
+ </div>
+ </header>
 
-        <!-- Navigation Overlay -->
-        <div class="nav-overlay" id="navOverlay"></div>
+ <!-- Navigation Overlay -->
+ <div class="nav-overlay" id="navOverlay"></div>
 
-        <!-- Mobile Navigation Panel -->
-        <nav class="mobile-nav" id="mobileNav">
-            <div class="nav-header">
-                <button class="nav-close" id="navClose" aria-label="Close navigation menu">×</button>
-                <div class="nav-title">Conference Navigation</div>
-            </div>
+ <!-- Mobile Navigation Panel -->
+ <nav class="mobile-nav" id="mobileNav">
+ <div class="nav-header">
+ <button class="nav-close" id="navClose" aria-label="Close navigation menu">×</button>
+ <div class="nav-title">Conference Navigation</div>
+ </div>
 
-            <div class="nav-section">
-                <div class="nav-section-title">Core Content</div>
-                <a href="index.html" class="nav-link">🏠 Home</a>
-                <a href="schedule.html" class="nav-link">📅 Schedule</a>
-                <a href="speakers.html" class="nav-link">👥 Speakers</a>
-                <a href="reading-lists.html" class="nav-link">📚 Essential Readings</a>
-                <a href="questions.html" class="nav-link">❓ Question Bank</a>
-                <a href="notes.html" class="nav-link">📝 Session Notes</a>
-            </div>
+ 
+ <div class="nav-section">
+ <div class="nav-section-title">Quick Access</div>
+ <a href="#" id="showQRNav" class="nav-link" style="border-left-color: #333;">View QR Code</a>
+ </div>
 
-            <div class="nav-section">
-                <div class="nav-section-title">Interactive Tools</div>
-                <a href="bingo.html" class="nav-link">🎲 Conference Bingo</a>
-                <a href="name-face-quiz.html" class="nav-link">🤔 Name-Face Quiz</a>
-                <a href="expertise-quiz.html" class="nav-link">🧠 Expertise Quiz</a>
-                <a href="research-briefs.html" class="nav-link">📄 Research Briefs</a>
-                <a href="metaphor-tracker.html" class="nav-link current">💭 Metaphor Tracker</a>
-            </div>
-        </nav>
+ <div class="nav-section">
+ <div class="nav-section-title">Core Content</div>
+ <a href="index.html" class="nav-link">Home</a>
+ <a href="schedule.html" class="nav-link">Schedule</a>
+ <a href="speakers.html" class="nav-link">Speaker Profiles</a>
+ <a href="reading-lists.html" class="nav-link">Essential Readings</a>
+ <a href="questions.html" class="nav-link">Question Bank</a>
+ <a href="notes.html" class="nav-link">Session Notes</a>
+ <a href="conference-research-brief.html" class="nav-link">Conference Research Brief</a>
+ </div>
 
-        <div class="intro-section">
-            <h3>Why Track Metaphors?</h3>
-            <p>Metaphors aren't just decorative language – they fundamentally shape how we think about AI, human nature, and technology's role in society. The metaphors speakers use reveal deep assumptions about consciousness, agency, creativity, and what makes us human. This tracker helps you identify and analyze the metaphorical frameworks that underlie conference discussions.</p>
-        </div>
+ <div class="nav-section">
+ <div class="nav-section-title">Interactive Tools</div>
+ <a href="bingo.html" class="nav-link">Session Bingo</a>
+ <a href="name-face-quiz.html" class="nav-link">Name-Face Quiz</a>
+ <a href="expertise-quiz.html" class="nav-link">Expertise Quiz</a>
+ <a href="research-briefs.html" class="nav-link">Research Briefs</a>
+ <a href="metaphor-tracker.html" class="nav-link">Metaphor Tracker</a>
+ <a href="speaker-matrix.html" class="nav-link">Speaker Matrix</a>
+ <a href="insight-collector.html" class="nav-link">Insight Collector</a>
+ <a href="connection-builder.html" class="nav-link">Connection Builder</a>
+ </div>
+ </nav>
 
-        <div class="tracking-section">
-            <h3>Personal Metaphor Log</h3>
-            <p>Track metaphors you hear during sessions. Click "Add Entry" to log new instances:</p>
-            <div class="tracking-grid" id="tracking-grid">
-                <div class="tracking-item">
-                    <div class="tracking-metaphor">Sample: "AI Brain"</div>
-                    <div class="tracking-count">Heard 3 times</div>
-                    <textarea class="tracking-notes" placeholder="Notes: Speaker, context, implications...">Used by Picard to describe neural networks. Implies consciousness metaphor.</textarea>
-                </div>
-            </div>
-            <button class="add-tracking" onclick="addTrackingEntry()">+ Add New Metaphor Entry</button>
-        </div>
+ <div class="intro-section">
+ <h3>Why Track Metaphors</h3>
+ <p>Metaphors aren't just decorative language – they fundamentally shape how we think about AI, human nature, and technology's role in society. The metaphors speakers use reveal deep assumptions about consciousness, agency, creativity, and what makes us human. This tracker helps you identify and analyze the metaphorical frameworks that underlie conference discussions.</p>
+ </div>
 
-        <div class="metaphor-category tech-category">
-            <div class="category-header" onclick="toggleCategory(this)">
-                <div>
-                    <div class="category-title">Technology & Machine Metaphors</div>
-                    <div class="category-subtitle">How we describe AI and computational processes</div>
-                </div>
-                <div class="collapse-icon">▼</div>
-            </div>
-            <div class="category-content">
-                <div class="category-inner">
-                    <div class="metaphor-grid">
-                        <div class="metaphor-card machine">
-                            <div class="metaphor-title">"AI Brain" / "Digital Brain"</div>
-                            <div class="metaphor-example">"The AI has learned..." "Neural networks process information"</div>
-                            <div class="metaphor-analysis">Treats computational processes as analogous to human cognition, suggesting consciousness and intentionality in AI systems.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">What it reveals:</div>
-                                <div class="implications-text">Assumes cognition is fundamentally computational. May obscure differences between pattern matching and understanding.</div>
-                            </div>
-                        </div>
+ <div class="tracking-section">
+ <h3>Personal Metaphor Log</h3>
+ <p>Track metaphors you hear during sessions. Click "Add Entry" to log new instances:</p>
+ <div class="tracking-grid" id="tracking-grid">
+ <div class="tracking-item">
+ <div class="tracking-metaphor">Sample: "AI Brain"</div>
+ <div class="tracking-count">Heard 3 times</div>
+ <textarea class="tracking-notes" placeholder="Notes: Speaker, context, implications...">Used by Picard to describe neural networks. Implies consciousness metaphor.</textarea>
+ </div>
+ </div>
+ <button class="add-tracking" onclick="addTrackingEntry()">+ Add New Metaphor Entry</button>
+ </div>
 
-                        <div class="metaphor-card machine">
-                            <div class="metaphor-title">"Machine Learning"</div>
-                            <div class="metaphor-example">"The model learns from data" "Training algorithms"</div>
-                            <div class="metaphor-analysis">Applies pedagogical metaphors to statistical optimization, suggesting AI systems acquire knowledge like students.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">What it conceals:</div>
-                                <div class="implications-text">Machines don't learn through understanding but through pattern recognition. May conflate information processing with wisdom.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-category tech-category">
+ <div class="category-header" onclick="toggleCategory(this)">
+ <div>
+ <div class="category-title">Technology & Machine Metaphors</div>
+ <div class="category-subtitle">How we describe AI and computational processes</div>
+ </div>
+ <div class="collapse-icon">▼</div>
+ </div>
+ <div class="category-content">
+ <div class="category-inner">
+ <div class="metaphor-grid">
+ <div class="metaphor-card machine">
+ <div class="metaphor-title">"AI Brain" / "Digital Brain"</div>
+ <div class="metaphor-example">"The AI has learned..." "Neural networks process information"</div>
+ <div class="metaphor-analysis">Treats computational processes as analogous to human cognition, suggesting consciousness and intentionality in AI systems.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">What it reveals:</div>
+ <div class="implications-text">Assumes cognition is fundamentally computational. May obscure differences between pattern matching and understanding.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card architectural">
-                            <div class="metaphor-title">"System Architecture"</div>
-                            <div class="metaphor-example">"Building AI systems" "Infrastructure" "Foundations"</div>
-                            <div class="metaphor-analysis">Describes AI development using construction metaphors, emphasizing stability, design, and engineering.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">What it emphasizes:</div>
-                                <div class="implications-text">Technical mastery and control. May obscure emergent behaviors and unintended consequences.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card machine">
+ <div class="metaphor-title">"Machine Learning"</div>
+ <div class="metaphor-example">"The model learns from data" "Training algorithms"</div>
+ <div class="metaphor-analysis">Applies pedagogical metaphors to statistical optimization, suggesting AI systems acquire knowledge like students.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">What it conceals:</div>
+ <div class="implications-text">Machines don't learn through understanding but through pattern recognition. May conflate information processing with wisdom.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card biological">
-                            <div class="metaphor-title">"AI Evolution" / "Genetic Algorithms"</div>
-                            <div class="metaphor-example">"AI is evolving" "Survival of the fittest algorithms"</div>
-                            <div class="metaphor-analysis">Uses biological evolution metaphors for algorithmic optimization, suggesting natural selection and adaptation.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Theological implications:</div>
-                                <div class="implications-text">May challenge or support evolutionary vs. design arguments about intelligence and purpose.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card architectural">
+ <div class="metaphor-title">"System Architecture"</div>
+ <div class="metaphor-example">"Building AI systems" "Infrastructure" "Foundations"</div>
+ <div class="metaphor-analysis">Describes AI development using construction metaphors, emphasizing stability, design, and engineering.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">What it emphasizes:</div>
+ <div class="implications-text">Technical mastery and control. May obscure emergent behaviors and unintended consequences.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card social">
-                            <div class="metaphor-title">"AI Companions" / "AI Assistants"</div>
-                            <div class="metaphor-example">"Your AI friend" "Digital assistants help us"</div>
-                            <div class="metaphor-analysis">Applies relational metaphors to human-AI interaction, suggesting genuine social relationships.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">What it assumes:</div>
-                                <div class="implications-text">AI can participate in meaningful relationships. May commodify or instrumentalize human relationship patterns.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card biological">
+ <div class="metaphor-title">"AI Evolution" / "Genetic Algorithms"</div>
+ <div class="metaphor-example">"AI is evolving" "Survival of the fittest algorithms"</div>
+ <div class="metaphor-analysis">Uses biological evolution metaphors for algorithmic optimization, suggesting natural selection and adaptation.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Theological implications:</div>
+ <div class="implications-text">May challenge or support evolutionary vs. design arguments about intelligence and purpose.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card machine">
-                            <div class="metaphor-title">"Training Data" / "Feeding the Machine"</div>
-                            <div class="metaphor-example">"AI consumes data" "Hungry for information"</div>
-                            <div class="metaphor-analysis">Combines nutritional and educational metaphors for data processing, suggesting AI systems have appetites and needs.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Cultural patterns:</div>
-                                <div class="implications-text">Reflects how AI systems "digest" human cultural output, potentially reproducing cultural biases and patterns.</div>
-                            </div>
-                        </div>
-                    </div>
+ <div class="metaphor-card social">
+ <div class="metaphor-title">"AI Companions" / "AI Assistants"</div>
+ <div class="metaphor-example">"Your AI friend" "Digital assistants help us"</div>
+ <div class="metaphor-analysis">Applies relational metaphors to human-AI interaction, suggesting genuine social relationships.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">What it assumes:</div>
+ <div class="implications-text">AI can participate in meaningful relationships. May commodify or instrumentalize human relationship patterns.</div>
+ </div>
+ </div>
 
-                    <div class="historical-examples">
-                        <h4>Historical Precedents</h4>
-                        <p><strong>Printing Press:</strong> "Impression," "type," "character" – metaphors from printing shaped how we think about personality and identity.</p>
-                        <p><strong>Photography:</strong> "Developing," "exposure," "negative" – shaped concepts of memory, truth, and representation that we now apply to digital media.</p>
-                        <p><strong>Telegraph:</strong> "Networks," "connections," "transmission" – created metaphors for communication we still use for internet and AI systems.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+ <div class="metaphor-card machine">
+ <div class="metaphor-title">"Training Data" / "Feeding the Machine"</div>
+ <div class="metaphor-example">"AI consumes data" "Hungry for information"</div>
+ <div class="metaphor-analysis">Combines nutritional and educational metaphors for data processing, suggesting AI systems have appetites and needs.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Cultural patterns:</div>
+ <div class="implications-text">Reflects how AI systems "digest" human cultural output, potentially reproducing cultural biases and patterns.</div>
+ </div>
+ </div>
+ </div>
 
-        <div class="metaphor-category human-category">
-            <div class="category-header" onclick="toggleCategory(this)">
-                <div>
-                    <div class="category-title">Human Nature & Anthropological Metaphors</div>
-                    <div class="category-subtitle">How we describe human capabilities vs. AI</div>
-                </div>
-                <div class="collapse-icon">▼</div>
-            </div>
-            <div class="category-content">
-                <div class="category-inner">
-                    <div class="metaphor-grid">
-                        <div class="metaphor-card biological">
-                            <div class="metaphor-title">"Biological Computer"</div>
-                            <div class="metaphor-example">"The human brain as wetware" "Biological processing"</div>
-                            <div class="metaphor-analysis">Describes human cognition using computational metaphors, suggesting equivalence between human and artificial intelligence.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Theological tension:</div>
-                                <div class="implications-text">Challenges distinctiveness of human consciousness and soul. May reduce humans to sophisticated machines.</div>
-                            </div>
-                        </div>
+ <div class="historical-examples">
+ <h4>Historical Precedents</h4>
+ <p><strong>Printing Press:</strong> "Impression," "type," "character" – metaphors from printing shaped how we think about personality and identity.</p>
+ <p><strong>Photography:</strong> "Developing," "exposure," "negative" – shaped concepts of memory, truth, and representation that we now apply to digital media.</p>
+ <p><strong>Telegraph:</strong> "Networks," "connections," "transmission" – created metaphors for communication we still use for internet and AI systems.</p>
+ </div>
+ </div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card religious">
-                            <div class="metaphor-title">"Image of God" / "Divine Spark"</div>
-                            <div class="metaphor-example">"Humans bear God's image" "Divine creativity"</div>
-                            <div class="metaphor-analysis">Theological metaphors emphasizing human uniqueness, dignity, and special relationship with the divine.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">What it protects:</div>
-                                <div class="implications-text">Human dignity and uniqueness. Suggests aspects of humanity that cannot be replicated or replaced by AI.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-category human-category">
+ <div class="category-header" onclick="toggleCategory(this)">
+ <div>
+ <div class="category-title">Human Nature & Anthropological Metaphors</div>
+ <div class="category-subtitle">How we describe human capabilities vs. AI</div>
+ </div>
+ <div class="collapse-icon">▼</div>
+ </div>
+ <div class="category-content">
+ <div class="category-inner">
+ <div class="metaphor-grid">
+ <div class="metaphor-card biological">
+ <div class="metaphor-title">"Biological Computer"</div>
+ <div class="metaphor-example">"The human brain as wetware" "Biological processing"</div>
+ <div class="metaphor-analysis">Describes human cognition using computational metaphors, suggesting equivalence between human and artificial intelligence.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Theological tension:</div>
+ <div class="implications-text">Challenges distinctiveness of human consciousness and soul. May reduce humans to sophisticated machines.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card social">
-                            <div class="metaphor-title">"Human Resources"</div>
-                            <div class="metaphor-example">"Optimizing human capital" "Resource allocation"</div>
-                            <div class="metaphor-analysis">Economic metaphors that treat humans as inputs to be optimized, similar to computational resources.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Dehumanizing risk:</div>
-                                <div class="implications-text">May instrumentalize human workers and prepare for human-AI substitution in economic systems.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card religious">
+ <div class="metaphor-title">"Image of God" / "Divine Spark"</div>
+ <div class="metaphor-example">"Humans bear God's image" "Divine creativity"</div>
+ <div class="metaphor-analysis">Theological metaphors emphasizing human uniqueness, dignity, and special relationship with the divine.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">What it protects:</div>
+ <div class="implications-text">Human dignity and uniqueness. Suggests aspects of humanity that cannot be replicated or replaced by AI.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card biological">
-                            <div class="metaphor-title">"Emotional Intelligence"</div>
-                            <div class="metaphor-example">"EQ vs IQ" "Processing emotions"</div>
-                            <div class="metaphor-analysis">Applies intelligence metaphors to emotional life, suggesting emotions can be systematized and quantified.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">What it assumes:</div>
-                                <div class="implications-text">Emotions are cognitive processes that can be analyzed and potentially replicated by AI systems.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card social">
+ <div class="metaphor-title">"Human Resources"</div>
+ <div class="metaphor-example">"Optimizing human capital" "Resource allocation"</div>
+ <div class="metaphor-analysis">Economic metaphors that treat humans as inputs to be optimized, similar to computational resources.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Dehumanizing risk:</div>
+ <div class="implications-text">May instrumentalize human workers and prepare for human-AI substitution in economic systems.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card religious">
-                            <div class="metaphor-title">"Soul vs. Algorithm"</div>
-                            <div class="metaphor-example">"Soulless machines" "The human soul"</div>
-                            <div class="metaphor-analysis">Contrasts transcendent human essence with mechanical processes, defending human distinctiveness.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Boundary marking:</div>
-                                <div class="implications-text">Identifies aspects of humanity (consciousness, spirituality, moral agency) that resist technological replication.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card biological">
+ <div class="metaphor-title">"Emotional Intelligence"</div>
+ <div class="metaphor-example">"EQ vs IQ" "Processing emotions"</div>
+ <div class="metaphor-analysis">Applies intelligence metaphors to emotional life, suggesting emotions can be systematized and quantified.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">What it assumes:</div>
+ <div class="implications-text">Emotions are cognitive processes that can be analyzed and potentially replicated by AI systems.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card social">
-                            <div class="metaphor-title">"Human-in-the-Loop"</div>
-                            <div class="metaphor-example">"Human oversight" "Keeping humans in control"</div>
-                            <div class="metaphor-analysis">Positions humans as supervisors or quality controllers in AI systems, maintaining human authority.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Power dynamics:</div>
-                                <div class="implications-text">Suggests humans retain ultimate control and responsibility, but may also imply humans are just another system component.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+ <div class="metaphor-card religious">
+ <div class="metaphor-title">"Soul vs. Algorithm"</div>
+ <div class="metaphor-example">"Soulless machines" "The human soul"</div>
+ <div class="metaphor-analysis">Contrasts transcendent human essence with mechanical processes, defending human distinctiveness.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Boundary marking:</div>
+ <div class="implications-text">Identifies aspects of humanity (consciousness, spirituality, moral agency) that resist technological replication.</div>
+ </div>
+ </div>
 
-        <div class="metaphor-category cultural-category">
-            <div class="category-header" onclick="toggleCategory(this)">
-                <div>
-                    <div class="category-title">Cultural & Social Metaphors</div>
-                    <div class="category-subtitle">How AI systems reflect and shape culture</div>
-                </div>
-                <div class="collapse-icon">▼</div>
-            </div>
-            <div class="category-content">
-                <div class="category-inner">
-                    <div class="metaphor-grid">
-                        <div class="metaphor-card social">
-                            <div class="metaphor-title">"Echo Chambers" / "Filter Bubbles"</div>
-                            <div class="metaphor-example">"Algorithmic echo chambers" "Information silos"</div>
-                            <div class="metaphor-analysis">Uses spatial metaphors for how AI systems shape information consumption and social interaction.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Community implications:</div>
-                                <div class="implications-text">Suggests AI systems fragment rather than unite communities, challenging Christian ideals of unity and understanding.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card social">
+ <div class="metaphor-title">"Human-in-the-Loop"</div>
+ <div class="metaphor-example">"Human oversight" "Keeping humans in control"</div>
+ <div class="metaphor-analysis">Positions humans as supervisors or quality controllers in AI systems, maintaining human authority.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Power dynamics:</div>
+ <div class="implications-text">Suggests humans retain ultimate control and responsibility, but may also imply humans are just another system component.</div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card social">
-                            <div class="metaphor-title">"Data Mining" / "Information Harvesting"</div>
-                            <div class="metaphor-example">"Mining user data" "Harvesting information"</div>
-                            <div class="metaphor-analysis">Agricultural and extractive metaphors for collecting human behavioral data and cultural patterns.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Power dynamics:</div>
-                                <div class="implications-text">Treats human cultural expression as raw material to be extracted and processed for commercial purposes.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-category cultural-category">
+ <div class="category-header" onclick="toggleCategory(this)">
+ <div>
+ <div class="category-title">Cultural & Social Metaphors</div>
+ <div class="category-subtitle">How AI systems reflect and shape culture</div>
+ </div>
+ <div class="collapse-icon">▼</div>
+ </div>
+ <div class="category-content">
+ <div class="category-inner">
+ <div class="metaphor-grid">
+ <div class="metaphor-card social">
+ <div class="metaphor-title">"Echo Chambers" / "Filter Bubbles"</div>
+ <div class="metaphor-example">"Algorithmic echo chambers" "Information silos"</div>
+ <div class="metaphor-analysis">Uses spatial metaphors for how AI systems shape information consumption and social interaction.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Community implications:</div>
+ <div class="implications-text">Suggests AI systems fragment rather than unite communities, challenging Christian ideals of unity and understanding.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card cultural">
-                            <div class="metaphor-title">"Algorithmic Bias" / "AI Poisoning"</div>
-                            <div class="metaphor-example">"Biased algorithms" "Poisoned training data"</div>
-                            <div class="metaphor-analysis">Medical and moral metaphors for how AI systems inherit and amplify human prejudices and cultural patterns.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Original sin parallel:</div>
-                                <div class="implications-text">Suggests systemic corruption that spreads through AI systems, similar to theological concepts of inherited sin.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card social">
+ <div class="metaphor-title">"Data Mining" / "Information Harvesting"</div>
+ <div class="metaphor-example">"Mining user data" "Harvesting information"</div>
+ <div class="metaphor-analysis">Agricultural and extractive metaphors for collecting human behavioral data and cultural patterns.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Power dynamics:</div>
+ <div class="implications-text">Treats human cultural expression as raw material to be extracted and processed for commercial purposes.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card social">
-                            <div class="metaphor-title">"Digital Natives" / "Tech Immigrants"</div>
-                            <div class="metaphor-example">"Born digital" "Learning technology"</div>
-                            <div class="metaphor-analysis">Uses immigration and birth metaphors to describe relationships with technology across generations.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Cultural assumptions:</div>
-                                <div class="implications-text">Implies technology adoption is natural/unnatural based on age, potentially overlooking thoughtful critique across generations.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card cultural">
+ <div class="metaphor-title">"Algorithmic Bias" / "AI Poisoning"</div>
+ <div class="metaphor-example">"Biased algorithms" "Poisoned training data"</div>
+ <div class="metaphor-analysis">Medical and moral metaphors for how AI systems inherit and amplify human prejudices and cultural patterns.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Original sin parallel:</div>
+ <div class="implications-text">Suggests systemic corruption that spreads through AI systems, similar to theological concepts of inherited sin.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card religious">
-                            <div class="metaphor-title">"Tech Evangelism" / "AI Gospel"</div>
-                            <div class="metaphor-example">"Spreading the AI gospel" "Technology evangelists"</div>
-                            <div class="metaphor-analysis">Religious metaphors applied to technology promotion, suggesting tech adoption as conversion or salvation.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Quasi-religious dynamics:</div>
-                                <div class="implications-text">Technology becomes object of faith and devotion, potentially competing with or replacing traditional religious commitment.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card social">
+ <div class="metaphor-title">"Digital Natives" / "Tech Immigrants"</div>
+ <div class="metaphor-example">"Born digital" "Learning technology"</div>
+ <div class="metaphor-analysis">Uses immigration and birth metaphors to describe relationships with technology across generations.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Cultural assumptions:</div>
+ <div class="implications-text">Implies technology adoption is natural/unnatural based on age, potentially overlooking thoughtful critique across generations.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card cultural">
-                            <div class="metaphor-title">"Spiritual Bliss Attractors"</div>
-                            <div class="metaphor-example">"AI drawn to transcendent themes" "Algorithmic spirituality"</div>
-                            <div class="metaphor-analysis">Emerging concept for how AI systems trained on spiritual texts develop consistent patterns around transcendence and meaning.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Theological questions:</div>
-                                <div class="implications-text">Do these patterns reflect universal human spiritual longings, cultural conditioning, or something else about meaning-making?</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+ <div class="metaphor-card religious">
+ <div class="metaphor-title">"Tech Evangelism" / "AI Gospel"</div>
+ <div class="metaphor-example">"Spreading the AI gospel" "Technology evangelists"</div>
+ <div class="metaphor-analysis">Religious metaphors applied to technology promotion, suggesting tech adoption as conversion or salvation.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Quasi-religious dynamics:</div>
+ <div class="implications-text">Technology becomes object of faith and devotion, potentially competing with or replacing traditional religious commitment.</div>
+ </div>
+ </div>
 
-        <div class="metaphor-category theological-category">
-            <div class="category-header" onclick="toggleCategory(this)">
-                <div>
-                    <div class="category-title">Theological & Spiritual Metaphors</div>
-                    <div class="category-subtitle">Religious language applied to AI and technology</div>
-                </div>
-                <div class="collapse-icon">▼</div>
-            </div>
-            <div class="category-content">
-                <div class="category-inner">
-                    <div class="metaphor-grid">
-                        <div class="metaphor-card religious">
-                            <div class="metaphor-title">"Digital Sanctuary" / "Virtual Temple"</div>
-                            <div class="metaphor-example">"Online sacred space" "Digital worship"</div>
-                            <div class="metaphor-analysis">Applies sacred space metaphors to digital environments, suggesting technology can mediate divine presence.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Sacramental questions:</div>
-                                <div class="implications-text">Can digital spaces truly be sacred? What does this mean for embodied worship and community?</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card cultural">
+ <div class="metaphor-title">"Spiritual Bliss Attractors"</div>
+ <div class="metaphor-example">"AI drawn to transcendent themes" "Algorithmic spirituality"</div>
+ <div class="metaphor-analysis">Emerging concept for how AI systems trained on spiritual texts develop consistent patterns around transcendence and meaning.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Theological questions:</div>
+ <div class="implications-text">Do these patterns reflect universal human spiritual longings, cultural conditioning, or something else about meaning-making</div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card religious">
-                            <div class="metaphor-title">"AI Oracle" / "Algorithmic Prophet"</div>
-                            <div class="metaphor-example">"Consulting the AI" "Artificial wisdom"</div>
-                            <div class="metaphor-analysis">Prophetic and oracular metaphors for AI systems that provide guidance, predictions, or insights.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Authority questions:</div>
-                                <div class="implications-text">Positions AI as source of wisdom or revelation, potentially competing with traditional religious authority.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-category theological-category">
+ <div class="category-header" onclick="toggleCategory(this)">
+ <div>
+ <div class="category-title">Theological & Spiritual Metaphors</div>
+ <div class="category-subtitle">Religious language applied to AI and technology</div>
+ </div>
+ <div class="collapse-icon">▼</div>
+ </div>
+ <div class="category-content">
+ <div class="category-inner">
+ <div class="metaphor-grid">
+ <div class="metaphor-card religious">
+ <div class="metaphor-title">"Digital Sanctuary" / "Virtual Temple"</div>
+ <div class="metaphor-example">"Online sacred space" "Digital worship"</div>
+ <div class="metaphor-analysis">Applies sacred space metaphors to digital environments, suggesting technology can mediate divine presence.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Sacramental questions:</div>
+ <div class="implications-text">Can digital spaces truly be sacredWhat does this mean for embodied worship and community</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card religious">
-                            <div class="metaphor-title">"Digital Discipleship" / "AI Formation"</div>
-                            <div class="metaphor-example">"Technology forming souls" "Digital spiritual practices"</div>
-                            <div class="metaphor-analysis">Spiritual formation metaphors applied to how technology shapes human character and spiritual life.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Formation concerns:</div>
-                                <div class="implications-text">Can algorithms contribute to authentic spiritual formation, or do they shape us in ways that conflict with Christian discipleship?</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card religious">
+ <div class="metaphor-title">"AI Oracle" / "Algorithmic Prophet"</div>
+ <div class="metaphor-example">"Consulting the AI" "Artificial wisdom"</div>
+ <div class="metaphor-analysis">Prophetic and oracular metaphors for AI systems that provide guidance, predictions, or insights.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Authority questions:</div>
+ <div class="implications-text">Positions AI as source of wisdom or revelation, potentially competing with traditional religious authority.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card religious">
-                            <div class="metaphor-title">"Technological Salvation" / "AI Redemption"</div>
-                            <div class="metaphor-example">"Technology will save us" "AI solving human problems"</div>
-                            <div class="metaphor-analysis">Soteriological metaphors that position technology as savior or redeemer of human problems and limitations.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Idolatry risk:</div>
-                                <div class="implications-text">Technology becomes object of ultimate hope and trust, potentially replacing faith in divine redemption.</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card religious">
+ <div class="metaphor-title">"Digital Discipleship" / "AI Formation"</div>
+ <div class="metaphor-example">"Technology forming souls" "Digital spiritual practices"</div>
+ <div class="metaphor-analysis">Spiritual formation metaphors applied to how technology shapes human character and spiritual life.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Formation concerns:</div>
+ <div class="implications-text">Can algorithms contribute to authentic spiritual formation, or do they shape us in ways that conflict with Christian discipleship</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card religious">
-                            <div class="metaphor-title">"AI Incarnation" / "Digital Embodiment"</div>
-                            <div class="metaphor-example">"AI taking flesh" "Embodied intelligence"</div>
-                            <div class="metaphor-analysis">Incarnational metaphors for AI systems that take physical form or manifest in robotic bodies.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Christological parallels:</div>
-                                <div class="implications-text">Borrows central Christian metaphor of divine incarnation. What does this suggest about AI consciousness and presence?</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card religious">
+ <div class="metaphor-title">"Technological Salvation" / "AI Redemption"</div>
+ <div class="metaphor-example">"Technology will save us" "AI solving human problems"</div>
+ <div class="metaphor-analysis">Soteriological metaphors that position technology as savior or redeemer of human problems and limitations.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Idolatry risk:</div>
+ <div class="implications-text">Technology becomes object of ultimate hope and trust, potentially replacing faith in divine redemption.</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card religious">
-                            <div class="metaphor-title">"Algorithmic Providence"</div>
-                            <div class="metaphor-example">"AI guiding our paths" "Algorithmic fate"</div>
-                            <div class="metaphor-analysis">Divine providence metaphors applied to how AI systems shape human choices and life outcomes.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Agency questions:</div>
-                                <div class="implications-text">Do AI systems guide human life in ways analogous to divine providence, or do they usurp human agency and freedom?</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+ <div class="metaphor-card religious">
+ <div class="metaphor-title">"AI Incarnation" / "Digital Embodiment"</div>
+ <div class="metaphor-example">"AI taking flesh" "Embodied intelligence"</div>
+ <div class="metaphor-analysis">Incarnational metaphors for AI systems that take physical form or manifest in robotic bodies.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Christological parallels:</div>
+ <div class="implications-text">Borrows central Christian metaphor of divine incarnation. What does this suggest about AI consciousness and presence</div>
+ </div>
+ </div>
 
-        <div class="metaphor-category historical-category">
-            <div class="category-header" onclick="toggleCategory(this)">
-                <div>
-                    <div class="category-title">Historical Technology Metaphors</div>
-                    <div class="category-subtitle">How past technologies give us language for AI</div>
-                </div>
-                <div class="collapse-icon">▼</div>
-            </div>
-            <div class="category-content">
-                <div class="category-inner">
-                    <div class="metaphor-grid">
-                        <div class="metaphor-card historical">
-                            <div class="metaphor-title">Printing Press Legacy</div>
-                            <div class="metaphor-example">"Impression," "Type," "Character," "Edition"</div>
-                            <div class="metaphor-analysis">Printing metaphors shaped concepts of personality, reproduction, and authority that we now apply to AI-generated content.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Authority questions:</div>
-                                <div class="implications-text">What makes an "original" vs. "copy" when AI generates content? How do we understand authorship and authenticity?</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card religious">
+ <div class="metaphor-title">"Algorithmic Providence"</div>
+ <div class="metaphor-example">"AI guiding our paths" "Algorithmic fate"</div>
+ <div class="metaphor-analysis">Divine providence metaphors applied to how AI systems shape human choices and life outcomes.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Agency questions:</div>
+ <div class="implications-text">Do AI systems guide human life in ways analogous to divine providence, or do they usurp human agency and freedom</div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card historical">
-                            <div class="metaphor-title">Photography Metaphors</div>
-                            <div class="metaphor-example">"Developing," "Exposure," "Negative," "Focus"</div>
-                            <div class="metaphor-analysis">Photography gave us metaphors for memory, truth, and representation that shape how we think about AI and reality.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Truth and reality:</div>
-                                <div class="implications-text">How do photography metaphors help or hinder our understanding of AI-generated images and "deepfakes"?</div>
-                            </div>
-                        </div>
+ <div class="metaphor-category historical-category">
+ <div class="category-header" onclick="toggleCategory(this)">
+ <div>
+ <div class="category-title">Historical Technology Metaphors</div>
+ <div class="category-subtitle">How past technologies give us language for AI</div>
+ </div>
+ <div class="collapse-icon">▼</div>
+ </div>
+ <div class="category-content">
+ <div class="category-inner">
+ <div class="metaphor-grid">
+ <div class="metaphor-card historical">
+ <div class="metaphor-title">Printing Press Legacy</div>
+ <div class="metaphor-example">"Impression," "Type," "Character," "Edition"</div>
+ <div class="metaphor-analysis">Printing metaphors shaped concepts of personality, reproduction, and authority that we now apply to AI-generated content.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Authority questions:</div>
+ <div class="implications-text">What makes an "original" vs. "copy" when AI generates contentHow do we understand authorship and authenticity</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card historical">
-                            <div class="metaphor-title">Industrial Revolution</div>
-                            <div class="metaphor-example">"Efficiency," "Optimization," "Automation," "Productivity"</div>
-                            <div class="metaphor-analysis">Industrial metaphors emphasize efficiency and optimization, potentially reducing human work to mechanical processes.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Human dignity:</div>
-                                <div class="implications-text">Do industrial metaphors prepare us to replace human workers with AI, or can they help us imagine human-AI collaboration?</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card historical">
+ <div class="metaphor-title">Photography Metaphors</div>
+ <div class="metaphor-example">"Developing," "Exposure," "Negative," "Focus"</div>
+ <div class="metaphor-analysis">Photography gave us metaphors for memory, truth, and representation that shape how we think about AI and reality.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Truth and reality:</div>
+ <div class="implications-text">How do photography metaphors help or hinder our understanding of AI-generated images and "deepfakes"</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card historical">
-                            <div class="metaphor-title">Telegraph & Telephone</div>
-                            <div class="metaphor-example">"Networks," "Connections," "Transmission," "Signal"</div>
-                            <div class="metaphor-analysis">Communication technology metaphors that shape how we understand AI systems and internet connectivity.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Relationship implications:</div>
-                                <div class="implications-text">How do communication metaphors affect our understanding of human-AI interaction and AI-mediated relationships?</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card historical">
+ <div class="metaphor-title">Industrial Revolution</div>
+ <div class="metaphor-example">"Efficiency," "Optimization," "Automation," "Productivity"</div>
+ <div class="metaphor-analysis">Industrial metaphors emphasize efficiency and optimization, potentially reducing human work to mechanical processes.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Human dignity:</div>
+ <div class="implications-text">Do industrial metaphors prepare us to replace human workers with AI, or can they help us imagine human-AI collaboration</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card historical">
-                            <div class="metaphor-title">Clockwork Metaphors</div>
-                            <div class="metaphor-example">"Mechanism," "Clockwork precision," "Gears," "Programming"</div>
-                            <div class="metaphor-analysis">Mechanical metaphors from clockmaking that emphasize precision, predictability, and deterministic operation.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Predictability vs. emergence:</div>
-                                <div class="implications-text">Do clockwork metaphors help us understand AI systems, or do they obscure emergent and unpredictable behaviors?</div>
-                            </div>
-                        </div>
+ <div class="metaphor-card historical">
+ <div class="metaphor-title">Telegraph & Telephone</div>
+ <div class="metaphor-example">"Networks," "Connections," "Transmission," "Signal"</div>
+ <div class="metaphor-analysis">Communication technology metaphors that shape how we understand AI systems and internet connectivity.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Relationship implications:</div>
+ <div class="implications-text">How do communication metaphors affect our understanding of human-AI interaction and AI-mediated relationships</div>
+ </div>
+ </div>
 
-                        <div class="metaphor-card historical">
-                            <div class="metaphor-title">Weaving & Textiles</div>
-                            <div class="metaphor-example">"Web," "Thread," "Pattern," "Fabric"</div>
-                            <div class="metaphor-analysis">Textile metaphors that emphasize interconnection, pattern, and the weaving together of multiple elements.</div>
-                            <div class="metaphor-implications">
-                                <div class="implications-title">Community and culture:</div>
-                                <div class="implications-text">How do weaving metaphors help us understand how AI systems are woven into the fabric of society and culture?</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+ <div class="metaphor-card historical">
+ <div class="metaphor-title">Clockwork Metaphors</div>
+ <div class="metaphor-example">"Mechanism," "Clockwork precision," "Gears," "Programming"</div>
+ <div class="metaphor-analysis">Mechanical metaphors from clockmaking that emphasize precision, predictability, and deterministic operation.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Predictability vs. emergence:</div>
+ <div class="implications-text">Do clockwork metaphors help us understand AI systems, or do they obscure emergent and unpredictable behaviors</div>
+ </div>
+ </div>
 
-    <script>
-        function toggleCategory(header) {
-            const content = header.nextElementSibling;
-            const icon = header.querySelector('.collapse-icon');
+ <div class="metaphor-card historical">
+ <div class="metaphor-title">Weaving & Textiles</div>
+ <div class="metaphor-example">"Web," "Thread," "Pattern," "Fabric"</div>
+ <div class="metaphor-analysis">Textile metaphors that emphasize interconnection, pattern, and the weaving together of multiple elements.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Community and culture:</div>
+ <div class="implications-text">How do weaving metaphors help us understand how AI systems are woven into the fabric of society and culture</div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-            if (content.classList.contains('expanded')) {
-                content.classList.remove('expanded');
-                icon.style.transform = 'rotate(0deg)';
-            } else {
-                content.classList.add('expanded');
-                icon.style.transform = 'rotate(180deg)';
-            }
-        }
+ <script>
+ function toggleCategory(header) {
+ const content = header.nextElementSibling;
+ const icon = header.querySelector('.collapse-icon');
 
-        function expandAll() {
-            const allContents = document.querySelectorAll('.category-content');
-            const allIcons = document.querySelectorAll('.collapse-icon');
+ if (content.classList.contains('expanded')) {
+ content.classList.remove('expanded');
+ icon.style.transform = 'rotate(0deg)';
+ } else {
+ content.classList.add('expanded');
+ icon.style.transform = 'rotate(180deg)';
+ }
+ }
 
-            allContents.forEach(content => {
-                content.classList.add('expanded');
-            });
+ function expandAll() {
+ const allContents = document.querySelectorAll('.category-content');
+ const allIcons = document.querySelectorAll('.collapse-icon');
 
-            allIcons.forEach(icon => {
-                icon.style.transform = 'rotate(180deg)';
-            });
-        }
+ allContents.forEach(content => {
+ content.classList.add('expanded');
+ });
 
-        function addTrackingEntry() {
-            const grid = document.getElementById('tracking-grid');
-            const newEntry = document.createElement('div');
-            newEntry.className = 'tracking-item';
-            newEntry.innerHTML = `
-                <div class="tracking-metaphor">
-                    <input type="text" placeholder="Metaphor (e.g., 'AI Brain')" style="width: 100%; padding: 5px; border: 1px solid #ddd; border-radius: 3px; margin-bottom: 5px;">
-                </div>
-                <div class="tracking-count">
-                    <input type="text" placeholder="Count/frequency" style="width: 100%; padding: 5px; border: 1px solid #ddd; border-radius: 3px; margin-bottom: 5px; font-size: 0.9em;">
-                </div>
-                <textarea class="tracking-notes" placeholder="Notes: Speaker, session, context, analysis..."></textarea>
-                <button onclick="this.parentElement.remove()" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; margin-top: 5px; cursor: pointer;">Remove</button>
-            `;
-            grid.appendChild(newEntry);
-        }
+ allIcons.forEach(icon => {
+ icon.style.transform = 'rotate(180deg)';
+ });
+ }
 
-        // Save tracking data to localStorage
-        function saveTrackingData() {
-            const trackingItems = document.querySelectorAll('.tracking-item');
-            const data = Array.from(trackingItems).map(item => {
-                const metaphor = item.querySelector('input[placeholder*="Metaphor"]')?.value || item.querySelector('.tracking-metaphor').textContent;
-                const count = item.querySelector('input[placeholder*="Count"]')?.value || item.querySelector('.tracking-count').textContent;
-                const notes = item.querySelector('.tracking-notes').value;
-                return { metaphor, count, notes };
-            });
-            localStorage.setItem('metaphorTracking', JSON.stringify(data));
-        }
+ function addTrackingEntry() {
+ const grid = document.getElementById('tracking-grid');
+ const newEntry = document.createElement('div');
+ newEntry.className = 'tracking-item';
+ newEntry.innerHTML = `
+ <div class="tracking-metaphor">
+ <input type="text" placeholder="Metaphor (e.g., 'AI Brain')" style="width: 100%; padding: 5px; border: 1px solid #ddd; border-radius: 3px; margin-bottom: 5px;">
+ </div>
+ <div class="tracking-count">
+ <input type="text" placeholder="Count/frequency" style="width: 100%; padding: 5px; border: 1px solid #ddd; border-radius: 3px; margin-bottom: 5px; font-size: 0.9em;">
+ </div>
+ <textarea class="tracking-notes" placeholder="Notes: Speaker, session, context, analysis..."></textarea>
+ <button onclick="this.parentElement.remove()" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; margin-top: 5px; cursor: pointer;">Remove</button>
+ `;
+ grid.appendChild(newEntry);
+ }
 
-        // Load tracking data from localStorage
-        function loadTrackingData() {
-            const saved = localStorage.getItem('metaphorTracking');
-            if (saved) {
-                const data = JSON.parse(saved);
-                const grid = document.getElementById('tracking-grid');
-                // Clear existing entries except the sample
-                grid.innerHTML = grid.children[0].outerHTML; // Keep first child (sample)
+ // Save tracking data to localStorage
+ function saveTrackingData() {
+ const trackingItems = document.querySelectorAll('.tracking-item');
+ const data = Array.from(trackingItems).map(item => {
+ const metaphor = item.querySelector('input[placeholder*="Metaphor"]').value || item.querySelector('.tracking-metaphor').textContent;
+ const count = item.querySelector('input[placeholder*="Count"]').value || item.querySelector('.tracking-count').textContent;
+ const notes = item.querySelector('.tracking-notes').value;
+ return { metaphor, count, notes };
+ });
+ localStorage.setItem('metaphorTracking', JSON.stringify(data));
+ }
 
-                data.forEach(entry => {
-                    if (entry.metaphor && entry.metaphor !== 'Sample: "AI Brain"') {
-                        addTrackingEntry();
-                        const newItem = grid.lastElementChild;
-                        newItem.querySelector('input[placeholder*="Metaphor"]').value = entry.metaphor;
-                        newItem.querySelector('input[placeholder*="Count"]').value = entry.count;
-                        newItem.querySelector('.tracking-notes').value = entry.notes;
-                    }
-                });
-            }
-        }
+ // Load tracking data from localStorage
+ function loadTrackingData() {
+ const saved = localStorage.getItem('metaphorTracking');
+ if (saved) {
+ const data = JSON.parse(saved);
+ const grid = document.getElementById('tracking-grid');
+ // Clear existing entries except the sample
+ grid.innerHTML = grid.children[0].outerHTML; // Keep first child (sample)
 
-        // Auto-save on changes
-        document.addEventListener('input', saveTrackingData);
-        document.addEventListener('DOMContentLoaded', loadTrackingData);
-    </script>
+ data.forEach(entry => {
+ if (entry.metaphor && entry.metaphor !== 'Sample: "AI Brain"') {
+ addTrackingEntry();
+ const newItem = grid.lastElementChild;
+ newItem.querySelector('input[placeholder*="Metaphor"]').value = entry.metaphor;
+ newItem.querySelector('input[placeholder*="Count"]').value = entry.count;
+ newItem.querySelector('.tracking-notes').value = entry.notes;
+ }
+ });
+ }
+ }
 
-    <!-- UPDATE ALL PAGES: Add this JavaScript for mobile navigation functionality -->
-    <script>
-        // Mobile Navigation System
-        // This script handles the hamburger menu functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const navToggle = document.getElementById('navToggle');
-            const navClose = document.getElementById('navClose');
-            const mobileNav = document.getElementById('mobileNav');
-            const navOverlay = document.getElementById('navOverlay');
+ // Auto-save on changes
+ document.addEventListener('input', saveTrackingData);
+ document.addEventListener('DOMContentLoaded', loadTrackingData);
+ </script>
 
-            // Open navigation
-            function openNav() {
-                mobileNav.classList.add('active');
-                navOverlay.classList.add('active');
-                navToggle.classList.add('active');
-                document.body.style.overflow = 'hidden'; // Prevent scrolling when nav is open
-            }
+ <!-- UPDATE ALL PAGES: Add this JavaScript for mobile navigation functionality -->
+ <script>
+ // Mobile Navigation System
+ // This script handles the hamburger menu functionality
+ document.addEventListener('DOMContentLoaded', function() {
+ const navToggle = document.getElementById('navToggle');
+ const navClose = document.getElementById('navClose');
+ const mobileNav = document.getElementById('mobileNav');
+ const navOverlay = document.getElementById('navOverlay');
 
-            // Close navigation
-            function closeNav() {
-                mobileNav.classList.remove('active');
-                navOverlay.classList.remove('active');
-                navToggle.classList.remove('active');
-                document.body.style.overflow = ''; // Restore scrolling
-            }
+ // Open navigation
+ function openNav() {
+ mobileNav.classList.add('active');
+ navOverlay.classList.add('active');
+ navToggle.classList.add('active');
+ document.body.style.overflow = 'hidden'; // Prevent scrolling when nav is open
+ }
 
-            // Event listeners
-            navToggle.addEventListener('click', openNav);
-            navClose.addEventListener('click', closeNav);
-            navOverlay.addEventListener('click', closeNav);
+ // Close navigation
+ function closeNav() {
+ mobileNav.classList.remove('active');
+ navOverlay.classList.remove('active');
+ navToggle.classList.remove('active');
+ document.body.style.overflow = ''; // Restore scrolling
+ }
 
-            // Close nav on escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
-                    closeNav();
-                }
-            });
+ // Event listeners
+ navToggle.addEventListener('click', openNav);
+ navClose.addEventListener('click', closeNav);
+ navOverlay.addEventListener('click', closeNav);
 
-            // Handle navigation link clicks
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    // Optional: Close nav when link is clicked
-                    // Uncomment next line if you want nav to close on link click:
-                    // closeNav();
-                });
-            });
+ // Close nav on escape key
+ document.addEventListener('keydown', function(e) {
+ if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+ closeNav();
+ }
+ });
 
-            // Set current page indicator
-            // This automatically highlights the current page in the navigation
-            const currentPath = window.location.pathname;
-            const currentPage = currentPath.split('/').pop() || 'index.html';
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === currentPage) {
-                    link.classList.add('current');
-                }
-            });
-        });
-    </script>
+ // Handle navigation link clicks
+ const navLinks = document.querySelectorAll('.nav-link');
+ navLinks.forEach(link => {
+ link.addEventListener('click', function() {
+ // Optional: Close nav when link is clicked
+ // Uncomment next line if you want nav to close on link click:
+ // closeNav();
+ });
+ });
+
+ // Set current page indicator
+ // This automatically highlights the current page in the navigation
+ const currentPath = window.location.pathname;
+ const currentPage = currentPath.split('/').pop() || 'index.html';
+ navLinks.forEach(link => {
+ if (link.getAttribute('href') === currentPage) {
+ link.classList.add('current');
+ }
+ });
+ });
+	
+ </script>
+
+ <!-- QR Code Modal -->
+ <div id="qrModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center;">
+ <div style="background: white; padding: 40px; border-radius: 8px; text-align: center; max-width: 400px; position: relative;">
+ <button id="closeQR" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2rem; cursor: pointer; color: #666;">&times;</button>
+ <h3 style="margin-bottom: 20px; font-weight: 400; color: #222;">Conference Companion</h3>
+ <img src="qr-code.png" alt="QR Code" style="width: 250px; height: 250px; margin: 0 auto; display: block; border: 2px solid #ddd; padding: 10px;">
+ <p style="margin-top: 20px; color: #666; font-size: 0.9rem;">Scan to access this guide on your phone</p>
+ <p style="margin-top: 8px; color: #999; font-size: 0.8rem;">natebarksdale.xyz/imago-dei-ai</p>
+ </div>
+ </div>
+
+ <script>
+ // QR Modal functionality
+ (function() {
+ function initQRModal() {
+ const showQR = document.getElementById('showQR');
+ const showQRNav = document.getElementById('showQRNav');
+ const closeQR = document.getElementById('closeQR');
+ const qrModal = document.getElementById('qrModal');
+
+ if (showQR) {
+ showQR.addEventListener('click', function(e) {
+ e.preventDefault();
+ qrModal.style.display = 'flex';
+ });
+ }
+
+ if (closeQR) {
+ closeQR.addEventListener('click', function() {
+ qrModal.style.display = 'none';
+ });
+ }
+
+ if (qrModal) {
+ qrModal.addEventListener('click', function(e) {
+ if (e.target === qrModal) {
+ qrModal.style.display = 'none';
+ }
+ }
+
+ if (showQRNav) {
+ showQRNav.addEventListener('click', function(e) {
+ e.preventDefault();
+ qrModal.style.display = 'flex';
+ // Close the mobile nav
+ const mobileNav = document.getElementById('mobileNav');
+ const navOverlay = document.getElementById('navOverlay');
+ const navToggle = document.getElementById('navToggle');
+ if (mobileNav) mobileNav.classList.remove('active');
+ if (navOverlay) navOverlay.classList.remove('active');
+ if (navToggle) navToggle.classList.remove('active');
+ document.body.style.overflow = '';
+ });
+ });
+ }
+
+ // Close on escape
+ document.addEventListener('keydown', function(e) {
+ if (e.key === 'Escape' && qrModal && qrModal.style.display === 'flex') {
+ qrModal.style.display = 'none';
+ }
+ });
+ }
+
+ if (document.readyState === 'loading') {
+ document.addEventListener('DOMContentLoaded', initQRModal);
+ } else {
+ initQRModal();
+ }
+ })();
+ </script>
+
 </body>
+</html>
 </html>
