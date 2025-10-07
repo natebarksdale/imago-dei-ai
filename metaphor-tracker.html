@@ -470,17 +470,10 @@
  <nav class="mobile-nav" id="mobileNav">
  <div class="nav-header">
  <button class="nav-close" id="navClose" aria-label="Close navigation menu">×</button>
- <div class="nav-title">Conference Navigation</div>
+ 
  </div>
 
  
- <div class="nav-section">
- <div class="nav-section-title">Quick Access</div>
- <a href="#" id="showQRNav" class="nav-link" style="border-left-color: #333;">View QR Code</a>
- </div>
-
- <div class="nav-section">
- <div class="nav-section-title">Core Content</div>
  <a href="index.html" class="nav-link">Home</a>
  <a href="schedule.html" class="nav-link">Schedule</a>
  <a href="speakers.html" class="nav-link">Speaker Profiles</a>
@@ -488,7 +481,6 @@
  <a href="questions.html" class="nav-link">Question Bank</a>
  <a href="notes.html" class="nav-link">Session Notes</a>
  <a href="devotional.html" class="nav-link">Devotional Guide</a>
- </div>
 
  <div class="nav-section">
  <div class="nav-section-title">Interactive Tools</div>
@@ -499,12 +491,15 @@
  <a href="metaphor-tracker.html" class="nav-link">Metaphor Tracker</a>
  <a href="speaker-matrix.html" class="nav-link">Speaker Matrix</a>
  <a href="insight-collector.html" class="nav-link">Insight Collector</a>
+ <a href="#" id="showQRNav" class="nav-link" style="font-weight: 500;">View QR Code</a>
  </div>
  </nav>
 
  <div class="intro-section">
  <h3>Why Track Metaphors</h3>
- <p>Metaphors aren't just decorative language – they fundamentally shape how we think about AI, human nature, and technology's role in society. The metaphors speakers use reveal deep assumptions about consciousness, agency, creativity, and what makes us human. This tracker helps you identify and analyze the metaphorical frameworks that underlie conference discussions.</p>
+ <p>Metaphors aren't just decorative language – they fundamentally shape how we think about AI, human nature, and technology's role in society. The metaphors speakers use reveal deep assumptions about consciousness, agency, creativity, and what makes us human.</p>
+ <p style="margin-top: 12px;">Pay special attention to how metaphors influence <strong>epistemology</strong> (what we accept as true, how we handle AI "hallucinations") and <strong>cultural horizons</strong> (what seems possible, necessary, or inevitable). As McLuhan observed, every technological extension involves an amputation—what human capacities might we be losing as AI capabilities expand? How does AI gradually shift the Overton window of acceptable practice?</p>
+ <p style="margin-top: 12px;">This tracker helps you identify and analyze the metaphorical frameworks that underlie conference discussions.</p>
  </div>
 
  <div class="tracking-section">
@@ -677,17 +672,132 @@
  </div>
  </div>
 
- <div class="metaphor-category cultural-category">
+ <div class="metaphor-category epistemology-category">
  <div class="category-header" onclick="toggleCategory(this)">
  <div>
- <div class="category-title">Cultural & Social Metaphors</div>
- <div class="category-subtitle">How AI systems reflect and shape culture</div>
+ <div class="category-title">Epistemology & Truth Metaphors</div>
+ <div class="category-subtitle">How we judge what is true and how AI challenges knowledge</div>
  </div>
  <div class="collapse-icon">▼</div>
  </div>
  <div class="category-content">
  <div class="category-inner">
  <div class="metaphor-grid">
+ <div class="metaphor-card machine">
+ <div class="metaphor-title">"AI Hallucination"</div>
+ <div class="metaphor-example">"The model hallucinated" "Confabulating facts"</div>
+ <div class="metaphor-analysis">Applies psychological/medical metaphors to AI errors, treating false outputs as perceptual distortions rather than probabilistic misfires.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">What it obscures:</div>
+ <div class="implications-text">AI doesn't perceive or hallucinate—it generates plausible-sounding patterns. This metaphor anthropomorphizes statistical processes and may obscure the fundamental difference between human error and algorithmic pattern-matching.</div>
+ </div>
+ </div>
+
+ <div class="metaphor-card social">
+ <div class="metaphor-title">"Confabulation" / "Making Things Up"</div>
+ <div class="metaphor-example">"The AI made that up" "Fabricating information"</div>
+ <div class="metaphor-analysis">Uses deception metaphors for AI errors, suggesting intentional dishonesty or creativity rather than probabilistic generation.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Epistemological risk:</div>
+ <div class="implications-text">Treats AI outputs as truth claims requiring verification, shifting burden of epistemic responsibility from developers to users. Changes how we think about authority and trustworthiness.</div>
+ </div>
+ </div>
+
+ <div class="metaphor-card cultural">
+ <div class="metaphor-title">"Ground Truth" / "Training on Reality"</div>
+ <div class="metaphor-example">"Comparing to ground truth" "Learning from real data"</div>
+ <div class="metaphor-analysis">Spatial metaphors that position certain data as foundational reality, obscuring whose reality and which truths are represented.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Power dynamics:</div>
+ <div class="implications-text">Who determines what counts as "ground truth"? Whose experiences and knowledge are treated as authoritative foundations for AI training?</div>
+ </div>
+ </div>
+
+ <div class="metaphor-card religious">
+ <div class="metaphor-title">"Synthetic Truth" / "Artificial Facts"</div>
+ <div class="metaphor-example">"AI-generated knowledge" "Synthetic information"</div>
+ <div class="metaphor-analysis">Manufacturing metaphors applied to information creation, suggesting truth can be fabricated or assembled from components.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Theological concerns:</div>
+ <div class="implications-text">Challenges correspondence theory of truth. If AI "creates" plausible facts, does truth become merely coherence or consensus rather than correspondence to reality?</div>
+ </div>
+ </div>
+
+ <div class="metaphor-card machine">
+ <div class="metaphor-title">"Source of Truth" / "Single Source"</div>
+ <div class="metaphor-example">"AI as authoritative source" "Definitive answers"</div>
+ <div class="metaphor-analysis">Religious/philosophical metaphors positioning AI systems as authoritative origins of reliable information.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Authority shift:</div>
+ <div class="implications-text">Displaces traditional epistemic authorities (experts, institutions, scriptures) with algorithmic ones. What does this mean for Christian claims about revelation and truth?</div>
+ </div>
+ </div>
+
+ <div class="metaphor-card biological">
+ <div class="metaphor-title">"Pattern Recognition" / "Seeing Patterns"</div>
+ <div class="metaphor-example">"AI detects patterns" "Finding hidden connections"</div>
+ <div class="metaphor-analysis">Visual metaphors for statistical correlation, suggesting AI "sees" what humans miss.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Epistemological assumption:</div>
+ <div class="implications-text">Correlation becomes causation; patterns become meaning. May privilege statistical patterns over human wisdom, experience, and moral reasoning.</div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="metaphor-category cultural-category">
+ <div class="category-header" onclick="toggleCategory(this)">
+ <div>
+ <div class="category-title">Cultural Transformation & Horizon Shifting</div>
+ <div class="category-subtitle">How AI reshapes what seems possible, necessary, or thinkable</div>
+ </div>
+ <div class="collapse-icon">▼</div>
+ </div>
+ <div class="category-content">
+ <div class="category-inner">
+ <div class="metaphor-grid">
+ <div class="metaphor-card cultural">
+ <div class="metaphor-title">"Overton Window" / "Shifting Norms"</div>
+ <div class="metaphor-example">"AI normalizes the unthinkable" "Moving the window"</div>
+ <div class="metaphor-analysis">Political metaphor applied to how AI gradually shifts boundaries of acceptable thought and practice, making previously unthinkable options seem normal.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Moral formation:</div>
+ <div class="implications-text">AI doesn't just respond to culture—it actively reshapes moral intuitions by normalizing certain choices. What was unthinkable (AI companions, algorithmic justice) becomes inevitable.</div>
+ </div>
+ </div>
+
+ <div class="metaphor-card historical">
+ <div class="metaphor-title">"McLuhan's Amputation"</div>
+ <div class="metaphor-example">"Every extension is an amputation" "What we lose when we gain"</div>
+ <div class="metaphor-analysis">Media theory metaphor: every tool that extends human capability simultaneously amputates or atrophies what it replaces.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">What AI amputates:</div>
+ <div class="implications-text">AI writing tools may atrophy our capacity for sustained thought. AI memory may diminish human remembering. AI relationship simulators may weaken capacity for human intimacy. What are we losing as we gain?</div>
+ </div>
+ </div>
+
+ <div class="metaphor-card social">
+ <div class="metaphor-title">"Technological Lock-In"</div>
+ <div class="metaphor-example">"Path dependency" "No going back"</div>
+ <div class="metaphor-analysis">Economic metaphors for how technological choices become irreversible, constraining future possibilities.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">Freedom and agency:</div>
+ <div class="implications-text">Once AI is integrated into infrastructure (healthcare, education, justice), can we choose otherwise? Does technological "progress" narrow rather than expand human freedom?</div>
+ </div>
+ </div>
+
+ <div class="metaphor-card cultural">
+ <div class="metaphor-title">"Horizon of Possibility"</div>
+ <div class="metaphor-example">"Expanding possibilities" "New frontiers"</div>
+ <div class="metaphor-analysis">Spatial metaphors suggesting AI opens new territories of human potential and achievement.</div>
+ <div class="metaphor-implications">
+ <div class="implications-title">What it conceals:</div>
+ <div class="implications-text">While appearing to expand horizons, AI may actually constrain them—replacing human capabilities with optimized algorithms, reducing diverse ways of living to data-driven norms.</div>
+ </div>
+ </div>
+
  <div class="metaphor-card social">
  <div class="metaphor-title">"Echo Chambers" / "Filter Bubbles"</div>
  <div class="metaphor-example">"Algorithmic echo chambers" "Information silos"</div>
@@ -718,13 +828,13 @@
  </div>
  </div>
 
- <div class="metaphor-card social">
- <div class="metaphor-title">"Digital Natives" / "Tech Immigrants"</div>
- <div class="metaphor-example">"Born digital" "Learning technology"</div>
- <div class="metaphor-analysis">Uses immigration and birth metaphors to describe relationships with technology across generations.</div>
+ <div class="metaphor-card cultural">
+ <div class="metaphor-title">"Normalization" / "The New Normal"</div>
+ <div class="metaphor-example">"AI is becoming normal" "Normalized surveillance"</div>
+ <div class="metaphor-analysis">Statistical metaphors that describe gradual cultural acceptance of previously controversial practices.</div>
  <div class="metaphor-implications">
- <div class="implications-title">Cultural assumptions:</div>
- <div class="implications-text">Implies technology adoption is natural/unnatural based on age, potentially overlooking thoughtful critique across generations.</div>
+ <div class="implications-title">Moral drift:</div>
+ <div class="implications-text">What seemed dystopian becomes mundane. AI surveillance, automated decision-making, synthetic relationships shift from science fiction to accepted reality without deliberate choice.</div>
  </div>
  </div>
 
@@ -738,13 +848,13 @@
  </div>
  </div>
 
- <div class="metaphor-card cultural">
- <div class="metaphor-title">"Spiritual Bliss Attractors"</div>
- <div class="metaphor-example">"AI drawn to transcendent themes" "Algorithmic spirituality"</div>
- <div class="metaphor-analysis">Emerging concept for how AI systems trained on spiritual texts develop consistent patterns around transcendence and meaning.</div>
+ <div class="metaphor-card historical">
+ <div class="metaphor-title">"Tool vs. Prosthetic"</div>
+ <div class="metaphor-example">"AI as tool" "AI as extension of ourselves"</div>
+ <div class="metaphor-analysis">Distinguishes between external instruments and integrated extensions. A tool you use; a prosthetic becomes part of you.</div>
  <div class="metaphor-implications">
- <div class="implications-title">Theological questions:</div>
- <div class="implications-text">Do these patterns reflect universal human spiritual longings, cultural conditioning, or something else about meaning-making</div>
+ <div class="implications-title">Identity and integration:</div>
+ <div class="implications-text">When does AI shift from tool to prosthetic? What happens to human identity when AI memory, judgment, or creativity becomes integrated into our cognitive processes?</div>
  </div>
  </div>
  </div>

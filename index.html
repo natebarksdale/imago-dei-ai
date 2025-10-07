@@ -11,6 +11,18 @@
  box-sizing: border-box;
  }
 
+ :root {
+ /* Swiss Modernist session colors */
+ --picard-keynote: #c1272d;
+ --frontiers-chat: #0082ca;
+ --session-i: #e87722;
+ --kim-keynote: #009b77;
+ --session-ii: #7b69ae;
+ --session-iii: #d4af37;
+ --session-iv: #5f8670;
+ --hogan-lecture: #8b6f47;
+ }
+
  body {
  font-family: 'Helvetica Neue', Arial, sans-serif;
  font-weight: 300;
@@ -26,9 +38,8 @@
  }
 
  header {
- margin-bottom: 60px;
- border-bottom: 1px solid #ddd;
- padding-bottom: 40px;
+ margin-bottom: 20px;
+ padding-bottom: 0;
  }
 
  h1 {
@@ -59,9 +70,8 @@
  }
 
  .next-event-section {
- margin: 40px 0 60px 0;
+ margin: 20px 0 60px 0;
  background: white;
- border: 1px solid #ddd;
  }
 
  .next-event-header {
@@ -100,19 +110,59 @@
  background: #fafafa;
  border: 1px solid #ddd;
  padding: 20px;
- border-left: 3px solid #ccc;
+ border-left: 4px solid #ccc;
  flex-shrink: 0;
  transition: all 0.2s ease;
  }
 
  .event-card.next {
- border-left-color: #333;
  background: #fff;
  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
  }
 
  .event-card.past {
  opacity: 0.6;
+ }
+
+ /* Theme-colored event cards */
+ .event-card.picard-keynote {
+ border-left-color: var(--picard-keynote);
+ background: rgba(193, 39, 45, 0.04);
+ }
+
+ .event-card.frontiers-chat {
+ border-left-color: var(--frontiers-chat);
+ background: rgba(0, 130, 202, 0.04);
+ }
+
+ .event-card.session-i {
+ border-left-color: var(--session-i);
+ background: rgba(232, 119, 34, 0.04);
+ }
+
+ .event-card.kim-keynote {
+ border-left-color: var(--kim-keynote);
+ background: rgba(0, 155, 119, 0.04);
+ }
+
+ .event-card.session-ii {
+ border-left-color: var(--session-ii);
+ background: rgba(123, 105, 174, 0.04);
+ }
+
+ .event-card.session-iii {
+ border-left-color: var(--session-iii);
+ background: rgba(212, 175, 55, 0.04);
+ }
+
+ .event-card.session-iv {
+ border-left-color: var(--session-iv);
+ background: rgba(95, 134, 112, 0.04);
+ }
+
+ .event-card.hogan-lecture {
+ border-left-color: var(--hogan-lecture);
+ background: rgba(139, 111, 71, 0.04);
  }
 
  .event-day {
@@ -483,10 +533,8 @@
  <div class="main-header">
  <div class="header-content">
  <h1>Imago Dei & AI</h1>
- <p class="subtitle">Conference Companion</p>
- <div class="conference-meta">
- <strong>October 9-11, 2025</strong> • Harvard University<br>Christianity and Artificial Intelligence in the Algorithmic Society
- </div>
+ <p class="subtitle">Christianity and Artificial Intelligence in the Algorithmic Society<br/>
+    <em><small>An experimental, unofficial, largely vibe-coded conference companion</small></em></p>
  </div>
  <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu">
  ☰
@@ -501,23 +549,16 @@
  <nav class="mobile-nav" id="mobileNav">
  <div class="nav-header">
  <button class="nav-close" id="navClose" aria-label="Close navigation menu">×</button>
- <div class="nav-title">Conference Navigation</div>
+ 
  </div>
 
- <div class="nav-section">
- <div class="nav-section-title">Quick Access</div>
- <a href="#" id="showQRNav" class="nav-link" style="border-left-color: #333;">View QR Code</a>
- </div>
-
- <div class="nav-section">
- <div class="nav-section-title">Core Content</div>
  <a href="index.html" class="nav-link current">Home</a>
  <a href="schedule.html" class="nav-link">Schedule</a>
  <a href="speakers.html" class="nav-link">Speaker Profiles</a>
  <a href="reading-lists.html" class="nav-link">Essential Readings</a>
  <a href="questions.html" class="nav-link">Question Bank</a>
  <a href="notes.html" class="nav-link">Session Notes</a>
- </div>
+ <a href="devotional.html" class="nav-link">Devotional Guide</a>
 
  <div class="nav-section">
  <div class="nav-section-title">Interactive Tools</div>
@@ -528,6 +569,7 @@
  <a href="metaphor-tracker.html" class="nav-link">Metaphor Tracker</a>
  <a href="speaker-matrix.html" class="nav-link">Speaker Matrix</a>
  <a href="insight-collector.html" class="nav-link">Insight Collector</a>
+ <a href="#" id="showQRNav" class="nav-link" style="font-weight: 500;">View QR Code</a>
  </div>
  </nav>
 
@@ -690,6 +732,19 @@
  return 0; // Index of next event
  }
 
+ // Get theme class based on event
+ function getEventThemeClass(event) {
+ if (event.speaker === "Prof. Rosalind Picard") return 'picard-keynote';
+ if (event.title.includes("The Frontiers of AI")) return 'frontiers-chat';
+ if (event.title.includes("Session I:")) return 'session-i';
+ if (event.speaker === "Dr. John Kim") return 'kim-keynote';
+ if (event.title.includes("Session II:")) return 'session-ii';
+ if (event.title.includes("Session III:")) return 'session-iii';
+ if (event.title.includes("Session IV:")) return 'session-iv';
+ if (event.title.includes("Flourishing Considerations")) return 'hogan-lecture';
+ return '';
+ }
+
  // Populate schedule scroll
  function populateSchedule() {
  const container = document.getElementById('scheduleScroll');
@@ -698,6 +753,12 @@
  scheduleEvents.forEach((event, index) => {
  const card = document.createElement('div');
  card.className = 'event-card';
+
+ // Add theme color class
+ const themeClass = getEventThemeClass(event);
+ if (themeClass) {
+ card.classList.add(themeClass);
+ }
 
  if (index === nextEventIndex) {
  card.classList.add('next');
