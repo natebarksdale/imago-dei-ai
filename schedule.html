@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Conference Schedule - Imago Dei & AI</title>
+ <style>
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ :root {
+ /* Swiss Modernist session colors */
+ --picard-keynote: #c1272d;
+ --frontiers-chat: #0082ca;
+ --session-i: #e87722;
+ --kim-keynote: #009b77;
+ --session-ii: #7b69ae;
+ --session-iii: #d4af37;
+ --session-iv: #5f8670;
+ --hogan-lecture: #8b6f47;
+ }
+
+ body {
+ font-family: 'Helvetica Neue', Arial, sans-serif;
+ font-weight: 300;
+ line-height: 1.5;
+ color: #222;
+ background: #fafafa;
+ }
+
+ .container {
+ max-width: 1000px;
+ margin: 0 auto;
+ padding: 40px 20px;
+ }
+
+ header {
+ margin-bottom: 60px;
+ border-bottom: 1px solid #ddd;
+ padding-bottom: 40px;
+ }
+
+ .nav-home {
+ color: #666;
+ text-decoration: none;
+ font-size: 0.9rem;
+ margin-bottom: 30px;
+ display: inline-block;
+ border-bottom: 1px solid transparent;
+ transition: border-color 0.2s ease;
+ }
+
+ .nav-home:hover {
+ border-color: #666;
+ }
+
+ h1 {
+ font-size: 2.5rem;
+ font-weight: 200;
+ color: #111;
+ margin-bottom: 8px;
+ letter-spacing: -1px;
+ }
+
+ .subtitle {
+ font-size: 1.1rem;
+ color: #666;
+ font-weight: 300;
+ }
+
+ .day {
+ background: white;
+ border: 1px solid #ddd;
+ margin-bottom: 40px;
+ }
+
+ .day-header {
+ background: #f5f5f5;
+ border-bottom: 1px solid #ddd;
+ border-left: 3px solid #333;
+ padding: 30px;
+ }
+
+ .day-header h2 {
+ font-size: 1.5rem;
+ font-weight: 400;
+ color: #222;
+ margin-bottom: 8px;
+ }
+
+ .day-theme {
+ font-size: 1rem;
+ color: #666;
+ font-weight: 300;
+ }
+
+ .session {
+ padding: 30px;
+ border-bottom: 1px solid #eee;
+ border-left: 3px solid transparent;
+ }
+
+ .session:last-child {
+ border-bottom: none;
+ }
+
+ /* Swiss Modernist session color accents */
+ .session.picard-keynote {
+ border-left-color: var(--picard-keynote);
+ }
+
+ .session.frontiers-chat {
+ border-left-color: var(--frontiers-chat);
+ }
+
+ .session.session-i {
+ border-left-color: var(--session-i);
+ }
+
+ .session.kim-keynote {
+ border-left-color: var(--kim-keynote);
+ }
+
+ .session.session-ii {
+ border-left-color: var(--session-ii);
+ }
+
+ .session.session-iii {
+ border-left-color: var(--session-iii);
+ }
+
+ .session.session-iv {
+ border-left-color: var(--session-iv);
+ }
+
+ .session.hogan-lecture {
+ border-left-color: var(--hogan-lecture);
+ }
+
+ .session.picard-keynote .session-time {
+ background: var(--picard-keynote);
+ }
+
+ .session.frontiers-chat .session-time {
+ background: var(--frontiers-chat);
+ }
+
+ .session.session-i .session-time {
+ background: var(--session-i);
+ }
+
+ .session.kim-keynote .session-time {
+ background: var(--kim-keynote);
+ }
+
+ .session.session-ii .session-time {
+ background: var(--session-ii);
+ }
+
+ .session.session-iii .session-time {
+ background: var(--session-iii);
+ }
+
+ .session.session-iv .session-time {
+ background: var(--session-iv);
+ }
+
+ .session.hogan-lecture .session-time {
+ background: var(--hogan-lecture);
+ }
+
+ .session-time {
+ background: #333;
+ color: white;
+ padding: 8px 15px;
+ font-size: 0.85rem;
+ font-weight: 400;
+ display: inline-block;
+ margin-bottom: 15px;
+ letter-spacing: 0.5px;
+ }
+
+ .session-title {
+ color: #222;
+ font-size: 1.3rem;
+ margin-bottom: 15px;
+ font-weight: 400;
+ line-height: 1.3;
+ }
+
+ .session-type {
+ background: #eee;
+ color: #555;
+ padding: 4px 12px;
+ font-size: 0.75rem;
+ margin-left: 15px;
+ font-weight: 400;
+ text-transform: uppercase;
+ letter-spacing: 1px;
+ }
+
+ .session-chair {
+ color: #666;
+ font-size: 0.9rem;
+ margin-bottom: 15px;
+ font-weight: 300;
+ }
+
+ .speakers {
+ margin: 20px 0;
+ }
+
+ .speaker {
+ background: #f9f9f9;
+ padding: 15px 20px;
+ margin: 10px 0;
+ border-left: 2px solid #ddd;
+ display: flex;
+ align-items: center;
+ gap: 15px;
+ }
+
+ .speaker-thumbnail {
+ width: 50px;
+ height: 50px;
+ border-radius: 50%;
+ object-fit: cover;
+ border: 2px solid #ddd;
+ flex-shrink: 0;
+ }
+
+ .speaker-info {
+ flex: 1;
+ }
+
+ .speaker-name a {
+ color: #222;
+ text-decoration: none;
+ border-bottom: 1px solid transparent;
+ transition: border-color 0.2s ease;
+ }
+
+ .speaker-name a:hover {
+ border-bottom-color: #333;
+ }
+
+ .session-chair a {
+ color: #333;
+ text-decoration: none;
+ border-bottom: 1px solid transparent;
+ transition: border-color 0.2s ease;
+ }
+
+ .session-chair a:hover {
+ border-bottom-color: #333;
+ }
+
+ .speaker-name {
+ font-weight: 400;
+ color: #222;
+ font-size: 0.95rem;
+ }
+
+ .speaker-title {
+ font-size: 0.85rem;
+ color: #666;
+ margin-top: 5px;
+ font-weight: 300;
+ }
+
+ .venue {
+ background: #f5f5f5;
+ color: #555;
+ padding: 8px 15px;
+ font-size: 0.8rem;
+ margin-top: 15px;
+ display: inline-block;
+ border-left: 2px solid #333;
+ font-weight: 400;
+ }
+
+ .venue a {
+ color: #555;
+ text-decoration: none;
+ border-bottom: 1px solid transparent;
+ transition: border-bottom-color 0.2s ease;
+ cursor: pointer;
+ position: relative;
+ z-index: 1;
+ }
+
+ .venue a:hover {
+ border-bottom-color: #333;
+ }
+
+ .special-note {
+ background: #f9f9f9;
+ color: #555;
+ padding: 15px 20px;
+ margin-top: 20px;
+ font-size: 0.9rem;
+ border-left: 3px solid #333;
+ font-weight: 300;
+ }
+
+ .themes-preview {
+ background: #f9f9f9;
+ padding: 20px;
+ margin-top: 20px;
+ border-left: 2px solid #ddd;
+ }
+
+ .themes-preview h4 {
+ color: #333;
+ margin-bottom: 15px;
+ font-size: 1rem;
+ font-weight: 400;
+ }
+
+ .themes-preview ul {
+ list-style-type: none;
+ padding-left: 0;
+ }
+
+ .themes-preview li {
+ background: white;
+ padding: 10px 15px;
+ margin: 8px 0;
+ border-left: 1px solid #ddd;
+ font-size: 0.9rem;
+ color: #555;
+ }
+
+ /* ===== MOBILE NAVIGATION SYSTEM ===== */
+ /* UPDATE ALL PAGES: Add this entire navigation section when iterating */
+
+ .main-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: flex-start;
+ margin-bottom: 20px;
+ }
+
+ .header-content {
+ flex: 1;
+ }
+
+ .nav-toggle {
+ background: none;
+ border: none;
+ font-size: 1.5rem;
+ cursor: pointer;
+ padding: 8px;
+ color: #333;
+ display: none; /* Show only on mobile */
+ transition: transform 0.2s ease;
+ min-width: 44px;
+ min-height: 44px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ position: fixed;
+ top: 20px;
+ right: 20px;
+ z-index: 1001;
+ background: white;
+ border-radius: 4px;
+ box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+ }
+
+ .nav-toggle:hover {
+ transform: scale(1.1);
+ }
+
+ .nav-toggle.active {
+ transform: rotate(90deg);
+ }
+
+ .mobile-nav {
+ position: fixed;
+ top: 0;
+ right: -100%;
+ width: 280px;
+ height: 100vh;
+ height: 100dvh; /* Use dynamic viewport height for iOS */
+ background: white;
+ z-index: 1000;
+ transition: right 0.3s ease;
+ box-shadow: -2px 0 20px rgba(0,0,0,0.1);
+ overflow-y: auto;
+ -webkit-overflow-scrolling: touch;
+ padding-bottom: 80px; /* Extra padding for iOS Safari bottom bar */
+ }
+
+ .mobile-nav.active {
+ right: 0;
+ }
+
+ .nav-overlay {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: rgba(0,0,0,0.5);
+ z-index: 999;
+ opacity: 0;
+ visibility: hidden;
+ transition: all 0.3s ease;
+ }
+
+ .nav-overlay.active {
+ opacity: 1;
+ visibility: visible;
+ }
+
+ .nav-header {
+ padding: 30px 20px 20px;
+ border-bottom: 1px solid #eee;
+ }
+
+ .nav-close {
+ background: none;
+ border: none;
+ font-size: 1.5rem;
+ cursor: pointer;
+ float: right;
+ color: #666;
+ min-width: 44px;
+ min-height: 44px;
+ }
+
+ .nav-title {
+ font-size: 1.1rem;
+ font-weight: 500;
+ color: #222;
+ margin-top: 10px;
+ }
+
+ .nav-section {
+ padding: 12px 0;
+ border-bottom: 1px solid #f0f0f0;
+ }
+
+ .nav-section:last-child {
+ border-bottom: none;
+ }
+
+ .nav-section-title {
+ font-size: 0.8rem;
+ font-weight: 500;
+ color: #999;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ margin: 0 20px 10px;
+ }
+
+ .nav-link {
+ display: block;
+ padding: 10px 20px;
+ color: #333;
+ text-decoration: none;
+ font-size: 0.9rem;
+ transition: background-color 0.2s ease;
+ border-left: 3px solid transparent;
+ }
+
+ .nav-link:hover, .nav-link.current {
+ background: #f8f8f8;
+ border-left-color: #333;
+ }
+
+ .nav-link.current {
+ color: #000;
+ font-weight: 500;
+ }
+
+ .nav-home {
+ color: #666;
+ text-decoration: none;
+ font-size: 0.9rem;
+ margin-bottom: 30px;
+ display: inline-block;
+ border-bottom: 1px solid transparent;
+ transition: border-bottom-color 0.2s ease;
+ }
+
+ .nav-home:hover {
+ border-color: #666;
+ }
+
+ @media (max-width: 768px) {
+ .container {
+ padding: 30px 15px;
+ }
+
+ h1 {
+ font-size: 2rem;
+ }
+
+ .day-header {
+ padding: 20px;
+ }
+
+ .session {
+ padding: 20px;
+ }
+
+ .session-title {
+ font-size: 1.2em;
+ }
+
+ .nav-toggle {
+ display: flex; /* Show hamburger menu on mobile */
+ }
+
+ .nav-home {
+ display: none; /* Hide back link on mobile, use hamburger instead */
+ }
+ }
+
+ @media (min-width: 769px) {
+ .nav-toggle {
+ display: none; /* Hide hamburger on desktop */
+ }
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <!-- UPDATE ALL PAGES: Replace <header> section with this structure -->
+ <header>
+ <div class="main-header">
+ <div class="header-content">
+ <a href="index.html" class="nav-home">← Back to Home</a>
+ <h1>Conference Schedule</h1>
+ <p class="subtitle">Complete program for October 9-11, 2025</p>
+ </div>
+ <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu">
+ ☰
+ </button>
+ </div>
+ </header>
+
+ <!-- Navigation Overlay -->
+ <div class="nav-overlay" id="navOverlay"></div>
+
+ <!-- Mobile Navigation Panel -->
+ <nav class="mobile-nav" id="mobileNav">
+ <div class="nav-header">
+ <button class="nav-close" id="navClose" aria-label="Close navigation menu">×</button>
+ 
+ </div>
+
+ 
+ <a href="index.html" class="nav-link">Home</a>
+ <a href="schedule.html" class="nav-link">Schedule</a>
+ <a href="speakers.html" class="nav-link">Speaker Profiles</a>
+ <a href="reading-lists.html" class="nav-link">Essential Readings</a>
+ <a href="questions.html" class="nav-link">Question Bank</a>
+ <a href="notes.html" class="nav-link">Session Notes</a>
+ <a href="devotional.html" class="nav-link">Devotional Guide</a>
+
+ <div class="nav-section">
+ <div class="nav-section-title">Interactive Tools</div>
+ <a href="bingo.html" class="nav-link">Session Bingo</a>
+ <a href="name-face-quiz.html" class="nav-link">Name-Face Quiz</a>
+ <a href="expertise-quiz.html" class="nav-link">Expertise Quiz</a>
+ <a href="research-briefs.html" class="nav-link">Research Briefs</a>
+ <a href="metaphor-tracker.html" class="nav-link">Metaphor Tracker</a>
+ <a href="speaker-matrix.html" class="nav-link">Speaker Matrix</a>
+ <a href="insight-collector.html" class="nav-link">Insight Collector</a>
+ <a href="#" id="showQRNav" class="nav-link" style="font-weight: 500;">View QR Code</a>
+ </div>
+ </nav>
+
+ <div class="day">
+ <div class="day-header">
+ <h2>Thursday, October 9</h2>
+ <p class="day-theme">Introduction & Frontiers</p>
+ </div>
+
+ <div class="session hogan-lecture">
+ <div class="session-time">12:30pm - 1:45pm</div>
+ <div class="session-title">Flourishing Considerations for AI
+ <span class="session-type">Luncheon Lecture</span>
+ </div>
+ <div class="speakers">
+ <div class="speaker">
+ <img src="images/68bf366737555730781a7ce4_VanderWeele_nb.png" alt="Prof. Tyler VanderWeele" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#vanderweele">Prof. Tyler VanderWeele</a></div>
+ <div class="speaker-title">John L. Loeb and Frances Lehman Loeb Professor of Epidemiology, Harvard T.H. Chan School of Public Health; Director, Harvard Human Flourishing Program</div>
+ </div>
+ </div>
+ </div>
+ <div class="venue"><a href="https://maps.google.com/?q=Harvard+Faculty+Club+Room+20+Quincy+Street+Cambridge+MA" target="_blank">Harvard Faculty Club, 20 Quincy St.</a></div>
+ <div class="special-note">⚠️ Attendance by special invitation only</div>
+ </div>
+
+ <div class="session">
+ <div class="session-time">2:00pm - 4:00pm</div>
+ <div class="session-title">Harvard Campus & Museum Tours (Optional)</div>
+ <div class="venue">Tours start: <a href="https://maps.google.com/?q=Smith+Campus+Center,+1350+Massachusetts+Ave,+Cambridge,+MA" target="_blank">Smith Campus Center, 1350 Massachusetts Ave.</a></div>
+ <div class="themes-preview">
+ <h4>Available Museums:</h4>
+ <ul>
+ <li>Harvard Art Museums, 32 Quincy St.</li>
+ <li>Harvard Museum of Natural History, 26 Oxford St.</li>
+ </ul>
+ </div>
+ </div>
+
+ <div class="session hogan-lecture" id="welcome-reception">
+ <div class="session-time">6:00pm - 7:15pm</div>
+ <div class="session-title">Welcome Reception and Dinner</div>
+ <div class="venue"><a href="https://maps.google.com/?q=The+Charles+Hotel,+1+Bennett+St,+Cambridge,+MA" target="_blank">Charles Ballroom, The Charles Hotel, 1 Bennett St.</a></div>
+ </div>
+
+
+ <div class="session fireside frontiers-chat" id="frontiers-ai">
+ <div class="session-time">7:15pm - 9:00pm</div>
+ <div class="session-title">The Frontiers of AI
+ <span class="session-type">Fireside Chat</span>
+ </div>
+ <div class="session-chair">Chair: <a href="speakers.html#zittrain">Prof. Jonathan Zittrain</a>, Harvard Law School</div>
+ <div class="speakers">
+ <div class="speaker">
+ <img src="images/68cc29457f8526310612f749_Johnson_2_nb.png" alt="Dr. Matthew Johnson" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#johnson">Dr. Matthew Johnson</a></div>
+ <div class="speaker-title">Chief of Responsible AI (RAI), U.S. Department of Defense</div>
+ </div>
+ </div>
+ <div class="speaker">
+ <img src="images/68c237331ffbfdc0af78d85b_T_Kim_nb.png" alt="Prof. Theodore Kim" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#kim-theodore">Prof. Theodore Kim</a></div>
+ <div class="speaker-title">Professor of Computer Science, Yale University</div>
+ </div>
+ </div>
+ <div class="speaker">
+ <img src="images/68cc34a922629a84c367e934_Weyl_nb.png" alt="Dr. Glen Weyl" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#weyl">Dr. Glen Weyl</a></div>
+ <div class="speaker-title">Research Lead, Plural Technology Collaboratory, Microsoft</div>
+ </div>
+ </div>
+ <div class="speaker">
+ <img src="images/68d2037dc584fa704afb56f9_Zhang_nb.png" alt="Dr. Richard Zhang" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#zhang">Dr. Richard Zhang</a></div>
+ <div class="speaker-title">Senior Research Scientist, Google DeepMind</div>
+ </div>
+ </div>
+ </div>
+ <div class="venue"><a href="https://maps.google.com/?q=The+Charles+Hotel,+1+Bennett+St,+Cambridge,+MA" target="_blank">Charles Ballroom, The Charles Hotel</a></div>
+ <div class="themes-preview">
+ <h4>Expected Topics:</h4>
+ <ul>
+ <li>Current state of AI research and development</li>
+ <li>Responsible AI implementation in government and industry</li>
+ <li>Technical frontiers and future directions</li>
+ <li>Intersection of faith and AI development</li>
+ </ul>
+ <p style="margin-top: 15px;">
+ <a href="research-briefs.html#brief-frontiers" style="color: #333; text-decoration: underline;">→ Briefing</a> ·
+ <a href="notes.html#frontiers-ai" style="color: #333; text-decoration: underline;">Notes</a> ·
+ <a href="questions.html#frontiers-ai" style="color: #333; text-decoration: underline;">Questions</a> ·
+ <a href="bingo.html#frontiers-ai" style="color: #333; text-decoration: underline;">Bingo</a> ·
+ <a href="devotional.html#frontiers-ai" style="color: #333; text-decoration: underline;">Prayers</a>
+ </p>
+ </div>
+ </div>
+ </div>
+
+ <div class="day">
+ <div class="day-header">
+ <h2>Friday, October 10</h2>
+ <p class="day-theme">Core Theological & Practical Sessions</p>
+ </div>
+
+ <div class="session">
+ <div class="session-time">8:45am - 8:50am</div>
+ <div class="session-title">Welcome</div>
+ <div class="speakers">
+ <div class="speaker">
+ <img src="images/68bf3500e5ada2afa39974e7_Okediji_nb.png" alt="Prof. Ruth Okediji" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#okediji">Prof. Ruth Okediji</a></div>
+ <div class="speaker-title">Jeremiah Smith, Jr., Professor of Law, Harvard Law School</div>
+ </div>
+ </div>
+ </div>
+ <div class="venue"><a href="https://maps.google.com/?q=James+Room+Swartz+Hall+Harvard+Divinity+School+45+Francis+Ave+Cambridge+MA" target="_blank">James Room, Swartz Hall, Harvard Divinity School</a></div>
+ </div>
+
+ <div class="session keynote picard-keynote" id="picard-keynote">
+ <div class="session-time">8:50am - 9:50am</div>
+ <div class="session-title">Are We Merely Machines
+ <span class="session-type">Keynote</span>
+ </div>
+ <div class="speakers">
+ <div class="speaker">
+ <img src="images/68bf34005db9773f6f3076a5_Rosalind.png" alt="Prof. Rosalind Picard" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#picard">Prof. Rosalind Picard</a></div>
+ <div class="speaker-title">Grover M. Hermann Professor of Health Sciences and Technology, MIT; Founder and Director, Affective Computing Research Group</div>
+ </div>
+ </div>
+ </div>
+ <div class="themes-preview">
+ <h4>Key Concepts to Watch For:</h4>
+ <ul>
+ <li>Affective computing and emotion recognition</li>
+ <li>Human-machine interaction and empathy</li>
+ <li>Integration of faith and scientific inquiry</li>
+ <li>Distinctively human vs. machine capabilities</li>
+ </ul>
+ <p style="margin-top: 15px;">
+ <a href="research-briefs.html#brief-picard" style="color: #333; text-decoration: underline;">→ Briefing</a> ·
+ <a href="notes.html#picard-keynote" style="color: #333; text-decoration: underline;">Notes</a> ·
+ <a href="questions.html#picard-keynote" style="color: #333; text-decoration: underline;">Questions</a> ·
+ <a href="bingo.html#picard-keynote" style="color: #333; text-decoration: underline;">Bingo</a> ·
+ <a href="devotional.html#picard-keynote" style="color: #333; text-decoration: underline;">Prayers</a>
+ </p>
+ </div>
+ </div>
+
+ <div class="session session-i" id="session-i">
+ <div class="session-time">10:05am - 12:05pm</div>
+ <div class="session-title">Session I: Technos, Telos, and Theology
+ <span class="session-type">Panel</span>
+ </div>
+ <div class="session-chair">Chair: <a href="speakers.html#okediji">Prof. Ruth Okediji</a>, Harvard Law School</div>
+ <div class="speakers">
+ <div class="speaker">
+ <img src="images/68bf343334dacf5c8949a753_Simon.png" alt="Rev. Dr. Simon Cross" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#cross">Rev. Dr. Simon Cross</a></div>
+ <div class="speaker-title">Bishop of Oxford's Office, Church of England</div>
+ </div>
+ </div>
+ <div class="speaker">
+ <img src="images/68d6b058a135d479c482c06d_Ha_nb_compressed.png" alt="Prof. Polly Ha" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#ha">Prof. Polly Ha</a></div>
+ <div class="speaker-title">Associate Professor of Early Modern History, Duke University</div>
+ </div>
+ </div>
+ <div class="speaker">
+ <img src="images/68bf3557e24b0b6afd52178b_Simpson_nb.png" alt="Prof. Tom Simpson" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#simpson">Prof. Tom Simpson</a></div>
+ <div class="speaker-title">Alfred Landecker Professor, Oxford University</div>
+ </div>
+ </div>
+ <div class="speaker">
+ <img src="images/68bf360dd4e55d41be075fad_Thio_nb.png" alt="Prof. Li-ann Thio" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#thio">Prof. Li-ann Thio</a></div>
+ <div class="speaker-title">Provost Chair Professor, National University of Singapore</div>
+ </div>
+ </div>
+ </div>
+ <div class="themes-preview">
+ <h4>Focus: Law, Governance & Citizenship in the Algorithmic State</h4>
+ <ul>
+ <li>Christian perspectives on algorithmic governance</li>
+ <li>Religious freedom in AI-mediated societies</li>
+ <li>Citizenship and human dignity in automated systems</li>
+ <li>Historical precedents for technology and faith</li>
+ </ul>
+ <p style="margin-top: 15px;">
+ <a href="research-briefs.html#brief-session-i" style="color: #333; text-decoration: underline;">→ Briefing</a> ·
+ <a href="notes.html#session-i" style="color: #333; text-decoration: underline;">Notes</a> ·
+ <a href="questions.html#session-i" style="color: #333; text-decoration: underline;">Questions</a> ·
+ <a href="bingo.html#session-i" style="color: #333; text-decoration: underline;">Bingo</a> ·
+ <a href="devotional.html#session-i" style="color: #333; text-decoration: underline;">Prayers</a>
+ </p>
+ </div>
+ </div>
+
+ <div class="session keynote kim-keynote" id="kim-keynote">
+ <div class="session-time">12:30pm - 1:30pm</div>
+ <div class="session-title">Hope in the Age of Generative AI
+ <span class="session-type">Luncheon Keynote</span>
+ </div>
+ <div class="speakers">
+ <div class="speaker">
+ <img src="images/68dc1c89e593114d3bff931e_Kim_2_nb.png" alt="Dr. John Kim" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#kim">Dr. John Kim</a></div>
+ <div class="speaker-title">Managing Member, Karamaan Group</div>
+ </div>
+ </div>
+ </div>
+ <div class="themes-preview">
+ <h4>Expected Themes:</h4>
+ <ul>
+ <li>Entrepreneurship and technology investing</li>
+ <li>Generative AI's transformative potential</li>
+ <li>Faith-informed approach to innovation</li>
+ <li>Building hope amid technological disruption</li>
+ </ul>
+ </div>
+ </div>
+
+ <div class="session session-ii" id="session-ii">
+ <div class="session-time">1:50pm - 3:30pm</div>
+ <div class="session-title">Session II: Education (and what it is for) in the Machine Age
+ <span class="session-type">Panel</span>
+ </div>
+ <div class="session-chair">Chair: <a href="speakers.html#west">Prof. Martin West</a>, Harvard Graduate School of Education</div>
+ <div class="speakers">
+ <div class="speaker">
+ <img src="images/68c2377af103c367d351ba0d_Dorobantu_nb.png" alt="Prof. Marius Dorobantu" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#dorobantu">Prof. Marius Dorobantu</a></div>
+ <div class="speaker-title">Assistant Professor of Theology and Artificial Intelligence, Vrije Universiteit Amsterdam</div>
+ </div>
+ </div>
+ <div class="speaker">
+ <img src="images/68cc29457f8526310612f749_Johnson_2_nb.png" alt="Dr. Matthew Johnson" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#johnson">Dr. Matthew Johnson</a></div>
+ <div class="speaker-title">Chief of Responsible AI (RAI), U.S. Department of Defense</div>
+ </div>
+ </div>
+ <div class="speaker">
+ <img src="images/68bf34c7aaab80d20ba278ff_Lumbreras_nb.png" alt="Prof. Sara Lumbreras Sancho" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#lumbreras">Prof. Sara Lumbreras Sancho</a></div>
+ <div class="speaker-title">Professor, ICAI School of Engineering, Universidad Pontificia Comillas</div>
+ </div>
+ </div>
+ </div>
+ <div class="themes-preview">
+ <h4>Focus: Learning, Formation & Wisdom</h4>
+ <ul>
+ <li>Human vs. machine learning processes</li>
+ <li>Christian pedagogy and AI integration</li>
+ <li>Spiritual formation in digital environments</li>
+ <li>Wisdom vs. information processing</li>
+ </ul>
+ <p style="margin-top: 15px;">
+ <a href="research-briefs.html#brief-session-ii" style="color: #333; text-decoration: underline;">→ Briefing</a> ·
+ <a href="notes.html#session-ii" style="color: #333; text-decoration: underline;">Notes</a> ·
+ <a href="questions.html#session-ii" style="color: #333; text-decoration: underline;">Questions</a> ·
+ <a href="bingo.html#session-ii" style="color: #333; text-decoration: underline;">Bingo</a> ·
+ <a href="devotional.html#session-ii" style="color: #333; text-decoration: underline;">Prayers</a>
+ </p>
+ </div>
+ </div>
+
+ <div class="session session-iii" id="session-iii">
+ <div class="session-time">3:45pm - 5:25pm</div>
+ <div class="session-title">Session III: AI, Relationships and Relating
+ <span class="session-type">Panel</span>
+ </div>
+ <div class="session-chair">Chair: <a href="speakers.html#drake">Rev'd. Dr. Lyndon Drake</a>, University of Oxford</div>
+ <div class="speakers">
+ <div class="speaker">
+ <img src="images/68bf35875d7efe1da673d1c5_Tan_nb.png" alt="Prof. Seow Hon Tan" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#tan">Prof. Seow Hon Tan</a></div>
+ <div class="speaker-title">Associate Professor of Law, Singapore Management University</div>
+ </div>
+ </div>
+ <div class="speaker">
+ <img src="images/68bf35d6de9d761c38c2e52d_Teubner_2_nb.png" alt="Dr. Jonathan Teubner" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#teubner">Dr. Jonathan Teubner</a></div>
+ <div class="speaker-title">Research Associate, Harvard Human Flourishing Program</div>
+ </div>
+ </div>
+ <div class="speaker">
+ <img src="images/68d70ec87b700c234dd8c5ea_Wales_nb.png" alt="Prof. Jordan Wales" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#wales">Prof. Jordan Wales</a></div>
+ <div class="speaker-title">Associate Professor of Theology, Hillsdale College</div>
+ </div>
+ </div>
+ </div>
+ <div class="themes-preview">
+ <h4>Focus: Subversion, Surrogacy, Supercession</h4>
+ <ul>
+ <li>AI companions vs. authentic relationships</li>
+ <li>Algorithmic mediation of community</li>
+ <li>Christian friendship and love in digital contexts</li>
+ <li>Technology's impact on spiritual community</li>
+ </ul>
+ <p style="margin-top: 15px;">
+ <a href="research-briefs.html#brief-session-iii" style="color: #333; text-decoration: underline;">→ Briefing</a> ·
+ <a href="notes.html#session-iii" style="color: #333; text-decoration: underline;">Notes</a> ·
+ <a href="questions.html#session-iii" style="color: #333; text-decoration: underline;">Questions</a> ·
+ <a href="bingo.html#session-iii" style="color: #333; text-decoration: underline;">Bingo</a> ·
+ <a href="devotional.html#session-iii" style="color: #333; text-decoration: underline;">Prayers</a>
+ </p>
+ </div>
+ </div>
+
+ <div class="session">
+ <div class="session-time">5:25pm - 5:45pm</div>
+ <div class="session-title">Open Discussion</div>
+ </div>
+
+ <div class="session">
+ <div class="session-time">6:15pm - 8:15pm</div>
+ <div class="session-title">VIP Dinner</div>
+ <div class="venue"><a href="https://maps.google.com/?q=Harvest+Restaurant+44+Brattle+Street+Cambridge+MA" target="_blank">Harvest, 44 Brattle St.</a></div>
+ <div class="special-note">⚠️ Invitation only</div>
+ </div>
+ </div>
+
+ <div class="day">
+ <div class="day-header">
+ <h2>Saturday, October 11</h2>
+ <p class="day-theme">Practical Applications in Church Life</p>
+ </div>
+
+ <div class="session session-iv" id="session-iv">
+ <div class="session-time">9:00am - 11:15am</div>
+ <div class="session-title">Session IV: Artificial Intelligence at Church
+ <span class="session-type">Panel</span>
+ </div>
+ <div class="session-chair">Chair: <a href="speakers.html#crouch">Mr. Andy Crouch</a>, Praxis</div>
+ <div class="speakers">
+ <div class="speaker">
+ <img src="images/68d94521b010df995f6ca300_Durr_nb.png" alt="Dr. Oliver Dürr" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#durr">Dr. Oliver Dürr</a></div>
+ <div class="speaker-title">Director, Faith & Society Center, University of Fribourg</div>
+ </div>
+ </div>
+ <div class="speaker">
+ <img src="images/68d210770f4ecf1ac7d4aeb2_Kelly_nb.png" alt="Mr. James Kelly" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#kelly">Mr. James Kelly</a></div>
+ <div class="speaker-title">Founder & CEO, FaithTech</div>
+ </div>
+ </div>
+ <div class="speaker">
+ <img src="images/68d200abae19d0f5ba7a5b08_Wright_nb_2.png" alt="Dr. Oliver Wright" class="speaker-thumbnail" onerror="this.style.display='none'">
+ <div class="speaker-info">
+ <div class="speaker-name"><a href="speakers.html#wright">Dr. Oliver Wright</a></div>
+ <div class="speaker-title">Faculty of Theology and Religion, University of Oxford</div>
+ </div>
+ </div>
+ </div>
+ <div class="venue"><a href="https://maps.google.com/?q=Lewis+Law+Center+Room+200+1557+Massachusetts+Avenue+Cambridge+MA" target="_blank">Lewis Law Center 200, 1557 Massachusetts Ave.</a></div>
+ <div class="special-note">⚠️ Requires separate registration</div>
+ <div class="themes-preview">
+ <h4>Focus: Altars, Pews, and Sacraments</h4>
+ <ul>
+ <li>AI in worship and liturgy</li>
+ <li>Technology in pastoral care</li>
+ <li>Digital discipleship and formation</li>
+ <li>Sacramental theology and virtual experiences</li>
+ </ul>
+ <p style="margin-top: 15px;">
+ <a href="research-briefs.html#brief-session-iv" style="color: #333; text-decoration: underline;">→ Briefing</a> ·
+ <a href="notes.html#session-iv" style="color: #333; text-decoration: underline;">Notes</a> ·
+ <a href="questions.html#session-iv" style="color: #333; text-decoration: underline;">Questions</a> ·
+ <a href="bingo.html#session-iv" style="color: #333; text-decoration: underline;">Bingo</a> ·
+ <a href="devotional.html#session-iv" style="color: #333; text-decoration: underline;">Prayers</a>
+ </p>
+ </div>
+ </div>
+
+ <div class="session">
+ <div class="session-time">11:15am - 1:00pm</div>
+ <div class="session-title">Lunch & Networking</div>
+ </div>
+ </div>
+ </div>
+
+ <!-- UPDATE ALL PAGES: Add this JavaScript for mobile navigation functionality -->
+ <script>
+ // Mobile Navigation System
+ // This script handles the hamburger menu functionality
+ document.addEventListener('DOMContentLoaded', function() {
+ const navToggle = document.getElementById('navToggle');
+ const navClose = document.getElementById('navClose');
+ const mobileNav = document.getElementById('mobileNav');
+ const navOverlay = document.getElementById('navOverlay');
+
+ // Open navigation
+ function openNav() {
+ mobileNav.classList.add('active');
+ navOverlay.classList.add('active');
+ navToggle.classList.add('active');
+ document.body.style.overflow = 'hidden'; // Prevent scrolling when nav is open
+ }
+
+ // Close navigation
+ function closeNav() {
+ mobileNav.classList.remove('active');
+ navOverlay.classList.remove('active');
+ navToggle.classList.remove('active');
+ document.body.style.overflow = ''; // Restore scrolling
+ }
+
+ // Event listeners
+ navToggle.addEventListener('click', openNav);
+ navClose.addEventListener('click', closeNav);
+ navOverlay.addEventListener('click', closeNav);
+
+ // Close nav on escape key
+ document.addEventListener('keydown', function(e) {
+ if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+ closeNav();
+ }
+ });
+
+ // Handle navigation link clicks
+ const navLinks = document.querySelectorAll('.nav-link');
+ navLinks.forEach(link => {
+ link.addEventListener('click', function() {
+ // Optional: Close nav when link is clicked
+ // Uncomment next line if you want nav to close on link click:
+ // closeNav();
+ });
+ });
+
+ // Set current page indicator
+ // This automatically highlights the current page in the navigation
+ const currentPath = window.location.pathname;
+ const currentPage = currentPath.split('/').pop() || 'index.html';
+
+ navLinks.forEach(link => {
+ const linkHref = link.getAttribute('href');
+ if (linkHref === currentPage || (currentPage === '' && linkHref === 'index.html')) {
+ link.classList.add('current');
+ } else {
+ link.classList.remove('current');
+ }
+ });
+ });
+	
+ </script>
+
+ <!-- QR Code Modal -->
+ <div id="qrModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center;">
+ <div style="background: white; padding: 40px; border-radius: 8px; text-align: center; max-width: 400px; position: relative;">
+ <button id="closeQR" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2rem; cursor: pointer; color: #666;">&times;</button>
+ <h3 style="margin-bottom: 20px; font-weight: 400; color: #222;">Conference Companion</h3>
+ <img src="qr-code.png" alt="QR Code" style="width: 250px; height: 250px; margin: 0 auto; display: block; border: 2px solid #ddd; padding: 10px;">
+ <p style="margin-top: 20px; color: #666; font-size: 0.9rem;">Scan to access this guide on your phone</p>
+ <p style="margin-top: 8px; color: #999; font-size: 0.8rem;">natebarksdale.xyz/imago-dei-ai</p>
+ </div>
+ </div>
+
+ <script>
+ // QR Modal functionality
+ (function() {
+ function initQRModal() {
+ const showQR = document.getElementById('showQR');
+ const showQRNav = document.getElementById('showQRNav');
+ const closeQR = document.getElementById('closeQR');
+ const qrModal = document.getElementById('qrModal');
+
+ if (showQR) {
+ showQR.addEventListener('click', function(e) {
+ e.preventDefault();
+ qrModal.style.display = 'flex';
+ });
+ }
+
+ if (closeQR) {
+ closeQR.addEventListener('click', function() {
+ qrModal.style.display = 'none';
+ });
+ }
+
+ if (qrModal) {
+ qrModal.addEventListener('click', function(e) {
+ if (e.target === qrModal) {
+ qrModal.style.display = 'none';
+ }
+ });
+ }
+
+ if (showQRNav) {
+ showQRNav.addEventListener('click', function(e) {
+ e.preventDefault();
+ qrModal.style.display = 'flex';
+ // Close the mobile nav
+ const mobileNav = document.getElementById('mobileNav');
+ const navOverlay = document.getElementById('navOverlay');
+ const navToggle = document.getElementById('navToggle');
+ if (mobileNav) mobileNav.classList.remove('active');
+ if (navOverlay) navOverlay.classList.remove('active');
+ if (navToggle) navToggle.classList.remove('active');
+ document.body.style.overflow = '';
+ });
+ }
+
+ // Close on escape
+ document.addEventListener('keydown', function(e) {
+ if (e.key === 'Escape' && qrModal && qrModal.style.display === 'flex') {
+ qrModal.style.display = 'none';
+ }
+ });
+ }
+
+ if (document.readyState === 'loading') {
+ document.addEventListener('DOMContentLoaded', initQRModal);
+ } else {
+ initQRModal();
+ }
+ })();
+ </script>
+
+</body>
+</html>
+</html>
