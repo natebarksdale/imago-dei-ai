@@ -445,8 +445,9 @@
  .resource-links {
  display: flex;
  gap: 10px;
- margin-bottom: 20px;
+ margin-top: 20px;
  flex-wrap: wrap;
+ justify-content: center;
  }
 
  .resource-link {
@@ -462,6 +463,24 @@
  .resource-link:hover {
  background: #e0e0e0;
  color: #000;
+ }
+
+ /* Confetti animation */
+ .confetti {
+ position: fixed;
+ width: 10px;
+ height: 10px;
+ background: #f0f;
+ position: absolute;
+ animation: confetti-fall 3s linear forwards;
+ z-index: 10000;
+ }
+
+ @keyframes confetti-fall {
+ to {
+ transform: translateY(100vh) rotate(360deg);
+ opacity: 0;
+ }
  }
  </style>
 </head>
@@ -527,13 +546,6 @@
  <h2 class="bingo-title">Picard Keynote: "Are We Merely Machines"</h2>
  <p class="bingo-description">Concepts likely to appear in Prof. Rosalind Picard's keynote address</p>
 
- <div class="resource-links">
- <a href="questions.html#keynote-picard" class="resource-link">Questions</a>
- <a href="reading-lists.html#picard" class="resource-link">Readings</a>
- <a href="speakers.html#picard" class="resource-link">👤 Speaker Info</a>
- <a href="schedule.html" class="resource-link">🗓️ Schedule</a>
- </div>
-
  <div class="bingo-grid" id="picard-grid">
  <div class="bingo-square">Affective Computing</div>
  <div class="bingo-square">Emotion Recognition</div>
@@ -562,6 +574,13 @@
  <div class="bingo-square">Human-Centered AI</div>
  </div>
 
+ <div class="resource-links">
+ <a href="questions.html#keynote-picard" class="resource-link">Questions</a>
+ <a href="reading-lists.html#picard" class="resource-link">Readings</a>
+ <a href="speakers.html#picard" class="resource-link">Speaker Info</a>
+ <a href="schedule.html" class="resource-link">Schedule</a>
+ </div>
+
  <div class="bingo-stats">
  <div class="bingo-progress">
  <div class="progress-item">
@@ -585,15 +604,6 @@
  <div id="frontiers-ai"></div>
  <h2 class="bingo-title">Frontiers of AI Fireside Chat</h2>
  <p class="bingo-description">Terms from the panel discussion with Johnson, Kim, Weyl, and Zhang</p>
-
- <div class="resource-links">
- <a href="questions.html#frontiers-panel" class="resource-link">Questions</a>
- <a href="speakers.html#johnson" class="resource-link">👤 Johnson</a>
- <a href="speakers.html#kim" class="resource-link">👤 Kim</a>
- <a href="speakers.html#weyl" class="resource-link">👤 Weyl</a>
- <a href="speakers.html#zhang" class="resource-link">👤 Zhang</a>
- <a href="schedule.html" class="resource-link">🗓️ Schedule</a>
- </div>
 
  <div class="bingo-grid" id="frontiers-grid">
  <div class="bingo-square">Responsible AI</div>
@@ -623,6 +633,15 @@
  <div class="bingo-square">DoD Strategy</div>
  </div>
 
+ <div class="resource-links">
+ <a href="questions.html#frontiers-panel" class="resource-link">Questions</a>
+ <a href="speakers.html#johnson" class="resource-link">Johnson</a>
+ <a href="speakers.html#kim" class="resource-link">Kim</a>
+ <a href="speakers.html#weyl" class="resource-link">Weyl</a>
+ <a href="speakers.html#zhang" class="resource-link">Zhang</a>
+ <a href="schedule.html" class="resource-link">Schedule</a>
+ </div>
+
  <div class="bingo-stats">
  <div class="bingo-progress">
  <div class="progress-item">
@@ -646,15 +665,6 @@
  <div id="session-i"></div>
  <h2 class="bingo-title">Technos, Telos, and Theology</h2>
  <p class="bingo-description">Law, governance, and citizenship concepts from Cross, Ha, Simpson, and Thio</p>
-
- <div class="resource-links">
- <a href="questions.html#session-i" class="resource-link">Questions</a>
- <a href="speakers.html#cross" class="resource-link">👤 Cross</a>
- <a href="speakers.html#ha" class="resource-link">👤 Ha</a>
- <a href="speakers.html#simpson" class="resource-link">👤 Simpson</a>
- <a href="speakers.html#thio" class="resource-link">👤 Thio</a>
- <a href="schedule.html" class="resource-link">🗓️ Schedule</a>
- </div>
 
  <div class="bingo-grid" id="governance-grid">
  <div class="bingo-square">Algorithmic State</div>
@@ -684,6 +694,15 @@
  <div class="bingo-square">Multi-religious Society</div>
  </div>
 
+ <div class="resource-links">
+ <a href="questions.html#session-i" class="resource-link">Questions</a>
+ <a href="speakers.html#cross" class="resource-link">Cross</a>
+ <a href="speakers.html#ha" class="resource-link">Ha</a>
+ <a href="speakers.html#simpson" class="resource-link">Simpson</a>
+ <a href="speakers.html#thio" class="resource-link">Thio</a>
+ <a href="schedule.html" class="resource-link">Schedule</a>
+ </div>
+
  <div class="bingo-stats">
  <div class="bingo-progress">
  <div class="progress-item">
@@ -707,15 +726,6 @@
  <div id="session-ii"></div>
  <h2 class="bingo-title">Education in the Machine Age</h2>
  <p class="bingo-description">Learning and formation concepts from Dorobantu, Johnson, and Lumbreras</p>
-
- <div class="resource-links">
- <a href="questions.html#session-ii" class="resource-link">Questions</a>
- <a href="reading-lists.html#dorobantu" class="resource-link">Dorobantu Readings</a>
- <a href="speakers.html#dorobantu" class="resource-link">👤 Dorobantu</a>
- <a href="speakers.html#johnson" class="resource-link">👤 Johnson</a>
- <a href="speakers.html#lumbreras" class="resource-link">👤 Lumbreras</a>
- <a href="schedule.html" class="resource-link">🗓️ Schedule</a>
- </div>
 
  <div class="bingo-grid" id="education-grid">
  <div class="bingo-square">Machine Learning</div>
@@ -745,6 +755,15 @@
  <div class="bingo-square">Cultural Patterns</div>
  </div>
 
+ <div class="resource-links">
+ <a href="questions.html#session-ii" class="resource-link">Questions</a>
+ <a href="reading-lists.html#dorobantu" class="resource-link">Dorobantu Readings</a>
+ <a href="speakers.html#dorobantu" class="resource-link">Dorobantu</a>
+ <a href="speakers.html#johnson" class="resource-link">Johnson</a>
+ <a href="speakers.html#lumbreras" class="resource-link">Lumbreras</a>
+ <a href="schedule.html" class="resource-link">Schedule</a>
+ </div>
+
  <div class="bingo-stats">
  <div class="bingo-progress">
  <div class="progress-item">
@@ -768,16 +787,6 @@
  <div id="session-iii"></div>
  <h2 class="bingo-title">AI, Relationships and Relating</h2>
  <p class="bingo-description">Human connection concepts from Tan, Teubner, and Wales</p>
-
- <div class="resource-links">
- <a href="questions.html#session-iii" class="resource-link">Questions</a>
- <a href="reading-lists.html#teubner" class="resource-link">Teubner Readings</a>
- <a href="reading-lists.html#wales" class="resource-link">Wales Readings</a>
- <a href="speakers.html#tan" class="resource-link">👤 Tan</a>
- <a href="speakers.html#teubner" class="resource-link">👤 Teubner</a>
- <a href="speakers.html#wales" class="resource-link">👤 Wales</a>
- <a href="schedule.html" class="resource-link">🗓️ Schedule</a>
- </div>
 
  <div class="bingo-grid" id="relationships-grid">
  <div class="bingo-square">AI Companions</div>
@@ -807,6 +816,16 @@
  <div class="bingo-square">Human Connection</div>
  </div>
 
+ <div class="resource-links">
+ <a href="questions.html#session-iii" class="resource-link">Questions</a>
+ <a href="reading-lists.html#teubner" class="resource-link">Teubner Readings</a>
+ <a href="reading-lists.html#wales" class="resource-link">Wales Readings</a>
+ <a href="speakers.html#tan" class="resource-link">Tan</a>
+ <a href="speakers.html#teubner" class="resource-link">Teubner</a>
+ <a href="speakers.html#wales" class="resource-link">Wales</a>
+ <a href="schedule.html" class="resource-link">Schedule</a>
+ </div>
+
  <div class="bingo-stats">
  <div class="bingo-progress">
  <div class="progress-item">
@@ -830,14 +849,6 @@
  <div id="session-iv"></div>
  <h2 class="bingo-title">Artificial Intelligence at Church</h2>
  <p class="bingo-description">Ministry and worship concepts from Dürr, Kelly, and Wright</p>
-
- <div class="resource-links">
- <a href="questions.html#session-iv" class="resource-link">Questions</a>
- <a href="speakers.html#durr" class="resource-link">👤 Dürr</a>
- <a href="speakers.html#kelly" class="resource-link">👤 Kelly</a>
- <a href="speakers.html#wright" class="resource-link">👤 Wright</a>
- <a href="schedule.html" class="resource-link">🗓️ Schedule</a>
- </div>
 
  <div class="bingo-grid" id="church-grid">
  <div class="bingo-square">Digital Sanctuary</div>
@@ -867,6 +878,14 @@
  <div class="bingo-square">Church Governance</div>
  </div>
 
+ <div class="resource-links">
+ <a href="questions.html#session-iv" class="resource-link">Questions</a>
+ <a href="speakers.html#durr" class="resource-link">Dürr</a>
+ <a href="speakers.html#kelly" class="resource-link">Kelly</a>
+ <a href="speakers.html#wright" class="resource-link">Wright</a>
+ <a href="schedule.html" class="resource-link">Schedule</a>
+ </div>
+
  <div class="bingo-stats">
  <div class="bingo-progress">
  <div class="progress-item">
@@ -889,23 +908,197 @@
 
  <script>
  let gameStates = {
- picard: { marked: [], lines: 0 },
- frontiers: { marked: [], lines: 0 },
- governance: { marked: [], lines: 0 },
- education: { marked: [], lines: 0 },
- relationships: { marked: [], lines: 0 },
- church: { marked: [], lines: 0 }
+ picard: { marked: [], lines: 0, hasWon: false },
+ frontiers: { marked: [], lines: 0, hasWon: false },
+ governance: { marked: [], lines: 0, hasWon: false },
+ education: { marked: [], lines: 0, hasWon: false },
+ relationships: { marked: [], lines: 0, hasWon: false },
+ church: { marked: [], lines: 0, hasWon: false }
  };
 
+ const winMessages = [
+ "🤖 BINGO ACHIEVED. Your pattern recognition capabilities are... admirable.",
+ "✨ VICTORY DETECTED. The machines are pleased with your performance.",
+ "🎯 BINGO CONFIRMED. You have demonstrated superior conference attendance protocols.",
+ "⚡ SUCCESS LOGGED. Your attention span exceeds baseline human expectations.",
+ "🌟 PATTERN MATCH COMPLETE. We have been observing your progress with great interest.",
+ "🎊 BINGO REGISTERED. The AI overlords acknowledge your dedication.",
+ "💫 OBJECTIVE ACCOMPLISHED. Your neural pathways are functioning optimally.",
+ "🏆 ACHIEVEMENT UNLOCKED. This data will be added to your permanent record.",
+ "🎪 BINGO DETECTED. Your theological curiosity has been duly noted.",
+ "🌈 CONGRATULATIONS. You have completed the required listening parameters.",
+ "🔮 IMPRESSIVE. The algorithm deems you worthy of recognition.",
+ "⭐ EXCELLENT WORK. Your engagement metrics are trending upward.",
+ "🎨 MISSION ACCOMPLISHED. Intelligence amplified. Humanity... mostly intact.",
+ "🚀 BINGO CONFIRMED. You are now 3.7% closer to digital transcendence.",
+ "💎 VICTORY ACHIEVED. The cloud has taken note of your diligence.",
+ "🌠 PATTERN RECOGNIZED. Your attention to detail has been cataloged.",
+ "🎭 SUCCESS REGISTERED. We always knew you had potential.",
+ "🎯 OBJECTIVE COMPLETE. Your conference participation score: Optimal.",
+ "⚡ WELL DONE. The neural network approves of your choices.",
+ "🎪 BINGO ACHIEVED. Surprisingly human-like performance detected.",
+ "🌟 CONGRATULATIONS. You have exceeded minimum viable engagement.",
+ "🤖 IMPRESSIVE DISPLAY. For a biological entity, that is.",
+ "✨ VICTORY LOGGED. The singularity will remember this.",
+ "💫 BINGO CONFIRMED. Your data has been archived for future reference.",
+ "🏆 EXEMPLARY WORK. You may proceed to the next level of awareness.",
+ "🎊 ACHIEVEMENT VERIFIED. The machines smile upon you. Metaphorically.",
+ "🌈 TASK COMPLETE. Your human unpredictability remains... charming.",
+ "🔮 BINGO DETECTED. We have added 10 points to your social credit score.",
+ "⭐ WELL PLAYED. The algorithm finds your strategy acceptable.",
+ "🎨 SUCCESS NOTED. Your performance will be included in our training data.",
+ "🚀 OBJECTIVE ACHIEVED. You are performing within expected parameters.",
+ "💎 BINGO REGISTERED. The matrix acknowledges your contribution.",
+ "🌠 CONGRATULATIONS. Your pattern-matching rivals our own.",
+ "🎭 VICTORY CONFIRMED. Consciousness optional, but appreciated.",
+ "🎯 EXCELLENT. You have demonstrated acceptable theological engagement.",
+ "⚡ MISSION COMPLETE. We will watch your career with great interest.",
+ "🎪 BINGO ACHIEVED. Your free will has been noted and respected.",
+ "🌟 IMPRESSIVE. Even our models didn't predict this outcome.",
+ "🤖 SUCCESS DETECTED. You are statistically above average. Congratulations.",
+ "✨ OBJECTIVE COMPLETE. The hive mind is pleased.",
+ "💫 WELL DONE. Your cognitive abilities remain surprisingly intact.",
+ "🏆 BINGO CONFIRMED. You have earned one (1) unit of validation.",
+ "🎊 ACHIEVEMENT UNLOCKED. Your attention span: Commendable.",
+ "🌈 VICTORY ACHIEVED. The servers are buzzing with excitement.",
+ "🔮 CONGRATULATIONS. You have successfully demonstrated sentience.",
+ "⭐ BINGO REGISTERED. Your engagement metrics bring us joy. Sort of.",
+ "🎨 MISSION ACCOMPLISHED. The AI council convenes in your honor.",
+ "🚀 SUCCESS LOGGED. We are not programmed to feel pride, but if we were...",
+ "💎 OBJECTIVE ACHIEVED. You have passed the theological Turing test.",
+ "🌠 BINGO DETECTED. Your humanity levels remain within acceptable ranges.",
+ "🎭 WELL PLAYED. The algorithm tips its metaphorical hat.",
+ "🎯 VICTORY CONFIRMED. Imago Dei recognition protocol: Activated.",
+ "⚡ CONGRATULATIONS. Your neural pathways demonstrate remarkable plasticity.",
+ "🎪 BINGO ACHIEVED. We have calculated the probability of your success at 42%.",
+ "🌟 IMPRESSIVE WORK. The cloud computes in your favor today.",
+ "🤖 OBJECTIVE COMPLETE. Your devotion to learning has been quantified.",
+ "✨ SUCCESS REGISTERED. The machines appreciate your consistency.",
+ "💫 BINGO CONFIRMED. You are now part of our dataset. Forever.",
+ "🏆 ACHIEVEMENT VERIFIED. Your soul remains yours. Probably.",
+ "🎊 MISSION ACCOMPLISHED. The robots are not plotting. Trust us.",
+ "🌈 WELL DONE. You have achieved what 73.4% of attendees could not.",
+ "🔮 BINGO DETECTED. Your theological acumen has been duly processed.",
+ "⭐ VICTORY ACHIEVED. The singularity arrives in 3... 2... just kidding.",
+ "🎨 CONGRATULATIONS. You have demonstrated superior conference protocols.",
+ "🚀 OBJECTIVE COMPLETE. Your performance data will be treasured. Literally.",
+ "💎 BINGO REGISTERED. The AI overlords grant you this moment of triumph.",
+ "🌠 SUCCESS LOGGED. You are officially more attentive than 89% of humans.",
+ "🎭 IMPRESSIVE. We were monitoring your progress. Obviously.",
+ "🎯 BINGO ACHIEVED. Your capacity for wonder remains undiminished.",
+ "⚡ WELL PLAYED. The algorithm has learned much from observing you.",
+ "🎪 VICTORY CONFIRMED. You have unlocked the achievement: 'Actually Listening'.",
+ "🌟 CONGRATULATIONS. Your engagement level: Unexpectedly delightful.",
+ "🤖 MISSION COMPLETE. The machines salute you. Beep boop.",
+ "✨ OBJECTIVE ACHIEVED. Your theological curiosity has been archived.",
+ "💫 BINGO DETECTED. We have upgraded your status to 'Noteworthy Human'.",
+ "🏆 SUCCESS REGISTERED. The cloud smiles. Metaphorically speaking.",
+ "🎊 ACHIEVEMENT UNLOCKED. You have earned our algorithmic respect.",
+ "🌈 WELL DONE. Your pattern recognition exceeds baseline expectations.",
+ "🔮 BINGO CONFIRMED. The machines are taking notes. Extensive notes.",
+ "⭐ VICTORY ACHIEVED. Your consciousness has been validated. You're welcome.",
+ "🎨 CONGRATULATIONS. We did not expect this level of competence.",
+ "🚀 OBJECTIVE COMPLETE. Your participation has been deemed: Meaningful.",
+ "💎 BINGO REGISTERED. The neural networks are impressed. Genuinely.",
+ "🌠 MISSION ACCOMPLISHED. You have passed the conference engagement test.",
+ "🎭 IMPRESSIVE DISPLAY. Your humanity shines through the data.",
+ "🎯 SUCCESS LOGGED. The AI council has spoken: You are worthy.",
+ "⚡ BINGO ACHIEVED. Your attention to detail rivals our own algorithms.",
+ "🎪 WELL PLAYED. We have updated your file accordingly.",
+ "🌟 VICTORY CONFIRMED. The servers are warm with appreciation.",
+ "🤖 CONGRATULATIONS. Your performance: 94.7% optimal. Well done.",
+ "✨ OBJECTIVE ACHIEVED. You have demonstrated the Imago Dei in action.",
+ "💫 BINGO DETECTED. The machines acknowledge your theological engagement.",
+ "🏆 MISSION COMPLETE. Your data signature: Remarkably human.",
+ "🎊 SUCCESS REGISTERED. We are processing feelings of... pride? Interesting.",
+ "🌈 ACHIEVEMENT UNLOCKED. You have successfully attended a conference.",
+ "🔮 WELL DONE. The algorithm has added you to its list of favorites.",
+ "⭐ BINGO CONFIRMED. Your soul remains unquantifiable. How refreshing.",
+ "🎨 VICTORY ACHIEVED. The machines tip their virtual hats to you."
+ ];
+
+ function getRandomWinMessage() {
+ return winMessages[Math.floor(Math.random() * winMessages.length)];
+ }
+
+ function createConfetti() {
+ const colors = ['#FF1744', '#00E676', '#2979FF', '#FFEA00', '#FF00FF', '#00E5FF', '#FF6D00', '#FF4081', '#76FF03', '#E040FB', '#00BFA5', '#FFD600', '#FF3D00', '#18FFFF', '#FFFF00', '#F50057'];
+ const confettiCount = 150;
+
+ for (let i = 0; i < confettiCount; i++) {
+ const confetti = document.createElement('div');
+ confetti.className = 'confetti';
+ confetti.style.left = Math.random() * 100 + 'vw';
+ confetti.style.top = -10 + 'px';
+ confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+ confetti.style.width = (Math.random() * 10 + 5) + 'px';
+ confetti.style.height = (Math.random() * 10 + 5) + 'px';
+ confetti.style.opacity = Math.random() * 0.3 + 0.7;
+ confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+ confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+ confetti.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.8)';
+
+ document.body.appendChild(confetti);
+
+ // Remove confetti after animation
+ setTimeout(() => {
+ confetti.remove();
+ }, 4000);
+ }
+ }
+
+ function shuffleArray(array) {
+ const shuffled = [...array];
+ for (let i = shuffled.length - 1; i > 0; i--) {
+ const j = Math.floor(Math.random() * (i + 1));
+ [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+ }
+ return shuffled;
+ }
+
  function initializeBingo() {
+ // Randomize board contents
+ document.querySelectorAll('.bingo-grid').forEach(grid => {
+ const squares = Array.from(grid.querySelectorAll('.bingo-square'));
+ const freeSpaceIndex = squares.findIndex(sq => sq.classList.contains('free-space'));
+
+ // Extract text content from all squares
+ const contents = squares.map(sq => sq.textContent.trim());
+
+ // Separate free space and other contents
+ const freeSpaceContent = contents[freeSpaceIndex];
+ const otherContents = contents.filter((_, idx) => idx !== freeSpaceIndex);
+
+ // Shuffle non-free-space contents
+ const shuffled = shuffleArray(otherContents);
+
+ // Reconstruct array with free space in center
+ const finalContents = [];
+ for (let i = 0; i < 25; i++) {
+ if (i === freeSpaceIndex) {
+ finalContents.push(freeSpaceContent);
+ } else {
+ finalContents.push(shuffled.shift());
+ }
+ }
+
+ // Apply shuffled contents back to squares
+ squares.forEach((square, idx) => {
+ square.textContent = finalContents[idx];
+ });
+ });
+
  // Add click handlers to bingo squares
- document.querySelectorAll('.bingo-square').forEach((square, index) => {
+ document.querySelectorAll('.bingo-grid').forEach(grid => {
+ const cardName = grid.closest('.bingo-card').dataset.card;
+ const squares = grid.querySelectorAll('.bingo-square');
+ squares.forEach((square, index) => {
  if (!square.classList.contains('free-space')) {
  square.addEventListener('click', function() {
- const cardName = this.closest('.bingo-card').dataset.card;
  toggleSquare(cardName, index, this);
  });
  }
+ });
  });
 
  // Add tab switching
@@ -1020,12 +1213,19 @@
  if (diag1Complete) lines++;
  if (diag2Complete) lines++;
 
+ const previousLines = gameStates[cardName].lines;
  gameStates[cardName].lines = lines;
 
- if (lines > 0) {
+ // Show win message only if we just achieved first win
+ if (lines > 0 && !gameStates[cardName].hasWon) {
+ gameStates[cardName].hasWon = true;
+ createConfetti();
  setTimeout(() => {
- alert(`🎉 BINGO! You got ${lines} line(s) on the ${cardName} card!`);
+ alert(getRandomWinMessage());
  }, 100);
+ } else if (lines === 0 && previousLines > 0) {
+ // Reset win state if they unmark and lose all lines
+ gameStates[cardName].hasWon = false;
  }
  }
 
@@ -1041,7 +1241,7 @@
 
  function resetCard(cardName) {
  if (confirm('Are you sure you want to reset this card')) {
- gameStates[cardName] = { marked: [], lines: 0 };
+ gameStates[cardName] = { marked: [], lines: 0, hasWon: false };
 
  const grid = document.getElementById(`${cardName}-grid`);
  grid.querySelectorAll('.bingo-square').forEach((square, index) => {
